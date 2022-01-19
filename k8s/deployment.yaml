@@ -20,6 +20,9 @@ spec:
         - image: shp7724/django-k8s-resource-monitor:latest
           imagePullPolicy: Always
           name: backend
+          envFrom:
+            - configMapRef:
+                name: backend-config
           ports:
             - containerPort: 8000
               name: gunicorn
