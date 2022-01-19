@@ -18,6 +18,7 @@ spec:
     spec:
       containers:
         - image: shp7724/django-k8s-resource-monitor:latest
+          imagePullPolicy: Always
           name: backend
           ports:
             - containerPort: 8000
