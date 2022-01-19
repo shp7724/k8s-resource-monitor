@@ -1,0 +1,40 @@
+# `backend` 서버를 쿠버네티스에 배포하기 위한 yaml 파일입니다.
+# Deployment와 Service를 한꺼번에 배포합니다.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - image: shp7724/django-k8s-resource-monitor:latest
+          name: backend
+          ports:
+            - containerPort: 8000
+              name: gunicorn
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+  labels:
+    app: backend
+spec:
+  type: NodePort
+  selector:
+    app: backend
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+      nodePort: 31234
