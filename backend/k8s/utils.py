@@ -1,5 +1,5 @@
 from kubernetes import client
-
+from datetime import datetime
 
 config = client.Configuration()
 
@@ -12,3 +12,4 @@ config.host = "https://kubernetes.default"
 config.ssl_ca_cert = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
 config.verify_ssl = True
 k8s = client.CoreV1Api(client.ApiClient(config))
+
