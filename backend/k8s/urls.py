@@ -4,4 +4,5 @@ from .views import *
 
 urlpatterns = [
     path("hello-world/", hello_world),
+    path("list-pods/", list_pods),
 ]

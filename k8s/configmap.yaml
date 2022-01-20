@@ -4,4 +4,4 @@ metadata:
   name: backend-config
 data:
   DJANGO_ALLOWED_HOST: "182.225.15.97"
-  DEBUG: "False"
+  DEBUG: "True"
