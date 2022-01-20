@@ -4,5 +4,8 @@ from .views import *
 
 urlpatterns = [
     path("hello_world/", hello_world),
-    path("list_all_pods/", list_all_pods),
+    path("list_pods/", list_pods),
+    path("list_namespaces/", list_namespaces),
+    path("top/nodes/", top_nodes),
+    path("top/pods/", top_pods),
 ]
