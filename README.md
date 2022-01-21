@@ -2,6 +2,8 @@
 
 ## APIs
 
+변경이 잦은 API라서 접속이 어려울 수 있습니다.
+
 - [/api/list_pods](http://182.225.15.97:31234/api/list_pods/)
   - `namespace: str`
 - [/api/list_namespaces](http://182.225.15.97:31234/api/list_namespaces/)
