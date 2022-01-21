@@ -4,9 +4,13 @@ from django.urls import include, path
 from .views import *
 
 urlpatterns = [
-    path("list_pods/", list_pods),
-    path("list_namespaces/", list_namespaces),
+    path("pods/", list_pods),
+    path("namespaces/", list_namespaces),
+    path("nodes/top/", top_nodes),
+    path("pods/top/", top_pods),
     path("deployments/", ListCreateDeployment.as_view()),
-    path("top/nodes/", top_nodes),
-    path("top/pods/", top_pods),
+    path(
+        "deployments/<str:deploy_namespace>/<str:deploy_name>/",
+        RetrieveUpdateDestroyDeployment.as_view(),
+    ),
 ]

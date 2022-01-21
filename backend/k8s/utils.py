@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 class K8sClient:
     def __init__(self) -> None:
-        config.load_incluster_config()
+        config.load_config()
         self.core = client.CoreV1Api()
         self.custom = client.CustomObjectsApi()
         self.apps = client.AppsV1Api()
@@ -16,3 +16,7 @@ class K8sClient:
 
 
 k8s = K8sClient()
+
+
+if __name__ == "__main__":
+    print("hello")

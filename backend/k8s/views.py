@@ -1,6 +1,6 @@
 import requests
 import yaml
-from kubernetes.client.models import V1DeploymentList as V1DepList
+from kubernetes.client.models import *
 from kubernetes.utils import create_from_yaml
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import *
@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .exceptions import *
-from .serializers import Serializers
+from .serializers import Serializer
 from .utils import k8s
 
 
@@ -20,14 +20,14 @@ def list_pods(request: Request):
         res = k8s.core.list_pod_for_all_namespaces(watch=False)
     else:
         res = k8s.core.list_namespaced_pod(namespace=namespace, watch=False)
-    data = [Serializers.pod(pod) for pod in res.items]
+    data = [Serializer.pod(pod) for pod in res.items]
     return Response(data)
 
 
 @api_view(["GET"])
 def list_namespaces(request: Request):
     res = k8s.core.list_namespace()
-    data = [Serializers.namespace(ns) for ns in res.items]
+    data = [Serializer.namespace(ns) for ns in res.items]
     return Response(data)
 
 
@@ -51,13 +51,18 @@ def top_pods(request: Request):
 
 
 class ListCreateDeployment(APIView):
+    def _create_from_dict():
+        pass
+
     def get(self, request):
         namespace = request.query_params.get("namespace")
         if namespace is None:
-            res: V1DepList = k8s.apps.list_deployment_for_all_namespaces(watch=False)
+            res: V1DeploymentList = k8s.apps.list_deployment_for_all_namespaces(
+                watch=False
+            )
         else:
             res = k8s.apps.list_namespaced_deployment(namespace=namespace, watch=False)
-        data = [Serializers.deployment(dep) for dep in res.items]
+        data = [Serializer.deployment(dep) for dep in res.items]
         return Response(data)
 
     def post(self, request):
@@ -71,5 +76,63 @@ class ListCreateDeployment(APIView):
         except Exception as e:
             raise FailedToCreate(detail=str(e))
         res = k8s.apps.list_deployment_for_all_namespaces()
-        data = [Serializers.deployment(dep) for dep in res.items]
+        data = [Serializer.deployment(dep) for dep in res.items]
         return Response(data)
+
+
+class RetrieveUpdateDestroyDeployment(APIView):
+    def get_deployment(self, deploy_name: str, deploy_namespace: str) -> V1Deployment:
+        try:
+            deployment: V1Deployment = k8s.apps.read_namespaced_deployment(
+                name=deploy_name,
+                namespace=deploy_namespace,
+            )
+        except Exception as e:
+            raise ResourceNotFound(detail=str(e), resource_name="Deployment")
+        else:
+            return deployment
+
+    def get(self, request, deploy_name: str, deploy_namespace: str):
+        deployment = self.get_deployment(
+            deploy_name=deploy_name,
+            deploy_namespace=deploy_namespace,
+        )
+        return Response(Serializer.deployment(deployment))
+
+    def patch(
+        self, request: Request, deploy_name: str, deploy_namespace: str
+    ) -> Response:
+        """Updates the desired number of replicas for the specified deployment.
+
+        Raises:
+            ResourceNotFound: Raised when the specified deployment does not exist.
+            K8sClientError: Raised when PATCH operation fails.
+        """
+        deployment = self.get_deployment(
+            deploy_name=deploy_name,
+            deploy_namespace=deploy_namespace,
+        )
+
+        replicas = request.data.get("replicas")
+        if replicas is not None:
+            deployment.spec.replicas = replicas
+
+        try:
+            updated_deployment = k8s.apps.patch_namespaced_deployment(
+                name=deployment.metadata.name,
+                namespace=deployment.metadata.namespace,
+                body=deployment,
+            )
+        except Exception as e:
+            raise K8sClientError(detail=str(e))
+        return Response(Serializer.deployment(updated_deployment))
+
+    def delete(self, request, deploy_name: str, deploy_namespace: str):
+        k8s.apps.delete_namespaced_deployment(
+            name=deploy_name,
+            deploy_namespace=deploy_namespace,
+            body=V1DeleteOptions(
+                propagation_policy="Foreground", grace_period_seconds=5
+            ),
+        )
+        return Response(status=204)
