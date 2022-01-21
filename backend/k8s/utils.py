@@ -1,5 +1,9 @@
-from kubernetes import client, config
 from datetime import datetime
+
+import requests
+from kubernetes import client, config
+from kubernetes.config.config_exception import ConfigException
+from rest_framework.response import Response
 
 
 class K8sClient:
@@ -8,6 +12,7 @@ class K8sClient:
         self.core = client.CoreV1Api()
         self.custom = client.CustomObjectsApi()
         self.apps = client.AppsV1Api()
+        self.api = client.ApiClient()
 
 
 k8s = K8sClient()

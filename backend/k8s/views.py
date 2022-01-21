@@ -1,10 +1,16 @@
+import requests
+import yaml
+from kubernetes.client.models import V1DeploymentList as V1DepList
+from kubernetes.utils import create_from_yaml
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework.exceptions import *
 from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .utils import k8s
-from kubernetes.client.models import V1DeploymentList
+from .exceptions import *
 from .serializers import Serializers
+from .utils import k8s
 
 
 @api_view(["GET"])
@@ -44,12 +50,26 @@ def top_pods(request: Request):
     return Response(data)
 
 
-@api_view(["GET"])
-def list_deployments(request: Request):
-    namespace = request.query_params.get("namespace")
-    if namespace is None:
-        res: V1DeploymentList = k8s.apps.list_deployment_for_all_namespaces(watch=False)
-    else:
-        res = k8s.apps.list_namespaced_deployment(namespace=namespace, watch=False)
-    data = [Serializers.deployment(dep) for dep in res.items]
-    return Response(data)
+class ListCreateDeployment(APIView):
+    def get(self, request):
+        namespace = request.query_params.get("namespace")
+        if namespace is None:
+            res: V1DepList = k8s.apps.list_deployment_for_all_namespaces(watch=False)
+        else:
+            res = k8s.apps.list_namespaced_deployment(namespace=namespace, watch=False)
+        data = [Serializers.deployment(dep) for dep in res.items]
+        return Response(data)
+
+    def post(self, request):
+        yaml_data = request.data.get("yaml")
+        if yaml_data is None:
+            raise ParseError(detail="yaml file not found.")
+        try:
+            create_from_yaml(
+                k8s_client=k8s.api, yaml_objects=yaml.safe_load_all(yaml_data)
+            )
+        except Exception as e:
+            raise FailedToCreate(detail=str(e))
+        res = k8s.apps.list_deployment_for_all_namespaces()
+        data = [Serializers.deployment(dep) for dep in res.items]
+        return Response(data)

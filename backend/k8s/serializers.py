@@ -14,8 +14,8 @@ class Serializers:
             namespace=instance.metadata.namespace,
             labels=instance.metadata.labels,
             pod_ip=instance.status.pod_ip,
-            sta=instance.metadata,
-            status=[cond.__dict__ for cond in instance.status.conditions],
+            creation_timestamp=instance.metadata.creation_timestamp,
+            status=Serializers.condition(instance.status.conditions),
         )
 
     @staticmethod
@@ -24,8 +24,10 @@ class Serializers:
             name=instance.metadata.name,
             namespace=instance.metadata.namespace,
             labels=instance.metadata.labels,
-            pod_ip=instance.status.pod_ip,
-            status=Serializers.condition(instance.status.conditions),
+            creation_timestamp=instance.metadata.creation_timestamp,
+            available_replicas=instance.status.available_replicas,
+            ready_replicas=instance.status.ready_replicas,
+            replicas=instance.status.replicas,
         )
 
     @staticmethod
