@@ -1,13 +1,10 @@
-from django.http import response
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.request import Request
-from rest_framework.exceptions import NotFound
 
-from backend.k8s.serializers import Serializers
 from .utils import k8s
-import json
 from kubernetes.client.models import V1DeploymentList
+from .serializers import Serializers
 
 
 @api_view(["GET"])

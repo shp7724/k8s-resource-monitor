@@ -7,7 +7,7 @@ class K8sClient:
         config.load_incluster_config()
         self.core = client.CoreV1Api()
         self.custom = client.CustomObjectsApi()
-        self.apps = client.AppsV1Api
+        self.apps = client.AppsV1Api()
 
 
 k8s = K8sClient()
