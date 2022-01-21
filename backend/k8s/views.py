@@ -3,13 +3,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.request import Request
 from rest_framework.exceptions import NotFound
+
+from backend.k8s.serializers import Serializers
 from .utils import k8s
 import json
-
-
-@api_view(["GET"])
-def hello_world(request):
-    return Response({"message": "Hello, world!"})
+from kubernetes.client.models import V1DeploymentList
 
 
 @api_view(["GET"])
@@ -19,21 +17,14 @@ def list_pods(request: Request):
         res = k8s.core.list_pod_for_all_namespaces(watch=False)
     else:
         res = k8s.core.list_namespaced_pod(namespace=namespace, watch=False)
-    data = [
-        dict(
-            name=pod.metadata.name,
-            namespace=pod.metadata.namespace,
-            pod_ip=pod.status.pod_ip,
-        )
-        for pod in res.items
-    ]
+    data = [Serializers.pod(pod) for pod in res.items]
     return Response(data)
 
 
 @api_view(["GET"])
 def list_namespaces(request: Request):
     res = k8s.core.list_namespace()
-    data = [dict(name=ns.metadata.name) for ns in res.items]
+    data = [Serializers.namespace(ns) for ns in res.items]
     return Response(data)
 
 
@@ -53,4 +44,15 @@ def top_pods(request: Request):
         for pod in data.get("items", [])
         if namespace is None or pod["metadata"]["namespace"] == namespace
     ]
+    return Response(data)
+
+
+@api_view(["GET"])
+def list_deployments(request: Request):
+    namespace = request.query_params.get("namespace")
+    if namespace is None:
+        res: V1DeploymentList = k8s.apps.list_deployment_for_all_namespaces(watch=False)
+    else:
+        res = k8s.apps.list_namespaced_deployment(namespace=namespace, watch=False)
+    data = [Serializers.deployment(dep) for dep in res.items]
     return Response(data)
