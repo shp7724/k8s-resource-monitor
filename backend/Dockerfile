@@ -1,11 +1,11 @@
 FROM python:3.9.9-alpine3.15
 
-ADD backend/requirements.txt /app/requirements.txt
+ADD ./requirements.txt /app/requirements.txt
 
 RUN python -m venv /env
 RUN /env/bin/pip install -r /app/requirements.txt
 
-ADD backend /app
+ADD . /app
 WORKDIR /app
 
 ENV VIRTUAL_ENV /env
