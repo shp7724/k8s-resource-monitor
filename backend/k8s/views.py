@@ -136,7 +136,15 @@ class RetrieveUpdateDestroyDeployment(APIView):
         return Response(Serializer.deployment(updated_deployment))
 
     def delete(self, request, deploy_name: str, deploy_namespace: str):
-        """Deletes the specified deployment."""
+        """Deletes the specified deployment.
+
+        Raises:
+            ProtectedError: Raised when trying to delete essential resources.
+            K8sClientError: Raised when DELETE operation fails.
+        """
+        if deploy_namespace.endswith("-system"):
+            raise ProtectedError(message="System Deployment는 삭제할 수 없습니다.")
+
         k8s.apps.delete_namespaced_deployment(
             name=deploy_name,
             deploy_namespace=deploy_namespace,
