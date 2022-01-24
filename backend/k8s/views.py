@@ -55,6 +55,7 @@ class ListCreateDeployment(APIView):
         pass
 
     def get(self, request):
+        """List deployments with an optional `namespace` parameter."""
         namespace = request.query_params.get("namespace")
         if namespace is None:
             res: V1DeploymentList = k8s.apps.list_deployment_for_all_namespaces(
@@ -66,6 +67,12 @@ class ListCreateDeployment(APIView):
         return Response(data)
 
     def post(self, request):
+        """Creates deployments (or other k8s objects) from a single yaml file.
+
+        Raises:
+            ParseError: Raised when no yaml file data is given.
+            FailedToCreate: Raised when the names of the objects already exist.
+        """
         yaml_data = request.data.get("yaml")
         if yaml_data is None:
             raise ParseError(detail="yaml file not found.")
@@ -92,7 +99,8 @@ class RetrieveUpdateDestroyDeployment(APIView):
         else:
             return deployment
 
-    def get(self, request, deploy_name: str, deploy_namespace: str):
+    def get(self, request: Request, deploy_name: str, deploy_namespace: str):
+        """Retrieves the specified deployment."""
         deployment = self.get_deployment(
             deploy_name=deploy_name,
             deploy_namespace=deploy_namespace,
@@ -128,6 +136,7 @@ class RetrieveUpdateDestroyDeployment(APIView):
         return Response(Serializer.deployment(updated_deployment))
 
     def delete(self, request, deploy_name: str, deploy_namespace: str):
+        """Deletes the specified deployment."""
         k8s.apps.delete_namespaced_deployment(
             name=deploy_name,
             deploy_namespace=deploy_namespace,
