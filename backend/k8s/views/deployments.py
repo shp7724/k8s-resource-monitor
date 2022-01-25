@@ -14,9 +14,6 @@ from k8s.utils import k8s
 
 
 class ListCreateDeployment(APIView):
-    def _create_from_dict():
-        pass
-
     def get(self, request):
         """List deployments with an optional `namespace` parameter."""
         namespace = request.query_params.get("namespace")

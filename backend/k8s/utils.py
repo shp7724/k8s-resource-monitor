@@ -16,7 +16,3 @@ class K8sClient:
 
 
 k8s = K8sClient()
-
-
-if __name__ == "__main__":
-    print("hello")
