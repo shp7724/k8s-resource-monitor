@@ -50,7 +50,6 @@ class Serializer:
     def namespace(instance: V1Namespace) -> dict:
         return dict(
             name=instance.metadata.name,
-            conditions=Serializer(instance.status.conditions),
         )
 
     @staticmethod
