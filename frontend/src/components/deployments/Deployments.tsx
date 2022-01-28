@@ -1,7 +1,23 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import shallow from "zustand/shallow";
+import { useDeployment, useNamespace } from "../../common/states";
+import DeploymentCard from "./DeploymentCard";
 
 const Deployments: FC = (): JSX.Element => {
-  return <div></div>;
+  const namespace = useNamespace((state) => state.selected);
+  const { deployments, fetch } = useDeployment((state) => state, shallow);
+
+  useEffect(() => {
+    fetch(namespace);
+  }, [namespace]);
+
+  return (
+    <div className="grid grid-cols-3 gap-6">
+      {deployments.map((deployment, idx) => (
+        <DeploymentCard key={idx} {...deployment} />
+      ))}
+    </div>
+  );
 };
 
 export default Deployments;

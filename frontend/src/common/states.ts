@@ -1,12 +1,12 @@
 import create from "zustand";
-import { combine } from "zustand/middleware";
-import { NamespaceProps } from "./types";
+import axiosClient from "./axios";
+import { DeploymentProps, NamespaceProps } from "./types";
 
 interface NamespaceState {
   selected: NamespaceProps | null;
   options: NamespaceProps[];
   setSelected: (namespace: NamespaceProps | null) => void;
-  setOptions: (options: NamespaceProps[]) => void;
+  fetch: () => Promise<void>;
 }
 
 export const useNamespace = create<NamespaceState>((set) => ({
@@ -15,5 +15,23 @@ export const useNamespace = create<NamespaceState>((set) => ({
   setSelected: (namespace) => {
     set({ selected: namespace });
   },
-  setOptions: (options) => set({ options: options }),
+  fetch: async () => {
+    const res = await axiosClient.get<NamespaceProps[]>("namespaces/");
+    set({ options: res.data });
+  },
+}));
+
+interface DeploymentState {
+  deployments: DeploymentProps[];
+  fetch: (namespace: NamespaceProps | null) => Promise<void>;
+}
+
+export const useDeployment = create<DeploymentState>((set) => ({
+  deployments: [],
+  fetch: async (namespace) => {
+    const res = await axiosClient.get<DeploymentProps[]>("deployments/", {
+      params: { namespace: namespace?.name },
+    });
+    set({ deployments: res.data });
+  },
 }));
