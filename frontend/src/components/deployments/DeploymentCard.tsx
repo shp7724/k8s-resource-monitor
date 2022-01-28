@@ -9,7 +9,7 @@ import Container from "./Container";
 const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
   return (
     <div className="rounded-lg bg-indigo-50 border border-indigo-500 p-5 shadow">
-      <div className="text-indigo-800 text-xl font-semibold truncate mb-2">
+      <div className="text-indigo-900 text-xl font-semibold truncate mb-2">
         {props.name}
       </div>
       <div>
@@ -36,9 +36,11 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
         <div className="text-sm text-indigo-900/80 font-semibold mb-1">
           컨테이너
         </div>
-        {props.containers.map((container, idx) => {
-          return <Container key={idx} {...container} />;
-        })}
+        <div className="flex flex-col gap-y-1.5">
+          {props.containers.map((container, idx) => {
+            return <Container key={idx} {...container} />;
+          })}
+        </div>
       </div>
       <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3">
         {Object.entries(props.labels).map(([name, value], index) => {

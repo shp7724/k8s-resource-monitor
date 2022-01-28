@@ -9,6 +9,4 @@ const axiosClient = axios.create({
   timeout: 2000,
 });
 
-console.log(process.env);
-
 export default axiosClient;

@@ -1,5 +1,3 @@
-import colors from "tailwindcss/colors";
-
 export interface PodProps {
   name: string;
   namespace: string;
