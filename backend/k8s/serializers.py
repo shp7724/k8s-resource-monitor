@@ -1,9 +1,11 @@
 from kubernetes.client.models import *
 from kubernetes.client.models import (
+    V1Condition,
     V1DeploymentCondition,
     V1NamespaceCondition,
-    V1Condition,
 )
+from kubernetes.utils import parse_quantity
+
 from .utils import k8s, labels_to_string
 
 
@@ -71,3 +73,31 @@ class Serializer:
     @staticmethod
     def conditions(data: list[V1Condition]) -> list[dict]:
         return [Serializer.condition(instance) for instance in data]
+
+    @staticmethod
+    def pod_usage(data: dict) -> dict:
+        return dict(
+            name=data.get("metadata", {}).get("name"),
+            timestamp=data.get("timestamp"),
+            window=int(data.get("window").strip("s")),
+            usage=[
+                dict(
+                    name=container.get("name"),
+                    cpu=parse_quantity(container["usage"]["cpu"]),
+                    memory=parse_quantity(container["usage"]["memory"]),
+                )
+                for container in data.get("containers", [])
+            ],
+        )
+
+    @staticmethod
+    def node_usage(data: dict) -> dict:
+        return dict(
+            name=data.get("metadata", {}).get("name"),
+            timestamp=data.get("timestamp"),
+            window=int(data.get("window").strip("s")),
+            usage=dict(
+                cpu=parse_quantity(data["usage"]["cpu"]),
+                memory=parse_quantity(data["usage"]["memory"]),
+            ),
+        )

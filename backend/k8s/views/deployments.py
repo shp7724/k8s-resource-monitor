@@ -17,7 +17,7 @@ class ListCreateDeployment(APIView):
     def get(self, request):
         """List deployments with an optional `namespace` parameter."""
         namespace = request.query_params.get("namespace")
-        if namespace is None:
+        if namespace is None or namespace == "전체":
             res: V1DeploymentList = k8s.apps.list_deployment_for_all_namespaces(
                 watch=False
             )
