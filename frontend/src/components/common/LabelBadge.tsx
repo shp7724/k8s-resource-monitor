@@ -1,14 +1,32 @@
 import { FC } from "react";
+import { themeColors } from "../../common/types";
 interface LabelBadgeProps {
   name: string;
   value: string;
+  color?: themeColors;
 }
 
 const LabelBadge: FC<LabelBadgeProps> = (props): JSX.Element => {
+  let colorClass = "";
+  switch (props.color) {
+    case "indigo":
+      colorClass =
+        "bg-indigo-100 divide-indigo-300 border-indigo-300 text-indigo-900";
+      break;
+    case "blue":
+      colorClass = "bg-blue-100 divide-blue-300 border-blue-300 text-blue-900";
+      break;
+    default:
+      break;
+  }
   return (
-    <div className="rounded-full bg-indigo-100 divide-x divide-solid divide-indigo-300 inline-block border-indigo-300 border text-sm text-indigo-900">
-      <div className="inline px-2">{props.name}</div>
-      <div className="inline px-2">{props.value}</div>
+    <div
+      className={`flex items-center rounded-full divide-x divide-solid border text-sm ${colorClass}`}
+    >
+      <div className="inline-block px-2 max-w-[10rem] truncate">
+        {props.name}
+      </div>
+      <div className="inline-block px-2">{props.value}</div>
     </div>
   );
 };

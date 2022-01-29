@@ -4,6 +4,7 @@ from kubernetes.client.models import (
     V1NamespaceCondition,
     V1Condition,
 )
+from .utils import k8s, labels_to_string
 
 
 class Serializer:
@@ -20,12 +21,18 @@ class Serializer:
 
     @staticmethod
     def deployment(instance: V1Deployment) -> dict:
+        pods_managed_by_this_deployment = k8s.core.list_namespaced_pod(
+            namespace=instance.metadata.namespace,
+            label_selector=labels_to_string(instance.spec.selector.match_labels),
+            watch=False,
+        )
         return dict(
             name=instance.metadata.name,
             namespace=instance.metadata.namespace,
             labels=instance.metadata.labels,
             creation_timestamp=instance.metadata.creation_timestamp,
             desired_replicas=instance.spec.replicas,
+            pods=[Serializer.pod(pod) for pod in pods_managed_by_this_deployment.items],
             status=dict(
                 available_replicas=instance.status.available_replicas,
                 ready_replicas=instance.status.ready_replicas,
@@ -58,7 +65,7 @@ class Serializer:
             type=instance.type,
             message=instance.message,
             reason=instance.reason,
-            status=instance.status,
+            status=instance.status == "True",
         )
 
     @staticmethod

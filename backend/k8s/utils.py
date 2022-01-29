@@ -16,3 +16,12 @@ class K8sClient:
 
 
 k8s = K8sClient()
+
+# -------------------
+# Utility Functions
+# -------------------
+
+
+def labels_to_string(labels: dict) -> str:
+    label_strings = [f"{key}={value}" for key, value in labels.items()]
+    return ", ".join(label_strings)

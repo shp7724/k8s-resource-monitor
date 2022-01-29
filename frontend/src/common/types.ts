@@ -6,7 +6,7 @@ export interface PodProps {
   };
   pod_ip: string;
   creation_timestamp: string;
-  status: ConditionProps[];
+  status: PodStatusProps[];
 }
 
 export interface DeploymentProps {
@@ -23,6 +23,7 @@ export interface DeploymentProps {
     replicas: number;
   };
   containers: ContainerProps[];
+  pods: PodProps[];
 }
 
 export interface ContainerProps {
@@ -30,13 +31,15 @@ export interface ContainerProps {
   image_pull_policy: string;
 }
 
-export interface ConditionProps {
-  type: string;
+export interface PodStatusProps {
+  type: "Initialized" | "Ready" | "ContainersReady" | "PodScheduled";
   message: string;
   reason: string;
-  status: string;
+  status: boolean;
 }
 
 export interface NamespaceProps {
   name: string;
 }
+
+export type themeColors = "indigo" | "blue";

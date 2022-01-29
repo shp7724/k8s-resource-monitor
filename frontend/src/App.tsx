@@ -12,6 +12,7 @@ function App() {
 
         <Title className="text-indigo-900" text="Deployments" />
         <Deployments />
+        <div className=" h-32"></div>
       </div>
     </div>
   );

@@ -1,12 +1,25 @@
+import classNames from "classnames";
 import { FC } from "react";
+import { themeColors } from "../../common/types";
 
 interface DescriptionProps {
   children?: React.ReactNode;
+  color?: themeColors;
 }
 
-const Description: FC<DescriptionProps> = ({ children }): JSX.Element => {
+const Description: FC<DescriptionProps> = ({
+  children,
+  color,
+}): JSX.Element => {
   return (
-    <div className="text-sm font-medium text-indigo-900 inline">{children}</div>
+    <div
+      className={classNames("text-sm font-medium inline", {
+        "text-indigo-900": color !== "blue",
+        "text-blue-900": color === "blue",
+      })}
+    >
+      {children}
+    </div>
   );
 };
 
