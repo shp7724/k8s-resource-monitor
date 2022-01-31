@@ -46,9 +46,9 @@ class Serializer:
     @staticmethod
     def container(instance: V1Container) -> dict:
         return dict(
+            name=instance.name,
             image=instance.image,
             image_pull_policy=instance.image_pull_policy,
-            # ports=[port.to_dict() for port in instance.ports],
         )
 
     @staticmethod
@@ -97,6 +97,7 @@ class Serializer:
             timestamp=data.get("timestamp"),
             window=int(data.get("window").strip("s")),
             usage=dict(
+                name=data.get("metadata", {}).get("name"),
                 cpu=parse_quantity(data["usage"]["cpu"]),
                 memory=parse_quantity(data["usage"]["memory"]),
             ),
