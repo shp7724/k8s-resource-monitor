@@ -5,7 +5,7 @@ import LabelBadge from "../common/LabelBadge";
 import Description from "./Description";
 import Label from "./Label";
 
-const Container: FC<PodProps> = (props): JSX.Element => {
+const Pod: FC<PodProps> = (props): JSX.Element => {
   return (
     <div className="py-2 px-3 bg-indigo-100 rounded-md border-indigo-300 border">
       <div>
@@ -37,4 +37,4 @@ const Container: FC<PodProps> = (props): JSX.Element => {
   );
 };
 
-export default Container;
+export default Pod;

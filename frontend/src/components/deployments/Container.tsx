@@ -7,6 +7,10 @@ const Container: FC<ContainerProps> = (props): JSX.Element => {
   return (
     <div className="py-2 px-3 bg-indigo-100 rounded-md border-dashed border border-indigo-300">
       <div>
+        <Label text="이름" />
+        <Description>{props.name}</Description>
+      </div>
+      <div>
         <Label text="이미지" />
         <Description>{props.image}</Description>
       </div>

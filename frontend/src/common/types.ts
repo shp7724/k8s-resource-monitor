@@ -27,6 +27,7 @@ export interface DeploymentProps {
 }
 
 export interface ContainerProps {
+  name: string;
   image: string;
   image_pull_policy: string;
 }
@@ -40,6 +41,26 @@ export interface PodStatusProps {
 
 export interface NamespaceProps {
   name: string;
+}
+
+export interface PodUsageProps {
+  name: string; // pod name
+  timestamp: string;
+  window: number;
+  usage: UsageProps[];
+}
+
+export interface NodeUsageProps {
+  name: string;
+  timestamp: string;
+  window: number;
+  usage: UsageProps;
+}
+
+export interface UsageProps {
+  name: string;
+  cpu: number;
+  memory: number;
 }
 
 export type themeColors = "indigo" | "blue";

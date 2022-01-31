@@ -9,7 +9,7 @@ interface TitleProps {
 const Title: FC<TitleProps> = ({ text, className }): JSX.Element => {
   return (
     <div
-      className={classNames("text-4xl my-4 font-bold", {
+      className={classNames("text-4xl mt-12 mb-4 font-bold", {
         [className ?? ""]: !!className,
       })}
     >

@@ -1,5 +1,5 @@
 import { Fragment, FC, useEffect } from "react";
-import { useNamespace } from "../../common/states";
+import { useNamespace, usePodUsage } from "../../common/states";
 import shallow from "zustand/shallow";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
@@ -10,12 +10,26 @@ const Namespace: FC = (): JSX.Element => {
     shallow
   );
 
+  const fetch1 = usePodUsage((state) => state.fetch);
+  const usagesByPod = usePodUsage(
+    (state) => state.usagesByPod,
+    (obj1, obj2) =>
+      Object.keys(obj1).every((key) => obj1[key].length === obj2[key].length)
+  );
+
   useEffect(() => {
     fetch();
   }, []);
 
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      fetch1(null);
+    }, 1000);
+    return () => clearInterval(timerId);
+  }, []);
+
   return (
-    <div className="py-5">
+    <div className="">
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm hover:cursor-pointer">
@@ -38,7 +52,9 @@ const Namespace: FC = (): JSX.Element => {
                 <Listbox.Option
                   key={personIdx}
                   className={({ active }) =>
-                    `${active ? "text-amber-900 bg-amber-100" : "text-gray-900"}
+                    `${
+                      active ? "text-indigo-900 bg-indigo-100" : "text-gray-900"
+                    }
                     cursor-default select-none relative py-2 pl-10 pr-4`
                   }
                   value={namespace}
