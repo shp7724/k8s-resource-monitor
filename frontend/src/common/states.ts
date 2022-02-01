@@ -70,20 +70,22 @@ interface PodUsageState {
   usagesByPod: {
     [podName: string]: PodUsageProps[];
   };
-  fetch: (namespace: NamespaceProps | null) => Promise<void>;
+  fetch: () => Promise<void>;
   getChartDataOf: (podName: string) => ContainerChartDataProps[];
 }
 
 export const usePodUsage = create<PodUsageState>((set, get) => ({
   usagesByPod: {},
-  fetch: async (namespace) => {
-    const res = await axiosClient.get<PodUsageProps[]>("pods/top/", {
-      params: { namespace: namespace?.name },
-    });
+  fetch: async () => {
+    const res = await axiosClient.get<PodUsageProps[]>("pods/top/");
     const usagesByPod = { ...get().usagesByPod };
     for (const usage of res.data) {
       if (usage.name in usagesByPod) {
-        usagesByPod[usage.name].push(usage);
+        if (
+          !usagesByPod[usage.name].find((i) => i.timestamp == usage.timestamp)
+        ) {
+          usagesByPod[usage.name].push(usage);
+        }
       } else {
         usagesByPod[usage.name] = [];
       }
@@ -92,28 +94,30 @@ export const usePodUsage = create<PodUsageState>((set, get) => ({
   },
   getChartDataOf: (podName) => {
     const podUsages = get().usagesByPod[podName];
-    if (podUsages == null || podUsages[0]?.usage == null) return [];
+    if (podUsages == null || podUsages.length === 0) return [];
 
     const numContainers = podUsages[0].usage.length;
+
     const containersData: ContainerChartDataProps[] = [];
     for (let i = 0; i < numContainers; i++) {
       const cpuData = {
         id: "cpu",
-        data: podUsages.map((usage) => ({
+        data: podUsages.slice(-30).map((usage) => ({
           x: usage.timestamp,
           y: usage.usage[i].cpu,
         })),
       };
       const memoryData = {
         id: "memory",
-        data: podUsages.map((usage) => ({
+        data: podUsages.slice(-30).map((usage) => ({
           x: usage.timestamp,
-          y: usage.usage[i].memory,
+          y: usage.usage[i].memory / 2 ** 20,
         })),
       };
       const containerData: ContainerChartDataProps = {
         containerName: podUsages[0].usage[i].name,
-        chartData: [cpuData, memoryData],
+        cpuChartData: cpuData,
+        memoryChartData: memoryData,
       };
       containersData.push(containerData);
     }

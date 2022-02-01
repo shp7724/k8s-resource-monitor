@@ -1,8 +1,6 @@
 import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/solid";
 import { FC } from "react";
 import { PodProps } from "../../common/types";
-import LabelBadge from "../common/LabelBadge";
-import MyResponsiveLine, { data } from "../pods/SampleChart";
 import Description from "./Description";
 import Label from "./Label";
 

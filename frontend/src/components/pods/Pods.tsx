@@ -13,8 +13,9 @@ const Pods: FC = (): JSX.Element => {
   }, [namespace]);
 
   useEffect(() => {
+    fetchPodUsage();
     const timerId = setInterval(() => {
-      fetchPodUsage(null);
+      fetchPodUsage();
     }, 5000);
     return () => clearInterval(timerId);
   }, []);

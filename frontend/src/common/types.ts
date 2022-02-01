@@ -65,7 +65,8 @@ export interface UsageProps {
 
 export interface ContainerChartDataProps {
   containerName: string;
-  chartData: ChartDataProps[];
+  cpuChartData: ChartDataProps;
+  memoryChartData: ChartDataProps;
 }
 
 export interface ChartDataProps {

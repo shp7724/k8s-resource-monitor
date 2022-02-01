@@ -1,27 +1,12 @@
 import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/solid";
-import { FC, useEffect, useState } from "react";
-import { usePodUsage } from "../../common/states";
-import { ContainerChartDataProps, PodProps } from "../../common/types";
+import { FC } from "react";
+import { PodProps } from "../../common/types";
 import LabelBadge from "../common/LabelBadge";
 import Description from "../deployments/Description";
 import Label from "../deployments/Label";
-import MyResponsiveLine, { data } from "./SampleChart";
+import PodUsageChart from "./PodUsageChart";
 
 const PodCard: FC<PodProps> = (props): JSX.Element => {
-  const [chartData, setChartData] = useState<ContainerChartDataProps[]>([]);
-  const getChartDataOf = usePodUsage((state) => state.getChartDataOf);
-
-  useEffect(() => {
-    const timerId = setInterval(() => {
-      setChartData(getChartDataOf(props.name));
-    }, 1000);
-    return () => clearInterval(timerId);
-  }, []);
-
-  useEffect(() => {
-    console.log(chartData);
-  }, [chartData]);
-
   return (
     <div className="rounded-lg bg-blue-50 border border-blue-500 p-5 shadow">
       <div>
@@ -42,13 +27,7 @@ const PodCard: FC<PodProps> = (props): JSX.Element => {
           )}
         </Description>
       </div>
-      {chartData.map((container) => {
-        return (
-          <div key={container.containerName} className="w-full h-28">
-            <MyResponsiveLine data={container.chartData} />
-          </div>
-        );
-      })}
+      <PodUsageChart podName={props.name} />
       <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3">
         {Object.entries(props.labels).map(([name, value], index) => {
           return (
