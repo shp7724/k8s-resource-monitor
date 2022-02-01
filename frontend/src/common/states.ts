@@ -1,6 +1,7 @@
 import create from "zustand";
 import axiosClient from "./axios";
 import {
+  ContainerChartDataProps,
   DeploymentProps,
   NamespaceProps,
   PodProps,
@@ -70,6 +71,7 @@ interface PodUsageState {
     [podName: string]: PodUsageProps[];
   };
   fetch: (namespace: NamespaceProps | null) => Promise<void>;
+  getChartDataOf: (podName: string) => ContainerChartDataProps[];
 }
 
 export const usePodUsage = create<PodUsageState>((set, get) => ({
@@ -87,5 +89,34 @@ export const usePodUsage = create<PodUsageState>((set, get) => ({
       }
     }
     set({ usagesByPod: usagesByPod });
+  },
+  getChartDataOf: (podName) => {
+    const podUsages = get().usagesByPod[podName];
+    if (podUsages == null || podUsages[0]?.usage == null) return [];
+
+    const numContainers = podUsages[0].usage.length;
+    const containersData: ContainerChartDataProps[] = [];
+    for (let i = 0; i < numContainers; i++) {
+      const cpuData = {
+        id: "cpu",
+        data: podUsages.map((usage) => ({
+          x: usage.timestamp,
+          y: usage.usage[i].cpu,
+        })),
+      };
+      const memoryData = {
+        id: "memory",
+        data: podUsages.map((usage) => ({
+          x: usage.timestamp,
+          y: usage.usage[i].memory,
+        })),
+      };
+      const containerData: ContainerChartDataProps = {
+        containerName: podUsages[0].usage[i].name,
+        chartData: [cpuData, memoryData],
+      };
+      containersData.push(containerData);
+    }
+    return containersData;
   },
 }));

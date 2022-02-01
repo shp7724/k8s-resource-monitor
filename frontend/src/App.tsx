@@ -14,7 +14,7 @@ function App() {
         <Title className="text-indigo-900" text="Deployments" />
         <Deployments />
 
-        <Title className="text-indigo-900" text="Pods" />
+        <Title className="text-blue-900" text="Pods" />
         <Pods />
 
         <div className=" h-32"></div>

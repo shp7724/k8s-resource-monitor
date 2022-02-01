@@ -63,4 +63,14 @@ export interface UsageProps {
   memory: number;
 }
 
+export interface ContainerChartDataProps {
+  containerName: string;
+  chartData: ChartDataProps[];
+}
+
+export interface ChartDataProps {
+  id: string;
+  data: { x: string; y: number }[];
+}
+
 export type themeColors = "indigo" | "blue";

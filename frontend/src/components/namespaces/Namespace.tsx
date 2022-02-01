@@ -1,8 +1,8 @@
-import { Fragment, FC, useEffect } from "react";
-import { useNamespace, usePodUsage } from "../../common/states";
-import shallow from "zustand/shallow";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { FC, Fragment, useEffect } from "react";
+import shallow from "zustand/shallow";
+import { useNamespace } from "../../common/states";
 
 const Namespace: FC = (): JSX.Element => {
   const { selected, options, fetch, setSelected } = useNamespace(
@@ -10,22 +10,8 @@ const Namespace: FC = (): JSX.Element => {
     shallow
   );
 
-  const fetch1 = usePodUsage((state) => state.fetch);
-  const usagesByPod = usePodUsage(
-    (state) => state.usagesByPod,
-    (obj1, obj2) =>
-      Object.keys(obj1).every((key) => obj1[key].length === obj2[key].length)
-  );
-
   useEffect(() => {
     fetch();
-  }, []);
-
-  useEffect(() => {
-    const timerId = setInterval(() => {
-      fetch1(null);
-    }, 1000);
-    return () => clearInterval(timerId);
   }, []);
 
   return (

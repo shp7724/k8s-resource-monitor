@@ -11,7 +11,7 @@ from k8s.utils import k8s
 @api_view(["GET"])
 def list_pods(request: Request):
     namespace = request.query_params.get("namespace")
-    if namespace is None:
+    if namespace is None or namespace == "전체":
         res = k8s.core.list_pod_for_all_namespaces(watch=False)
     else:
         res = k8s.core.list_namespaced_pod(namespace=namespace, watch=False)
