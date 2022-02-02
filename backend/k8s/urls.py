@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 from .views import *
+from .consumers import PodSSHConsumer
 
 urlpatterns = [
     path("pods/", list_pods),
@@ -13,5 +14,12 @@ urlpatterns = [
     path(
         "deployments/<str:deploy_namespace>/<str:deploy_name>/",
         RetrieveUpdateDestroyDeployment.as_view(),
+    ),
+]
+
+websocket_urlpatterns = [
+    path(
+        "ws/ssh/pod/<str:namespace>/<str:pod_name>/<str:container_name>/",
+        PodSSHConsumer.as_asgi(),
     ),
 ]

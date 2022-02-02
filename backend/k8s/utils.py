@@ -4,6 +4,7 @@ import requests
 from kubernetes import client, config
 from kubernetes.config.config_exception import ConfigException
 from rest_framework.response import Response
+from kubernetes.stream import stream
 
 
 class K8sClient:
@@ -13,6 +14,30 @@ class K8sClient:
         self.custom = client.CustomObjectsApi()
         self.apps = client.AppsV1Api()
         self.api = client.ApiClient()
+
+    def get_ssh_stream(self, namespace: str, pod_name: str, container_name: str = ""):
+        exec_command = [
+            "/bin/sh",
+            "-c",
+            "TERM=xterm-256color; export TERM; [ -x /bin/bash ] "
+            "&& ([ -x /usr/bin/script ] "
+            '&& /usr/bin/script -q -c "/bin/bash" /dev/null || exec /bin/bash) '
+            "|| exec /bin/sh",
+        ]
+
+        cont_stream = stream(
+            self.core.connect_get_namespaced_pod_exec,
+            name=pod_name,
+            namespace=namespace,
+            container=container_name,
+            command=exec_command,
+            stderr=True,
+            stdin=True,
+            stdout=True,
+            tty=True,
+            _preload_content=False,
+        )
+        return cont_stream
 
 
 k8s = K8sClient()

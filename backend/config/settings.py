@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "k8s",
     "corsheaders",
+    "channels",
 ]
 
 
@@ -137,3 +138,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "config.exception_handler.custom_exception_handler"
 }
+
+# ---------------------------------------------------------------------------- #
+#                                   Channels                                   #
+# ---------------------------------------------------------------------------- #
+
+ASGI_APPLICATION = "config.asgi.application"
