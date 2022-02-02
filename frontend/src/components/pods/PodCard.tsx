@@ -9,7 +9,7 @@ import PodUsageChart from "./PodUsageChart";
 const PodCard: FC<PodProps> = (props): JSX.Element => {
   return (
     <div className="rounded-lg bg-blue-50 border border-blue-500 p-5 shadow">
-      <div>
+      <div className="truncate">
         <Label text="이름" color="blue" />
         <Description color="blue">{props.name}</Description>
       </div>

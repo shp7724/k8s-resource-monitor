@@ -2,6 +2,7 @@ import { FC, useEffect } from "react";
 import shallow from "zustand/shallow";
 import { useNamespace, usePod, usePodUsage } from "../../common/states";
 import PodCard from "./PodCard";
+import TerminalDialog from "./TerminalDialog";
 
 const Pods: FC = (): JSX.Element => {
   const namespace = useNamespace((state) => state.selected);
@@ -22,6 +23,7 @@ const Pods: FC = (): JSX.Element => {
 
   return (
     <>
+      <TerminalDialog />
       <div className="grid grid-cols-3 gap-6">
         {pods.map((pod, idx) => (
           <PodCard key={idx} {...pod} />

@@ -87,7 +87,7 @@ export const usePodUsage = create<PodUsageState>((set, get) => ({
           usagesByPod[usage.name].push(usage);
         }
       } else {
-        usagesByPod[usage.name] = [];
+        usagesByPod[usage.name] = [usage];
       }
     }
     set({ usagesByPod: usagesByPod });
@@ -122,5 +122,32 @@ export const usePodUsage = create<PodUsageState>((set, get) => ({
       containersData.push(containerData);
     }
     return containersData;
+  },
+}));
+
+/* --------------------------- Container Terminal --------------------------- */
+
+interface TerminalProps {
+  podName: string;
+  namespace: string;
+  containerName: string;
+}
+
+interface TerminalState extends TerminalProps {
+  isOpen: boolean;
+  openTerminal: (props: TerminalProps) => () => void;
+  closeTerminal: () => void;
+}
+
+export const useTerminal = create<TerminalState>((set) => ({
+  isOpen: false,
+  podName: "",
+  containerName: "",
+  namespace: "",
+  openTerminal: (props) => () => {
+    set({ isOpen: true, ...props });
+  },
+  closeTerminal: () => {
+    set({ isOpen: false });
   },
 }));

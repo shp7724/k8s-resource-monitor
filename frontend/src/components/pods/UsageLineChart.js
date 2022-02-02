@@ -2,7 +2,7 @@ import { ResponsiveLine } from "@nivo/line";
 import colors from "tailwindcss/colors";
 
 // eslint-disable-next-line react/prop-types
-const UsageLineChart = ({ data }) => (
+const UsageLineChart = ({ data, displayMode }) => (
   <ResponsiveLine
     data={data}
     margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
@@ -14,7 +14,12 @@ const UsageLineChart = ({ data }) => (
       stacked: true,
       reverse: false,
     }}
-    // yFormat=" >-.5f"
+    yFormat={(value) =>
+      displayMode === "CPU"
+        ? Number(value).toFixed(5) + "cpu"
+        : Number(value).toFixed(3) + "MB"
+    }
+    xFormat="time:%Y-%m-%d %H:%M:%S"
     axisTop={null}
     axisRight={null}
     axisBottom={null}
