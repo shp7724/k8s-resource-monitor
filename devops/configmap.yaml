@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: django-k8s-resource-monitor-config
-  namespace: backend-system
+  namespace: frontend-system
 data:
   DJANGO_ALLOWED_HOST: "182.225.15.97"
   DEBUG: "True"

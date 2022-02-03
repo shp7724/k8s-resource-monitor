@@ -21,10 +21,9 @@ const Terminal: FC = (): JSX.Element => {
   useEffect(() => {
     switch (readyState) {
       case ReadyState.CONNECTING:
-        xtermRef.current.terminal.writeln(`Connecting to ${containerName}...`);
-        break;
-      case ReadyState.OPEN:
-        xtermRef.current.terminal.writeln(`Connection established!\n`);
+        xtermRef.current.terminal.writeln(
+          `Connecting to ${containerName}...\n`
+        );
         break;
       case ReadyState.CLOSING:
         xtermRef.current.terminal.writeln(`Closing connection...`);
