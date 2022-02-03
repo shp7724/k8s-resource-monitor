@@ -1,24 +1,26 @@
 import { TerminalIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import { FC, useEffect, useState } from "react";
-import { usePodUsage } from "../../common/states";
+import { TerminalProps, usePodUsage, useTerminal } from "../../common/states";
 import { ContainerChartDataProps } from "../../common/types";
 import UsageLineChart from "./UsageLineChart";
 
-interface PodUsageChart {
-  podName: string;
-}
-
 type UsageDisplayMode = "CPU" | "Memory";
 
-const PodUsageChart: FC<PodUsageChart> = ({ podName }): JSX.Element => {
+interface PodUsageChartProps {
+  podName: string;
+  namespace: string;
+}
+
+const PodUsageChart: FC<PodUsageChartProps> = (props): JSX.Element => {
   const [chartData, setChartData] = useState<ContainerChartDataProps[]>([]);
   const usagesByPod = usePodUsage((state) => state.usagesByPod);
   const getChartDataOf = usePodUsage((state) => state.getChartDataOf);
   const [displayMode, setDisplayMode] = useState<UsageDisplayMode>("CPU");
+  const openTerminal = useTerminal((state) => state.openTerminal);
 
   useEffect(() => {
-    setChartData(getChartDataOf(podName));
+    setChartData(getChartDataOf(props.podName));
   }, [usagesByPod]);
 
   return (
@@ -63,6 +65,11 @@ const PodUsageChart: FC<PodUsageChart> = ({ podName }): JSX.Element => {
                 </span>
               </div>
               <TerminalIcon
+                onClick={openTerminal({
+                  podName: props.podName,
+                  containerName: container.containerName,
+                  namespace: props.namespace,
+                })}
                 className={classNames(
                   "h-5 w-5 text-blue-900 hover:text-blue-600 active:text-blue-700 cursor-pointer",
                   {}

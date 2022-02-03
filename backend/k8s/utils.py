@@ -16,14 +16,7 @@ class K8sClient:
         self.api = client.ApiClient()
 
     def get_ssh_stream(self, namespace: str, pod_name: str, container_name: str = ""):
-        exec_command = [
-            "/bin/sh",
-            "-c",
-            "TERM=xterm-256color; export TERM; [ -x /bin/bash ] "
-            "&& ([ -x /usr/bin/script ] "
-            '&& /usr/bin/script -q -c "/bin/bash" /dev/null || exec /bin/bash) '
-            "|| exec /bin/sh",
-        ]
+        exec_command = ["/bin/sh"]
 
         cont_stream = stream(
             self.core.connect_get_namespaced_pod_exec,

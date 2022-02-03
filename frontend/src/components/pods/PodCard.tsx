@@ -27,14 +27,16 @@ const PodCard: FC<PodProps> = (props): JSX.Element => {
           )}
         </Description>
       </div>
-      <PodUsageChart podName={props.name} />
-      <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3">
-        {Object.entries(props.labels).map(([name, value], index) => {
-          return (
-            <LabelBadge key={index} name={name} value={value} color="blue" />
-          );
-        })}
-      </div>
+      <PodUsageChart podName={props.name} namespace={props.namespace} />
+      {props.labels && (
+        <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3">
+          {Object.entries(props.labels).map(([name, value], index) => {
+            return (
+              <LabelBadge key={index} name={name} value={value} color="blue" />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

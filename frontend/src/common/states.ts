@@ -127,7 +127,7 @@ export const usePodUsage = create<PodUsageState>((set, get) => ({
 
 /* --------------------------- Container Terminal --------------------------- */
 
-interface TerminalProps {
+export interface TerminalProps {
   podName: string;
   namespace: string;
   containerName: string;

@@ -1,11 +1,12 @@
 import axios from "axios";
 
+export const endpoint =
+  process.env.NODE_ENV == "production"
+    ? "182.225.15.97:31234"
+    : "localhost:8000";
+
 const axiosClient = axios.create({
-  baseURL: `http://${
-    process.env.NODE_ENV == "production"
-      ? "182.225.15.97:31234"
-      : "localhost:8000"
-  }/api/`,
+  baseURL: `http://${endpoint}/api/`,
   timeout: 2000,
 });
 

@@ -3,20 +3,58 @@ import { FitAddon } from "xterm-addon-fit";
 import { XTerm } from "xterm-for-react";
 import { useTerminal } from "../../common/states";
 import colors from "tailwindcss/colors";
+import shallow from "zustand/shallow";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import { endpoint } from "../../common/axios";
 
 const Terminal: FC = (): JSX.Element => {
   const xtermRef = useRef<any>(null);
   const fitAddon = new FitAddon();
-  const [input, setInput] = useState("");
-  const isOpen = useTerminal((state) => state.isOpen);
+  const { isOpen, containerName, podName, namespace } = useTerminal(
+    (state) => state,
+    shallow
+  );
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
+    `ws://${endpoint}/ws/ssh/pod/${namespace}/${podName}/${containerName}/`
+  );
+
+  useEffect(() => {
+    switch (readyState) {
+      case ReadyState.CONNECTING:
+        xtermRef.current.terminal.writeln(`Connecting to ${containerName}...`);
+        break;
+      case ReadyState.OPEN:
+        xtermRef.current.terminal.writeln(`Connection established!\n`);
+        break;
+      case ReadyState.CLOSING:
+        xtermRef.current.terminal.writeln(`Closing connection...`);
+        break;
+      case ReadyState.CLOSED:
+        xtermRef.current.terminal.writeln(
+          `An error occurred while establishing connection.`
+        );
+        xtermRef.current.terminal.writeln(
+          `It may indicate that this container does not support ssh connections.`
+        );
+        break;
+      default:
+        break;
+    }
+  }, [readyState]);
+
+  useEffect(() => {
+    if (lastMessage !== null) {
+      xtermRef.current.terminal.write(lastMessage.data);
+    }
+  }, [lastMessage]);
 
   useEffect(() => {
     fitAddon.fit();
-    xtermRef.current.terminal.writeln("hlloeo");
     xtermRef.current.terminal.setOption("theme", {
       background: colors.gray[900],
     });
   }, []);
+
   useEffect(() => {
     fitAddon.fit();
   }, [isOpen]);
@@ -27,20 +65,7 @@ const Terminal: FC = (): JSX.Element => {
       addons={[fitAddon]}
       className=""
       onData={(data) => {
-        const code = data.charCodeAt(0);
-        // If the user hits empty and there is something typed echo it.
-        if (code === 13 && input.length > 0) {
-          xtermRef.current.terminal.write("\r\nYou typed: '" + input + "'\r\n");
-          xtermRef.current.terminal.write("echo> ");
-          setInput("");
-        } else if (code < 32 || code === 127) {
-          // Disable control Keys such as arrow keys
-          return;
-        } else {
-          // Add general key press characters to the terminal
-          xtermRef.current.terminal.write(data);
-          setInput(input + data);
-        }
+        sendMessage(data);
       }}
     />
   );
