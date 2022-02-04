@@ -55,7 +55,7 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
       .promise(promise, {
         loading: "삭제 중...",
         success: "삭제 성공!",
-        error: "삭제 실패",
+        error: (err) => `${err.response.data.message}`,
       })
       .then(() => {
         setTimeout(() => {
