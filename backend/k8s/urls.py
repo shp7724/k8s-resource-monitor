@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import include, path
 
+from backend.k8s.views.configmaps import ListCreateConfigMaps, UpdateDestroyConfigMap
+
 from .views import *
 from .consumers import PodSSHConsumer
 
@@ -14,6 +16,11 @@ urlpatterns = [
     path(
         "deployments/<str:deploy_namespace>/<str:deploy_name>/",
         RetrieveUpdateDestroyDeployment.as_view(),
+    ),
+    path("configmaps/", ListCreateConfigMaps.as_view()),
+    path(
+        "configmaps/<str:namespace>/<str:name>/",
+        UpdateDestroyConfigMap.as_view(),
     ),
 ]
 

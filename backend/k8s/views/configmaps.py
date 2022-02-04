@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-class ListCreateConfigmaps(APIView):
+class ListCreateConfigMaps(APIView):
     def get(request):
         namespace = request.query_params.get("namespace")
         if namespace is None or namespace == "전체":
@@ -28,7 +28,7 @@ class ListCreateConfigmaps(APIView):
         return Response(status=201)
 
 
-class UpdateDestroyConfigmap(APIView):
+class UpdateDestroyConfigMap(APIView):
     def patch(request: Request, namespace: str, name: str):
         configmap = get_configmap(namespace=namespace, name=name)
 
