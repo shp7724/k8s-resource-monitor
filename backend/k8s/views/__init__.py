@@ -1,4 +1,4 @@
 from .deployments import ListCreateDeployment, RetrieveUpdateDestroyDeployment
-from .monitor import *
+from .metrics import *
 from .namespaces import *
 from .pods import *
