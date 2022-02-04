@@ -33,7 +33,7 @@ const Terminal: FC = (): JSX.Element => {
           `An error occurred while establishing connection.`
         );
         xtermRef.current.terminal.writeln(
-          `It may indicate that this container does not support ssh connections.`
+          `It may be because this container does not support ssh connections.`
         );
         break;
       default:

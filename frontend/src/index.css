@@ -2,11 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-.xterm-viewport::-webkit-scrollbar {
+.xterm-viewport::-webkit-scrollbar,
+.scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
 
-.xterm-viewport {
+.xterm-viewport,
+.scrollbar-hide {
   -ms-overflow-style: none; /* IE and 엣지 */
   scrollbar-width: none; /* 파이어폭스 */
 }

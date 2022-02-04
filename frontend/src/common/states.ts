@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import create from "zustand";
 import axiosClient from "./axios";
 import {
@@ -35,15 +36,32 @@ export const useNamespace = create<NamespaceState>((set) => ({
 interface DeploymentState {
   deployments: DeploymentProps[];
   fetch: (namespace: NamespaceProps | null) => Promise<void>;
+  delete: (namespace: string, name: string) => Promise<void>;
 }
 
-export const useDeployment = create<DeploymentState>((set) => ({
+export const useDeployment = create<DeploymentState>((set, get) => ({
   deployments: [],
   fetch: async (namespace) => {
     const res = await axiosClient.get<DeploymentProps[]>("deployments/", {
       params: { namespace: namespace?.name },
     });
-    set({ deployments: res.data });
+    set({
+      deployments: res.data.filter((dep) => dep.status.available_replicas > 0),
+    });
+  },
+  delete: async (namespace, name) => {
+    const promise = axiosClient.delete(`deployments/${namespace}/${name}/`);
+    toast
+      .promise(promise, {
+        loading: "삭제 중...",
+        success: "삭제 성공!",
+        error: "삭제 실패",
+      })
+      .then(() => {
+        setTimeout(() => {
+          get().fetch(useNamespace.getState().selected);
+        }, 1000);
+      });
   },
 }));
 

@@ -107,7 +107,7 @@ class RetrieveUpdateDestroyDeployment(APIView):
 
         k8s.apps.delete_namespaced_deployment(
             name=deploy_name,
-            deploy_namespace=deploy_namespace,
+            namespace=deploy_namespace,
             body=V1DeleteOptions(
                 propagation_policy="Foreground", grace_period_seconds=5
             ),

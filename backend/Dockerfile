@@ -1,4 +1,4 @@
-FROM python:3.9.9-alpine3.15
+FROM python:3.9.9-slim
 
 ADD ./requirements.txt /app/requirements.txt
 

@@ -3,7 +3,7 @@ import axios from "axios";
 export const endpoint =
   process.env.NODE_ENV == "production"
     ? "182.225.15.97:31234"
-    : "django-k8s-resource-monitor-svc:8000";
+    : "localhost:8000";
 
 const axiosClient = axios.create({
   baseURL: `http://${endpoint}/api/`,

@@ -6,10 +6,14 @@ import Label from "./Label";
 import Description from "./Description";
 import Container from "./Container";
 import Pod from "./Pod";
+import DeploymentMenus from "./DeploymentMenus";
 
 const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
   return (
-    <div className="rounded-lg bg-indigo-50 border border-indigo-500 p-5 shadow">
+    <div className="rounded-lg bg-indigo-50 border border-indigo-500 px-5 pb-5 shadow">
+      <div className="flex justify-end mt-3">
+        <DeploymentMenus name={props.name} namespace={props.namespace} />
+      </div>
       <div className="text-indigo-900 text-xl font-semibold truncate mb-2">
         {props.name}
       </div>

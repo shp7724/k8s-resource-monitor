@@ -1,4 +1,8 @@
-import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/solid";
+import {
+  CheckCircleIcon,
+  DotsHorizontalIcon,
+  ExclamationCircleIcon,
+} from "@heroicons/react/outline";
 import { FC } from "react";
 import { PodProps } from "../../common/types";
 import LabelBadge from "../common/LabelBadge";
