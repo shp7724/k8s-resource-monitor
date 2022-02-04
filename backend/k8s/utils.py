@@ -1,10 +1,17 @@
 from datetime import datetime
 
 import requests
+import yaml
 from kubernetes import client, config
+from kubernetes.client.models import *
 from kubernetes.config.config_exception import ConfigException
-from rest_framework.response import Response
 from kubernetes.stream import stream
+from kubernetes.utils import create_from_yaml
+from rest_framework.exceptions import ParseError
+from rest_framework.request import Request
+from rest_framework.response import Response
+
+from .exceptions import *
 
 
 class K8sClient:
@@ -38,6 +45,25 @@ k8s = K8sClient()
 # -------------------
 # Utility Functions
 # -------------------
+
+
+def create_resource(request: Request):
+    yaml_data = request.data.get("yaml")
+    if yaml_data is None:
+        raise ParseError(detail="yaml file not found.")
+    try:
+        create_from_yaml(k8s_client=k8s.api, yaml_objects=yaml.safe_load_all(yaml_data))
+    except Exception as e:
+        raise FailedToCreate(detail=str(e))
+
+
+def get_configmap(namespace: str, name: str) -> V1ConfigMap:
+    try:
+        configmap = k8s.core.read_namespaced_config_map(name=name, namespace=namespace)
+    except Exception as e:
+        raise ResourceNotFound(detail=str(e), resource_name="ConfigMap")
+    else:
+        return configmap
 
 
 def labels_to_string(labels: dict) -> str:

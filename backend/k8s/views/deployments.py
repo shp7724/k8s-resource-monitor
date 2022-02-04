@@ -1,16 +1,14 @@
 import requests
-import yaml
+from backend.k8s.utils import create_resource
+from k8s.exceptions import *
+from k8s.serializers import Serializer
+from k8s.utils import k8s
 from kubernetes.client.models import *
-from kubernetes.utils import create_from_yaml
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import *
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from k8s.exceptions import *
-from k8s.serializers import Serializer
-from k8s.utils import k8s
 
 
 class ListCreateDeployment(APIView):
@@ -33,18 +31,8 @@ class ListCreateDeployment(APIView):
             ParseError: Raised when no yaml file data is given.
             FailedToCreate: Raised when the names of the objects already exist.
         """
-        yaml_data = request.data.get("yaml")
-        if yaml_data is None:
-            raise ParseError(detail="yaml file not found.")
-        try:
-            create_from_yaml(
-                k8s_client=k8s.api, yaml_objects=yaml.safe_load_all(yaml_data)
-            )
-        except Exception as e:
-            raise FailedToCreate(detail=str(e))
-        res = k8s.apps.list_deployment_for_all_namespaces()
-        data = [Serializer.deployment(dep) for dep in res.items]
-        return Response(data)
+        create_resource(request)
+        return Response(status=201)
 
 
 class RetrieveUpdateDestroyDeployment(APIView):
@@ -82,8 +70,12 @@ class RetrieveUpdateDestroyDeployment(APIView):
         )
 
         replicas = request.data.get("replicas")
+        namespace = request.data.get("namespace")
+
         if replicas is not None:
             deployment.spec.replicas = replicas
+        if namespace is not None:
+            deployment.metadata.namespace = namespace
 
         try:
             updated_deployment = k8s.apps.patch_namespaced_deployment(
@@ -105,11 +97,14 @@ class RetrieveUpdateDestroyDeployment(APIView):
         if deploy_namespace.endswith("-system"):
             raise ProtectedError(message="System Deployment는 삭제할 수 없습니다.")
 
-        k8s.apps.delete_namespaced_deployment(
-            name=deploy_name,
-            namespace=deploy_namespace,
-            body=V1DeleteOptions(
-                propagation_policy="Foreground", grace_period_seconds=5
-            ),
-        )
+        try:
+            k8s.apps.delete_namespaced_deployment(
+                name=deploy_name,
+                namespace=deploy_namespace,
+                body=V1DeleteOptions(
+                    propagation_policy="Foreground", grace_period_seconds=5
+                ),
+            )
+        except Exception as e:
+            raise FailedToDelete(detail=str(e))
         return Response(status=204)

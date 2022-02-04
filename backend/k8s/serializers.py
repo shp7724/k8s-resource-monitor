@@ -62,6 +62,15 @@ class Serializer:
         )
 
     @staticmethod
+    def configmap(instance: V1ConfigMap) -> dict:
+        return dict(
+            name=instance.metadata.name,
+            namespace=instance.metadata.namespace,
+            labels=instance.metadata.labels,
+            data=instance.data,
+        )
+
+    @staticmethod
     def condition(instance: V1Container) -> dict:
         return dict(
             type=instance.type,
