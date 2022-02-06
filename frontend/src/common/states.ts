@@ -237,3 +237,34 @@ export const useTerminal = create<TerminalState>((set) => ({
     set({ isOpen: false });
   },
 }));
+
+/* -------------------------- Create Resource Modal ------------------------- */
+
+interface CreateResourceModalState {
+  yaml: string;
+  setYaml: (code: string) => void;
+  create: () => void;
+  isOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
+}
+
+export const useCreateResourceModal = create<CreateResourceModalState>(
+  (set, get) => ({
+    yaml: "",
+    setYaml: (code) => {
+      set({ yaml: code });
+    },
+    create: () => {
+      const promise = axiosClient.post("common/create/", { yaml: get().yaml });
+      toast.promise(promise, {
+        loading: "생성 중...",
+        success: "생성 요청이 전송되었습니다.",
+        error: (err) => err.response.data.message,
+      });
+    },
+    isOpen: false,
+    openModal: () => set({ isOpen: true }),
+    closeModal: () => set({ isOpen: false }),
+  })
+);

@@ -48,7 +48,7 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
   return (
     <div className="rounded-lg bg-indigo-50 border border-indigo-500 px-5 pb-5 shadow">
       <div className="flex justify-end mt-3">
-        <DropdownMenus menus={menus(props)} />
+        <DropdownMenus menus={menus(props)} iconClassName="text-indigo-600" />
       </div>
       <div className="text-indigo-900 text-xl font-semibold truncate mb-2">
         {props.name}
