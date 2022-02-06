@@ -30,26 +30,21 @@ const PatchDeploymentModal: FC = (): JSX.Element => {
         setPatchModalOpen(false);
       }}
     >
-      <CodeEditor
-        ref={(node) => {
-          node?.parentElement?.style.setProperty(
-            "overflow-y",
-            "auto",
-            "important"
-          );
-        }}
-        value={deploymentYaml}
-        language="yaml"
-        placeholder="YAML 코드를 입력해주세요."
-        onChange={(evn) => setDeploymentYaml(evn.target.value)}
-        padding={15}
-        className="bg-gray-800 rounded-lg mt-4 text-gray-200 max-h-[70vh]"
-        style={{
-          fontSize: 12,
-          fontFamily:
-            "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-        }}
-      />
+      <div className="max-h-[70vh] overflow-y-auto rounded-lg mt-4">
+        <CodeEditor
+          value={deploymentYaml}
+          language="yaml"
+          placeholder="YAML 코드를 입력해주세요."
+          onChange={(evn) => setDeploymentYaml(evn.target.value)}
+          padding={15}
+          className="bg-gray-800 text-gray-200"
+          style={{
+            fontSize: 12,
+            fontFamily:
+              "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+          }}
+        />
+      </div>
       <div className="mt-4 flex justify-center">
         <button
           type="button"

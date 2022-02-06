@@ -37,6 +37,7 @@ interface DeploymentState {
   deployments: DeploymentProps[];
   fetch: (namespace: NamespaceProps | null) => Promise<void>;
   delete: (namespace: string, name: string) => void;
+  restart: (namespace: string, name: string) => void;
 }
 
 export const useDeployment = create<DeploymentState>((set, get) => ({
@@ -56,6 +57,20 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
         loading: "삭제 중...",
         success: "삭제 성공!",
         error: (err) => `${err.response.data.message}`,
+      })
+      .then(() => {
+        setTimeout(() => {
+          get().fetch(useNamespace.getState().selected);
+        }, 1000);
+      });
+  },
+  restart: (namespace, name) => {
+    const promise = axiosClient.put(`deployments/${namespace}/${name}/`);
+    toast
+      .promise(promise, {
+        loading: "로딩 중...",
+        success: "재시작 요청이 전송되었습니다.",
+        error: (err) => err.response.data.message,
       })
       .then(() => {
         setTimeout(() => {
@@ -114,6 +129,7 @@ export const useDeploymentPatchModal = create<DeploymentPatchModalState>(
         success: "업데이트 성공!",
         error: (err) => err.response.data.messgae,
       });
+      useDeployment.getState().fetch(useNamespace.getState().selected);
     },
   })
 );

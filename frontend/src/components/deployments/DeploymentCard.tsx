@@ -16,6 +16,7 @@ import Pod from "./Pod";
 
 const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
   const deleteDeployment = useDeployment((state) => state.delete);
+  const restartDeployment = useDeployment((state) => state.restart);
   const openModal = useDeploymentPatchModal((state) => state.openModal);
   const menus = (props: DeploymentProps): MenuItemProps[] => {
     return [
@@ -29,7 +30,7 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
       {
         text: "재시작",
         onClick: () => {
-          console.log("");
+          restartDeployment(props.namespace, props.name);
         },
         Icon: RefreshIcon,
       },

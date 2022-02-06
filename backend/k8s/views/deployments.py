@@ -9,6 +9,8 @@ from rest_framework.exceptions import *
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from datetime import datetime
+import pytz
 
 
 class ListCreateDeployment(APIView):
@@ -77,6 +79,24 @@ class RetrieveUpdateDestroyDeployment(APIView):
                 name=deploy_name,
                 namespace=deploy_namespace,
                 body=yaml.safe_load(yaml_data),
+            )
+        except Exception as e:
+            raise FailedToPatch(detail=str(e))
+        return Response(Serializer.deployment(updated_deployment))
+
+    def put(self, request, deploy_name: str, deploy_namespace: str):
+        """Restarts the specified deployment."""
+        deployment = self.get_deployment(deploy_name, deploy_namespace)
+
+        deployment.spec.template.metadata.annotations = {
+            "kubectl.kubernetes.io/restartedAt": datetime.utcnow()
+            .replace(tzinfo=pytz.UTC)
+            .isoformat()
+        }
+
+        try:
+            updated_deployment = k8s.apps.patch_namespaced_deployment(
+                name=deploy_name, namespace=deploy_namespace, body=deployment
             )
         except Exception as e:
             raise FailedToPatch(detail=str(e))
