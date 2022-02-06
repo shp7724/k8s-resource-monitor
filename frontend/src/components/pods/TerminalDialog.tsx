@@ -5,6 +5,21 @@ import shallow from "zustand/shallow";
 import { FC } from "react";
 import { useTerminal } from "../../common/states";
 import Terminal from "./Terminal";
+import classNames from "classnames";
+
+interface DotButtonProps {
+  className?: string;
+  onClick?: () => void;
+}
+
+const DotButton: FC<DotButtonProps> = ({ className, onClick }): JSX.Element => {
+  return (
+    <div
+      className={classNames("h-3 w-3 rounded-full", className)}
+      onClick={onClick}
+    ></div>
+  );
+};
 
 const TerminalDialog: FC = (): JSX.Element => {
   const { isOpen, closeTerminal } = useTerminal((state) => state, shallow);
@@ -58,7 +73,18 @@ const TerminalDialog: FC = (): JSX.Element => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block w-full max-w-3xl my-8 align-middle transition-all transformshadow-xl rounded-2xl bg-gray-900 overflow-hidden">
+            <div className="inline-block w-full max-w-3xl my-8 align-middle transition-all transform shadow-xl rounded-2xl bg-gray-900 overflow-hidden">
+              <div className="flex justify-start gap-2 ml-5 mt-5">
+                <DotButton
+                  className="bg-red-500 hover:bg-red-400"
+                  onClick={closeTerminal}
+                />
+                <DotButton
+                  className="bg-amber-500 hover:bg-amber-400"
+                  onClick={closeTerminal}
+                />
+                <DotButton className="bg-green-500 hover:bg-green-400" />
+              </div>
               <div className="p-0">{isReallyOpen && <Terminal />}</div>
             </div>
           </Transition.Child>

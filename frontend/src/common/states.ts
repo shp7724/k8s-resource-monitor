@@ -113,7 +113,6 @@ export const useDeploymentPatchModal = create<DeploymentPatchModalState>(
       const res = await axiosClient.get(
         `deployments/${get().namespace}/${get().name}/`
       );
-      console.log(res.data);
       set({ deploymentYaml: res.data });
     },
     setDeploymentYaml: (code) => {

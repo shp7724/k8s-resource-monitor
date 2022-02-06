@@ -1,10 +1,8 @@
-import { FC, useEffect } from "react";
-import shallow from "zustand/shallow";
-import { useDeployment, useDeploymentPatchModal } from "../../common/states";
-import { DeploymentProps } from "../../common/types";
-import BaseModal from "../common/BaseModal";
 import CodeEditor from "@uiw/react-textarea-code-editor";
-import React from "react";
+import React, { FC, useEffect } from "react";
+import shallow from "zustand/shallow";
+import { useDeploymentPatchModal } from "../../common/states";
+import BaseModal from "../common/BaseModal";
 
 const PatchDeploymentModal: FC = (): JSX.Element => {
   const {
