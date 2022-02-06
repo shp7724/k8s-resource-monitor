@@ -13,16 +13,20 @@ class K8sClientError(APIException):
             self.message = message
 
 
-class FailedToCreate(K8sClientError):
-    message = "리소스 생성 중 오류가 발생했습니다."
-
-
 class ProtectedError(K8sClientError):
     message = "보호되고 있는 객체입니다."
 
 
+class FailedToCreate(K8sClientError):
+    message = "리소스 생성 중 오류가 발생했습니다."
+
+
 class FailedToDelete(K8sClientError):
     message = "리소스 삭제 중 오류가 발생했습니다."
+
+
+class FailedToPatch(K8sClientError):
+    message = "리소스 수정 중 오류가 발생했습니다."
 
 
 class ResourceNotFound(K8sClientError):

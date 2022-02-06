@@ -36,7 +36,7 @@ export const useNamespace = create<NamespaceState>((set) => ({
 interface DeploymentState {
   deployments: DeploymentProps[];
   fetch: (namespace: NamespaceProps | null) => Promise<void>;
-  delete: (namespace: string, name: string) => Promise<void>;
+  delete: (namespace: string, name: string) => void;
 }
 
 export const useDeployment = create<DeploymentState>((set, get) => ({
@@ -49,7 +49,7 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
       deployments: res.data.filter((dep) => dep.status.available_replicas > 0),
     });
   },
-  delete: async (namespace, name) => {
+  delete: (namespace, name) => {
     const promise = axiosClient.delete(`deployments/${namespace}/${name}/`);
     toast
       .promise(promise, {
@@ -64,6 +64,59 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
       });
   },
 }));
+
+/* ------------------------- Deployment Patch Modal ------------------------- */
+
+interface DeploymentPatchModalState {
+  deploymentYaml: string;
+  isPatchModalOpen: boolean;
+  name: string;
+  namespace: string;
+  openModal: (namespace: string, name: string) => void;
+  setPatchModalOpen: (isOpen: boolean) => void;
+  retrieve: () => Promise<void>;
+  update: () => void;
+  setDeploymentYaml: (code: string) => void;
+}
+
+export const useDeploymentPatchModal = create<DeploymentPatchModalState>(
+  (set, get) => ({
+    name: "",
+    namespace: "",
+    deploymentYaml: "",
+    isPatchModalOpen: false,
+    openModal: (namespace, name) => {
+      console.log(namespace, name);
+
+      set({ name: name, namespace: namespace, isPatchModalOpen: true });
+    },
+    setPatchModalOpen: (isOpen) => {
+      set({ isPatchModalOpen: isOpen });
+    },
+    retrieve: async () => {
+      set({ deploymentYaml: "" });
+      const res = await axiosClient.get(
+        `deployments/${get().namespace}/${get().name}/`
+      );
+      console.log(res.data);
+      set({ deploymentYaml: res.data });
+    },
+    setDeploymentYaml: (code) => {
+      set({ deploymentYaml: code });
+    },
+    update: () => {
+      const promise = axiosClient.patch(
+        `deployments/${get().namespace}/${get().name}/`,
+        { yaml: get().deploymentYaml }
+      );
+      toast.promise(promise, {
+        loading: "업데이트 중...",
+        success: "업데이트 성공!",
+        error: (err) => err.response.data.messgae,
+      });
+    },
+  })
+);
 
 /* ---------------------------------- Pods ---------------------------------- */
 

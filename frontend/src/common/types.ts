@@ -1,3 +1,7 @@
+/* -------------------------------------------------------------------------- */
+/*                                 Interfaces                                 */
+/* -------------------------------------------------------------------------- */
+
 export interface PodProps {
   name: string;
   namespace: string;
@@ -74,4 +78,9 @@ export interface ChartDataProps {
   data: { x: string; y: number }[];
 }
 
+/* -------------------------------------------------------------------------- */
+/*                                    Types                                   */
+/* -------------------------------------------------------------------------- */
+
 export type themeColors = "indigo" | "blue";
+export type HeroIcon = (props: React.ComponentProps<"svg">) => JSX.Element;

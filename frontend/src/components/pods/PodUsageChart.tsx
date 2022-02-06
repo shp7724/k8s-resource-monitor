@@ -58,7 +58,7 @@ const PodUsageChart: FC<PodUsageChartProps> = (props): JSX.Element => {
                   : container.cpuChartData,
               ]}
             />
-            <div className="flex justify-between">
+            <div className="flex justify-between px-1">
               <div className="text-sm">
                 <span className="text-blue-900 font-semibold">
                   {container.containerName}

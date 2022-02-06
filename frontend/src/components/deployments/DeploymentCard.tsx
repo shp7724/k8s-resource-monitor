@@ -1,18 +1,53 @@
+import {
+  PencilAltIcon,
+  RefreshIcon,
+  TrashIcon,
+} from "@heroicons/react/outline";
 import { FC } from "react";
-import { DeploymentProps, themeColors } from "../../common/types";
-import LabelBadge from "../common/LabelBadge";
 import Moment from "react-moment";
-import Label from "./Label";
-import Description from "./Description";
+import { useDeployment, useDeploymentPatchModal } from "../../common/states";
+import { DeploymentProps } from "../../common/types";
+import LabelBadge from "../common/LabelBadge";
 import Container from "./Container";
+import DropdownMenus, { MenuItemProps } from "../common/DropdownMenus";
+import Description from "./Description";
+import Label from "./Label";
 import Pod from "./Pod";
-import DeploymentMenus from "./DeploymentMenus";
 
 const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
+  const deleteDeployment = useDeployment((state) => state.delete);
+  const openModal = useDeploymentPatchModal((state) => state.openModal);
+  const menus = (props: DeploymentProps): MenuItemProps[] => {
+    return [
+      {
+        text: "수정",
+        onClick: () => {
+          openModal(props.namespace, props.name);
+        },
+        Icon: PencilAltIcon,
+      },
+      {
+        text: "재시작",
+        onClick: () => {
+          console.log("");
+        },
+        Icon: RefreshIcon,
+      },
+      {
+        text: "삭제",
+        onClick: () => {
+          deleteDeployment(props.namespace, props.name);
+        },
+        Icon: TrashIcon,
+        mode: "destructive",
+      },
+    ];
+  };
+
   return (
     <div className="rounded-lg bg-indigo-50 border border-indigo-500 px-5 pb-5 shadow">
       <div className="flex justify-end mt-3">
-        <DeploymentMenus name={props.name} namespace={props.namespace} />
+        <DropdownMenus menus={menus(props)} />
       </div>
       <div className="text-indigo-900 text-xl font-semibold truncate mb-2">
         {props.name}

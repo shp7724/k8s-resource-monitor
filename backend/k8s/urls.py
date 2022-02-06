@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import include, path
 
-from backend.k8s.views.configmaps import ListCreateConfigMaps, UpdateDestroyConfigMap
 
 from .views import *
 from .consumers import PodSSHConsumer

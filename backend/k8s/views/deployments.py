@@ -1,8 +1,8 @@
 import requests
-from backend.k8s.utils import create_resource
+import yaml
 from k8s.exceptions import *
 from k8s.serializers import Serializer
-from k8s.utils import k8s
+from k8s.utils import create_resource, k8s
 from kubernetes.client.models import *
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import *
@@ -53,7 +53,12 @@ class RetrieveUpdateDestroyDeployment(APIView):
             deploy_name=deploy_name,
             deploy_namespace=deploy_namespace,
         )
-        return Response(Serializer.deployment(deployment))
+        dict_object = k8s.api.sanitize_for_serialization(deployment)
+        del dict_object["metadata"]["annotations"]
+        del dict_object["metadata"]["managedFields"]
+        del dict_object["status"]
+        yaml_str = yaml.dump(dict_object)
+        return Response(yaml_str)
 
     def patch(
         self, request: Request, deploy_name: str, deploy_namespace: str
@@ -64,27 +69,17 @@ class RetrieveUpdateDestroyDeployment(APIView):
             ResourceNotFound: Raised when the specified deployment does not exist.
             K8sClientError: Raised when PATCH operation fails.
         """
-        deployment = self.get_deployment(
-            deploy_name=deploy_name,
-            deploy_namespace=deploy_namespace,
-        )
-
-        replicas = request.data.get("replicas")
-        namespace = request.data.get("namespace")
-
-        if replicas is not None:
-            deployment.spec.replicas = replicas
-        if namespace is not None:
-            deployment.metadata.namespace = namespace
-
+        yaml_data = request.data.get("yaml")
+        if yaml_data is None:
+            raise ParseError(detail="yaml file not found.")
         try:
             updated_deployment = k8s.apps.patch_namespaced_deployment(
-                name=deployment.metadata.name,
-                namespace=deployment.metadata.namespace,
-                body=deployment,
+                name=deploy_name,
+                namespace=deploy_namespace,
+                body=yaml.safe_load(yaml_data),
             )
         except Exception as e:
-            raise K8sClientError(detail=str(e))
+            raise FailedToPatch(detail=str(e))
         return Response(Serializer.deployment(updated_deployment))
 
     def delete(self, request, deploy_name: str, deploy_namespace: str):

@@ -1,9 +1,8 @@
 import requests
 import yaml
-from backend.k8s.utils import create_resource, get_configmap
 from k8s.exceptions import *
 from k8s.serializers import Serializer
-from k8s.utils import k8s
+from k8s.utils import create_resource, get_configmap, k8s
 from kubernetes.client.models import *
 from kubernetes.utils import create_from_yaml
 from rest_framework.decorators import api_view
