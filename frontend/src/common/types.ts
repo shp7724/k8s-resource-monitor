@@ -2,23 +2,21 @@
 /*                                 Interfaces                                 */
 /* -------------------------------------------------------------------------- */
 
-export interface PodProps {
+interface DefaultProps {
   name: string;
   namespace: string;
   labels: {
     [key: string]: string;
   };
+}
+
+export interface PodProps extends DefaultProps {
   pod_ip: string;
   creation_timestamp: string;
   status: PodStatusProps[];
 }
 
-export interface DeploymentProps {
-  name: string;
-  namespace: string;
-  labels: {
-    [key: string]: string;
-  };
+export interface DeploymentProps extends DefaultProps {
   creation_timestamp: string;
   desired_replicas: string;
   status: {
@@ -28,6 +26,12 @@ export interface DeploymentProps {
   };
   containers: ContainerProps[];
   pods: PodProps[];
+}
+
+export interface ConfigMapProps extends DefaultProps {
+  data: {
+    [key: string]: string;
+  };
 }
 
 export interface ContainerProps {

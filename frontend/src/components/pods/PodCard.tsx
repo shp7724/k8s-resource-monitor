@@ -2,17 +2,37 @@ import {
   CheckCircleIcon,
   DotsHorizontalIcon,
   ExclamationCircleIcon,
+  TrashIcon,
 } from "@heroicons/react/outline";
 import { FC } from "react";
+import { usePod } from "../../common/states";
 import { PodProps } from "../../common/types";
+import DropdownMenus, { MenuItemProps } from "../common/DropdownMenus";
 import LabelBadge from "../common/LabelBadge";
 import Description from "../deployments/Description";
 import Label from "../deployments/Label";
 import PodUsageChart from "./PodUsageChart";
 
 const PodCard: FC<PodProps> = (props): JSX.Element => {
+  const deletePod = usePod((state) => state.delete);
+  const menus = (props: PodProps): MenuItemProps[] => {
+    return [
+      {
+        text: "삭제",
+        mode: "destructive",
+        Icon: TrashIcon,
+        onClick: () => {
+          deletePod(props.namespace, props.name);
+        },
+      },
+    ];
+  };
+
   return (
-    <div className="rounded-lg bg-blue-50 border border-blue-500 p-5 shadow">
+    <div className="rounded-lg bg-blue-50 border border-blue-500 px-5 pb-5 shadow">
+      <div className="flex justify-end mt-3">
+        <DropdownMenus menus={menus(props)} iconClassName="text-blue-600" />
+      </div>
       <div className="truncate">
         <Label text="이름" color="blue" />
         <Description color="blue">{props.name}</Description>

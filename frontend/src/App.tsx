@@ -1,7 +1,6 @@
 import { useCreateResourceModal } from "./common/states";
 import CreateFloatingButton from "./components/common/CreateFloatingButton";
 import CreateModal from "./components/common/CreateModal";
-import Spinner from "./components/common/Spinner";
 import Title from "./components/common/Title";
 import Deployments from "./components/deployments/Deployments";
 import Namespace from "./components/namespaces/Namespace";
@@ -10,7 +9,7 @@ import Pods from "./components/pods/Pods";
 function App() {
   const openCreateModal = useCreateResourceModal((state) => state.openModal);
   return (
-    <div className="">
+    <div className="bg-gray-100">
       <div className="container mx-auto">
         <div className="h-32"></div>
         <Namespace />

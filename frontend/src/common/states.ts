@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import create from "zustand";
+import create, { GetState, SetState } from "zustand";
 import { k8sErrorToast } from "../components/pods/Pods";
 import axiosClient from "./axios";
 import {
@@ -63,7 +63,7 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
     });
   },
   delete: (namespace, name) => {
-    const promise = axiosClient.delete(`deployments1/${namespace}/${name}/`);
+    const promise = axiosClient.delete(`deployments/${namespace}/${name}/`);
     toast
       .promise(promise, {
         loading: "삭제 중...",
@@ -77,7 +77,7 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
       });
   },
   restart: (namespace, name) => {
-    const promise = axiosClient.put(`deployments2/${namespace}/${name}/`);
+    const promise = axiosClient.put(`deployments/${namespace}/${name}/`);
     toast
       .promise(promise, {
         loading: "로딩 중...",
@@ -92,59 +92,70 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
   },
 }));
 
-/* ------------------------- Deployment Patch Modal ------------------------- */
+/* ----------------------------- Patch Resources ---------------------------- */
 
-interface DeploymentPatchModalState {
-  deploymentYaml: string;
+interface ResourcePatchModalState {
+  yaml: string;
   isPatchModalOpen: boolean;
   name: string;
   namespace: string;
   isLoading: boolean;
+  baseUrl: () => string;
   openModal: (namespace: string, name: string) => void;
   setPatchModalOpen: (isOpen: boolean) => void;
   retrieve: () => Promise<void>;
   update: () => void;
-  setDeploymentYaml: (code: string) => void;
+  setYaml: (code: string) => void;
 }
 
-export const useDeploymentPatchModal = create<DeploymentPatchModalState>(
+const commonPatchModalStore = (
+  set: SetState<ResourcePatchModalState>,
+  get: GetState<ResourcePatchModalState>
+) => ({
+  name: "",
+  namespace: "",
+  yaml: "",
+  isPatchModalOpen: false,
+  isLoading: false,
+  openModal: (namespace: string, name: string) => {
+    set({ name: name, namespace: namespace, isPatchModalOpen: true });
+  },
+  setPatchModalOpen: (isOpen: boolean) => {
+    set({ isPatchModalOpen: isOpen });
+  },
+  setYaml: (code: string) => {
+    set({ yaml: code });
+  },
+  retrieve: async () => {
+    set({ yaml: "", isLoading: true });
+    const res = await axiosClient.get(get().baseUrl());
+    set({ yaml: res.data, isLoading: false });
+  },
+  update: () => {
+    const promise = axiosClient.patch(get().baseUrl(), { yaml: get().yaml });
+    toast.promise(promise, {
+      loading: "업데이트 중...",
+      success: "업데이트 성공!",
+      error: (err) => err.response.data.messgae,
+    });
+  },
+});
+
+/* ------------------------- Deployment Patch Modal ------------------------- */
+
+export const useDeploymentPatchModal = create<ResourcePatchModalState>(
   (set, get) => ({
-    name: "",
-    namespace: "",
-    deploymentYaml: "",
-    isPatchModalOpen: false,
-    isLoading: false,
-    openModal: (namespace, name) => {
-      set({ name: name, namespace: namespace, isPatchModalOpen: true });
-    },
-    setPatchModalOpen: (isOpen) => {
-      set({ isPatchModalOpen: isOpen });
-    },
-    retrieve: async () => {
-      if (!get().isLoading) {
-        return;
-      }
-      set({ deploymentYaml: "", isLoading: true });
-      const res = await axiosClient.get(
-        `deployments3/${get().namespace}/${get().name}/`
-      );
-      set({ deploymentYaml: res.data, isLoading: false });
-    },
-    setDeploymentYaml: (code) => {
-      set({ deploymentYaml: code });
-    },
-    update: () => {
-      const promise = axiosClient.patch(
-        `deployments4/${get().namespace}/${get().name}/`,
-        { yaml: get().deploymentYaml }
-      );
-      toast.promise(promise, {
-        loading: "업데이트 중...",
-        success: "업데이트 성공!",
-        error: (err) => err.response.data.messgae,
-      });
-      useDeployment.getState().fetch(useNamespace.getState().selected);
-    },
+    baseUrl: () => `deployments/${get().namespace}/${get().name}/`,
+    ...commonPatchModalStore(set, get),
+  })
+);
+
+/* -------------------------- ConfigMap Patch Modal ------------------------- */
+
+export const useConfigMapPatchModal = create<ResourcePatchModalState>(
+  (set, get) => ({
+    baseUrl: () => `configmaps/${get().namespace}/${get().name}/`,
+    ...commonPatchModalStore(set, get),
   })
 );
 
@@ -154,6 +165,7 @@ interface PodState {
   pods: PodProps[];
   isLoading: boolean;
   fetch: (namespace: NamespaceProps | null) => Promise<void>;
+  delete: (namespace: string, name: string) => void;
 }
 
 export const usePod = create<PodState>((set) => ({
@@ -165,6 +177,14 @@ export const usePod = create<PodState>((set) => ({
       params: { namespace: namespace?.name },
     });
     set({ pods: res.data, isLoading: false });
+  },
+  delete: (namespace, name) => {
+    const promise = axiosClient.delete(`pods/${namespace}/${name}/`);
+    toast.promise(promise, {
+      loading: "삭제 중...",
+      success: "삭제 성공!",
+      error: (err) => err.response.data.message,
+    });
   },
 }));
 

@@ -12,15 +12,17 @@ const PatchDeploymentModal: FC = (): JSX.Element => {
     setPatchModalOpen,
     name,
     namespace,
-    deploymentYaml,
-    setDeploymentYaml,
+    yaml,
+    setYaml,
     retrieve,
     update,
   } = useDeploymentPatchModal((state) => state, shallow);
 
   useEffect(() => {
-    retrieve();
-  }, [namespace, name]);
+    if (isPatchModalOpen) {
+      retrieve();
+    }
+  }, [namespace, name, isPatchModalOpen]);
 
   return (
     <BaseModal
@@ -35,10 +37,10 @@ const PatchDeploymentModal: FC = (): JSX.Element => {
           <Spinner wrapperClassName="h-80" />
         ) : (
           <CodeEditor
-            value={deploymentYaml}
+            value={yaml}
             language="yaml"
             placeholder="YAML 코드를 입력해주세요."
-            onChange={(evn) => setDeploymentYaml(evn.target.value)}
+            onChange={(evn) => setYaml(evn.target.value)}
             padding={15}
             className="bg-gray-800 text-gray-200"
             style={{

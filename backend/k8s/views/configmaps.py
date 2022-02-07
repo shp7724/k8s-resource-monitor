@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 
 
 class ListCreateConfigMaps(APIView):
-    def get(request):
+    def get(self, request):
         namespace = request.query_params.get("namespace")
         if namespace is None or namespace == "전체":
             res = k8s.core.list_config_map_for_all_namespaces(watch=False)
@@ -22,35 +22,33 @@ class ListCreateConfigMaps(APIView):
         data = [Serializer.configmap(config) for config in res.items]
         return Response(data)
 
-    def post(request):
+    def post(self, request):
         create_resource(request)
         return Response(status=201)
 
 
-class UpdateDestroyConfigMap(APIView):
-    def patch(request: Request, namespace: str, name: str):
+class RetrieveUpdateDestroyConfigMap(APIView):
+    def get(self, request, namespace, name):
         configmap = get_configmap(namespace=namespace, name=name)
+        dict_object = k8s.api.sanitize_for_serialization(configmap)
+        yaml_str = yaml.dump(dict_object)
+        return Response(yaml_str)
 
-        new_namespace = request.data.get("namespace")
-        new_name = request.data.get("name")
-        new_data = request.data.get("data")
-
-        if new_namespace is not None:
-            configmap.metadata.namespace = new_namespace
-        if new_name is not None:
-            configmap.metadata.name = new_name
-        if new_data is not None:
-            configmap.data = new_data
-
+    def patch(self, request: Request, namespace: str, name: str):
+        yaml_data = request.data.get("yaml")
+        if yaml_data is None:
+            raise ParseError(detail="yaml file not found.")
         try:
             updated_configmap = k8s.core.patch_namespaced_config_map(
-                namespace=namespace, naem=name, body=configmap
+                name=name,
+                namespace=namespace,
+                body=yaml.safe_load(yaml_data),
             )
         except Exception as e:
-            raise K8sClientError(detail=str(e), message="ConfigMap 설정 변경 중 오류가 발생했습니다.")
-        return Response(Serializer.configmap(updated_configmap))
+            raise FailedToPatch(detail=str(e))
+        return Response(Serializer.deployment(updated_configmap))
 
-    def delete(request, namespace: str, name: str):
+    def delete(self, request, namespace: str, name: str):
         try:
             k8s.core.delete_namespaced_config_map(namespace=namespace, name=name)
         except Exception as e:
