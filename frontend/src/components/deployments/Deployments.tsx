@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
 import shallow from "zustand/shallow";
 import { useDeployment, useNamespace } from "../../common/states";
+import NotFound from "../common/NotFound";
 import Spinner from "../common/Spinner";
 import DeploymentCard from "./DeploymentCard";
 import PatchDeploymentModal from "./PatchDeploymentModal";
@@ -15,6 +16,10 @@ const Deployments: FC = (): JSX.Element => {
   useEffect(() => {
     fetch(namespace);
   }, [namespace]);
+
+  if (!isLoading && deployments.length === 0) {
+    return <NotFound />;
+  }
 
   return isLoading ? (
     <Spinner wrapperClassName="h-96" />

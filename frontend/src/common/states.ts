@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import create from "zustand";
+import { k8sErrorToast } from "../components/pods/Pods";
 import axiosClient from "./axios";
 import {
   ContainerChartDataProps,
@@ -46,9 +47,16 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
   isLoading: false,
   fetch: async (namespace) => {
     set({ isLoading: true });
-    const res = await axiosClient.get<DeploymentProps[]>("deployments/", {
-      params: { namespace: namespace?.name },
-    });
+    const res = await axiosClient
+      .get<DeploymentProps[]>("deployments/", {
+        params: { namespace: namespace?.name },
+      })
+      .catch(() => {
+        k8sErrorToast();
+      });
+    if (!res) {
+      return;
+    }
     set({
       deployments: res.data.filter((dep) => dep.status.available_replicas > 0),
       isLoading: false,

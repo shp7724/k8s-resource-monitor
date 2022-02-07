@@ -10,7 +10,7 @@ import Pods from "./components/pods/Pods";
 function App() {
   const openCreateModal = useCreateResourceModal((state) => state.openModal);
   return (
-    <div className=" bg-gray-100">
+    <div className="">
       <div className="container mx-auto">
         <div className="h-32"></div>
         <Namespace />
