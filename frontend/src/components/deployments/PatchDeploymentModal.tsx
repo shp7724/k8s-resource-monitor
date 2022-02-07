@@ -3,10 +3,12 @@ import React, { FC, useEffect } from "react";
 import shallow from "zustand/shallow";
 import { useDeploymentPatchModal } from "../../common/states";
 import BaseModal from "../common/BaseModal";
+import Spinner from "../common/Spinner";
 
 const PatchDeploymentModal: FC = (): JSX.Element => {
   const {
     isPatchModalOpen,
+    isLoading,
     setPatchModalOpen,
     name,
     namespace,
@@ -29,19 +31,23 @@ const PatchDeploymentModal: FC = (): JSX.Element => {
       }}
     >
       <div className="max-h-[70vh] overflow-y-auto rounded-lg mt-4">
-        <CodeEditor
-          value={deploymentYaml}
-          language="yaml"
-          placeholder="YAML 코드를 입력해주세요."
-          onChange={(evn) => setDeploymentYaml(evn.target.value)}
-          padding={15}
-          className="bg-gray-800 text-gray-200"
-          style={{
-            fontSize: 12,
-            fontFamily:
-              "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-          }}
-        />
+        {isLoading ? (
+          <Spinner wrapperClassName="h-80" />
+        ) : (
+          <CodeEditor
+            value={deploymentYaml}
+            language="yaml"
+            placeholder="YAML 코드를 입력해주세요."
+            onChange={(evn) => setDeploymentYaml(evn.target.value)}
+            padding={15}
+            className="bg-gray-800 text-gray-200"
+            style={{
+              fontSize: 12,
+              fontFamily:
+                "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            }}
+          />
+        )}
       </div>
       <div className="mt-4 flex justify-center">
         <button

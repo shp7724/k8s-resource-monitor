@@ -7,7 +7,6 @@ export const endpoint =
 
 const axiosClient = axios.create({
   baseURL: `http://${endpoint}/api/`,
-  timeout: 2000,
 });
 
 export default axiosClient;

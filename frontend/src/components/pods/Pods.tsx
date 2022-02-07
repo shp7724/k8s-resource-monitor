@@ -1,12 +1,17 @@
 import { FC, useEffect } from "react";
 import shallow from "zustand/shallow";
 import { useNamespace, usePod, usePodUsage } from "../../common/states";
+import Spinner from "../common/Spinner";
 import PodCard from "./PodCard";
 import TerminalDialog from "./TerminalDialog";
 
 const Pods: FC = (): JSX.Element => {
   const namespace = useNamespace((state) => state.selected);
-  const { pods, fetch: fetchPods } = usePod((state) => state, shallow);
+  const {
+    pods,
+    fetch: fetchPods,
+    isLoading,
+  } = usePod((state) => state, shallow);
   const fetchPodUsage = usePodUsage((state) => state.fetch);
 
   useEffect(() => {
@@ -21,7 +26,9 @@ const Pods: FC = (): JSX.Element => {
     return () => clearInterval(timerId);
   }, []);
 
-  return (
+  return isLoading ? (
+    <Spinner wrapperClassName="h-96" />
+  ) : (
     <>
       <TerminalDialog />
       <div className="grid grid-cols-3 gap-6">

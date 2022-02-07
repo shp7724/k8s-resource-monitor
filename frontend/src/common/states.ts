@@ -35,6 +35,7 @@ export const useNamespace = create<NamespaceState>((set) => ({
 
 interface DeploymentState {
   deployments: DeploymentProps[];
+  isLoading: boolean;
   fetch: (namespace: NamespaceProps | null) => Promise<void>;
   delete: (namespace: string, name: string) => void;
   restart: (namespace: string, name: string) => void;
@@ -42,16 +43,19 @@ interface DeploymentState {
 
 export const useDeployment = create<DeploymentState>((set, get) => ({
   deployments: [],
+  isLoading: false,
   fetch: async (namespace) => {
+    set({ isLoading: true });
     const res = await axiosClient.get<DeploymentProps[]>("deployments/", {
       params: { namespace: namespace?.name },
     });
     set({
       deployments: res.data.filter((dep) => dep.status.available_replicas > 0),
+      isLoading: false,
     });
   },
   delete: (namespace, name) => {
-    const promise = axiosClient.delete(`deployments/${namespace}/${name}/`);
+    const promise = axiosClient.delete(`deployments1/${namespace}/${name}/`);
     toast
       .promise(promise, {
         loading: "삭제 중...",
@@ -65,7 +69,7 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
       });
   },
   restart: (namespace, name) => {
-    const promise = axiosClient.put(`deployments/${namespace}/${name}/`);
+    const promise = axiosClient.put(`deployments2/${namespace}/${name}/`);
     toast
       .promise(promise, {
         loading: "로딩 중...",
@@ -87,6 +91,7 @@ interface DeploymentPatchModalState {
   isPatchModalOpen: boolean;
   name: string;
   namespace: string;
+  isLoading: boolean;
   openModal: (namespace: string, name: string) => void;
   setPatchModalOpen: (isOpen: boolean) => void;
   retrieve: () => Promise<void>;
@@ -100,27 +105,29 @@ export const useDeploymentPatchModal = create<DeploymentPatchModalState>(
     namespace: "",
     deploymentYaml: "",
     isPatchModalOpen: false,
+    isLoading: false,
     openModal: (namespace, name) => {
-      console.log(namespace, name);
-
       set({ name: name, namespace: namespace, isPatchModalOpen: true });
     },
     setPatchModalOpen: (isOpen) => {
       set({ isPatchModalOpen: isOpen });
     },
     retrieve: async () => {
-      set({ deploymentYaml: "" });
+      if (!get().isLoading) {
+        return;
+      }
+      set({ deploymentYaml: "", isLoading: true });
       const res = await axiosClient.get(
-        `deployments/${get().namespace}/${get().name}/`
+        `deployments3/${get().namespace}/${get().name}/`
       );
-      set({ deploymentYaml: res.data });
+      set({ deploymentYaml: res.data, isLoading: false });
     },
     setDeploymentYaml: (code) => {
       set({ deploymentYaml: code });
     },
     update: () => {
       const promise = axiosClient.patch(
-        `deployments/${get().namespace}/${get().name}/`,
+        `deployments4/${get().namespace}/${get().name}/`,
         { yaml: get().deploymentYaml }
       );
       toast.promise(promise, {
@@ -137,16 +144,19 @@ export const useDeploymentPatchModal = create<DeploymentPatchModalState>(
 
 interface PodState {
   pods: PodProps[];
+  isLoading: boolean;
   fetch: (namespace: NamespaceProps | null) => Promise<void>;
 }
 
 export const usePod = create<PodState>((set) => ({
   pods: [],
+  isLoading: false,
   fetch: async (namespace) => {
+    set({ isLoading: true });
     const res = await axiosClient.get<PodProps[]>("pods/", {
       params: { namespace: namespace?.name },
     });
-    set({ pods: res.data });
+    set({ pods: res.data, isLoading: false });
   },
 }));
 
