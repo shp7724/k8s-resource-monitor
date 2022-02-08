@@ -101,7 +101,7 @@ jobs:
     steps:
       - uses: actions-hub/kubectl@master
         with:
-          args: get all -A
+          args: get all -A --insecure-skip-tls-verify
 
   # deploy:
   #   runs-on: ubuntu-latest
