@@ -93,9 +93,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      KUBE_HOST: ${{ secrets.KUBE_HOST }}
-      KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
-      KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+    # env:
+    #   KUBE_HOST: ${{ secrets.KUBE_HOST }}
+    #   KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
+    #   KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
     steps:
       - uses: actions-hub/kubectl@master
         with:
