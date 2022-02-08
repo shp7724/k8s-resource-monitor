@@ -94,7 +94,7 @@ export const useDeployment = create<DeploymentState>((set, get) => ({
 
 /* ----------------------------- Patch Resources ---------------------------- */
 
-interface ResourcePatchModalState {
+interface PatchResourceModalState {
   yaml: string;
   isPatchModalOpen: boolean;
   name: string;
@@ -109,8 +109,8 @@ interface ResourcePatchModalState {
 }
 
 const commonPatchModalStore = (
-  set: SetState<ResourcePatchModalState>,
-  get: GetState<ResourcePatchModalState>
+  set: SetState<PatchResourceModalState>,
+  get: GetState<PatchResourceModalState>
 ) => ({
   name: "",
   namespace: "",
@@ -136,14 +136,14 @@ const commonPatchModalStore = (
     toast.promise(promise, {
       loading: "업데이트 중...",
       success: "업데이트 성공!",
-      error: (err) => err.response.data.messgae,
+      error: (err) => err.response.data.message,
     });
   },
 });
 
 /* ------------------------- Deployment Patch Modal ------------------------- */
 
-export const useDeploymentPatchModal = create<ResourcePatchModalState>(
+export const useDeploymentPatchModal = create<PatchResourceModalState>(
   (set, get) => ({
     baseUrl: () => `deployments/${get().namespace}/${get().name}/`,
     ...commonPatchModalStore(set, get),
@@ -152,7 +152,7 @@ export const useDeploymentPatchModal = create<ResourcePatchModalState>(
 
 /* -------------------------- ConfigMap Patch Modal ------------------------- */
 
-export const useConfigMapPatchModal = create<ResourcePatchModalState>(
+export const useConfigMapPatchModal = create<PatchResourceModalState>(
   (set, get) => ({
     baseUrl: () => `configmaps/${get().namespace}/${get().name}/`,
     ...commonPatchModalStore(set, get),
