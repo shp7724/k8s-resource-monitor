@@ -4,9 +4,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react-k8s-resource-monitor-deployment
-  namespace: frontend-system
+  namespace: resource-monitor-system
   labels:
     app: react-k8s-resource-monitor
+    tier: frontend
 spec:
   replicas: 2
   selector:
@@ -28,7 +29,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: react-k8s-resource-monitor-svc
-  namespace: frontend-system
+  namespace: resource-monitor-system
   labels:
     app: react-k8s-resource-monitor
 spec:

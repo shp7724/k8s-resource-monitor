@@ -1,13 +1,4 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: backend-system
-  labels:
-    app: backend
----
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: frontend-system
-  labels:
-    app: frontend
+  name: resource-monitor-system
