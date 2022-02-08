@@ -99,18 +99,35 @@ jobs:
       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
     steps:
       - uses: actions/checkout@v2
-      
       - name: Apply yamls in ./devops.
         uses: actions-hub/kubectl@master
         with:
           args: apply -f ./devops --insecure-skip-tls-verify
 
-      - name: Restart backend deployments.
-        uses: actions-hub/kubectl@master
-        with:
-          args: rollout restart deployment/django-k8s-resource-monitor-deployment -n resource-monitor-system --insecure-skip-tls-verify
+  restart-frontend:
+    name: A job to restart frontend deployments iff source code have been modified.
+    runs-on: ubuntu-latest
+    needs: build-frontend
+    env:
+      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+    steps:
+      - uses: actions/checkout@v2
 
       - name: Restart frontend deployments.
         uses: actions-hub/kubectl@master
         with:
           args: rollout restart deployment/react-k8s-resource-monitor-deployment -n resource-monitor-system --insecure-skip-tls-verify
+
+  restart-backend:
+    name: A job to restart backend deployments iff source code have been modified.
+    runs-on: ubuntu-latest
+    needs: build-backend
+    env:
+      KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Restart backend deployments.
+        uses: actions-hub/kubectl@master
+        with:
+          args: rollout restart deployment/django-k8s-resource-monitor-deployment -n resource-monitor-system --insecure-skip-tls-verify
