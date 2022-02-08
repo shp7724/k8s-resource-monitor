@@ -92,14 +92,14 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    env:
+      KUBE_HOST: ${{ secrets.KUBE_HOST }}
+      KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
+      KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
     steps:
       - uses: actions-hub/kubectl@master
-        env:
-          KUBE_HOST: ${{ secrets.KUBE_HOST }}
-          KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
-          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
         with:
-          args: get pods
+          args: get pods --insecure-skip-tls-verify
 
   # deploy:
   #   runs-on: ubuntu-latest
