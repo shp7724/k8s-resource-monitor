@@ -1,0 +1,89 @@
+name: Build & Deploy to K8S
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-diff:
+    name: A job to determine which folder to build & deploy.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Check whether frontend folder has been modified.
+        id: frontend-modified
+        uses: tj-actions/changed-files@v14.4
+        with:
+          files: |
+            frontend
+
+      - name: Check whether backend folder has been modified.
+        id: backend-modified
+        uses: tj-actions/changed-files@v14.4
+        with:
+          files: |
+            backend
+    outputs:
+      frontend-modified: ${{ steps.frontend-modified.outputs.any_modified }}
+      backend-modified: ${{ steps.backend-modified.outputs.any_modified }}
+
+  build-frontend:
+    name: A job to build frontend project.
+    runs-on: ubuntu-latest
+    needs: check-diff
+    # if: needs.check-diff.outputs.frontend-modified == 'true'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run yarn install.
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: --cwd ./frontend install
+
+      - name: Run yarn build.
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: --cwd ./frontend build
+
+      - name: Setup Docker Buildx.
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Login to DockerHub.
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Build and push.
+        uses: docker/build-push-actions@v2
+        with:
+          context: ./frontend
+          push: true
+          tags: shp7724/react-k8s-resource-monitor:latest
+
+  build-backend:
+    name: A job to build backend project.
+    runs-on: ubuntu-latest
+    needs: check-diff
+    # if: needs.check-diff.outputs.backend-modified == 'true'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Docker Buildx.
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Login to DockerHub.
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      
+      - name: Build and push.
+        uses: docker/build-push-actions@v2
+        with:
+          context: ./backend
+          push: true
+          tags: shp7724/django-k8s-resource-monitor:latest
+
+
