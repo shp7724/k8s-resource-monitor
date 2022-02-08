@@ -19,9 +19,10 @@ hyperlink==21.0.0
 idna==3.3
 incremental==21.3.0
 kubernetes==20.13.0
-kubernetes-stubs
+kubernetes-stubs @ git+https://github.com/shp7724/kubernetes-stubs.git@6a9329259b8742d9a653916037a206bbda6755d4
 oauthlib==3.1.1
 pip-autoremove==0.10.0
+psycopg2==2.9.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.21
