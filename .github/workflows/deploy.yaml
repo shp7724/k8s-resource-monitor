@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch_depth: 0
+          fetch-depth: 0
 
       - name: Check whether frontend folder has been modified.
         id: frontend-modified
