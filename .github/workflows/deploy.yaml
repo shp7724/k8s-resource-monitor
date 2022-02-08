@@ -99,7 +99,7 @@ jobs:
     steps:
       - uses: actions-hub/kubectl@master
         with:
-          args: get pods --insecure-skip-tls-verify
+          args: get pods --insecure-skip-tls-verify --v=99
 
   # deploy:
   #   runs-on: ubuntu-latest
