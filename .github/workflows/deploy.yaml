@@ -36,7 +36,7 @@ jobs:
     needs: check-diff
     env:
       CI: false
-    # if: needs.check-diff.outputs.frontend-modified == 'true'
+    if: needs.check-diff.outputs.frontend-modified == 'true'
     steps:
       - uses: actions/checkout@v2
 
@@ -70,7 +70,7 @@ jobs:
     name: A job to build backend project.
     runs-on: ubuntu-latest
     needs: check-diff
-    # if: needs.check-diff.outputs.backend-modified == 'true'
+    if: needs.check-diff.outputs.backend-modified == 'true'
     steps:
       - uses: actions/checkout@v2
 
