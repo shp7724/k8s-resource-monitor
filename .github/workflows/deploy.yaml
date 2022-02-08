@@ -90,6 +90,17 @@ jobs:
           push: true
           tags: shp7724/django-k8s-resource-monitor:latest
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-hub/kubectl@master
+        env:
+          KUBE_HOST: ${{ secrets.KUBE_HOST }}
+          KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
+          KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
+        with:
+          args: get pods
+
   # deploy:
   #   runs-on: ubuntu-latest
   #   name: A job to deploy to MicroK8s.
