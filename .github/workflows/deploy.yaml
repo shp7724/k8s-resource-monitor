@@ -6,7 +6,7 @@ on:
 
 jobs:
   check-diff:
-    name: A job to determine which folder to build & deploy.
+    name: Determine which folder to build & deploy.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +31,7 @@ jobs:
       backend-modified: ${{ steps.backend-modified.outputs.any_modified }}
 
   build-frontend:
-    name: A job to build frontend project.
+    name: Build frontend project.
     runs-on: ubuntu-latest
     needs: check-diff
     env:
@@ -67,7 +67,7 @@ jobs:
           tags: shp7724/react-k8s-resource-monitor:latest
 
   build-backend:
-    name: A job to build backend project.
+    name: Build backend project.
     runs-on: ubuntu-latest
     needs: check-diff
     if: needs.check-diff.outputs.backend-modified == 'true'
@@ -90,8 +90,8 @@ jobs:
           push: true
           tags: shp7724/django-k8s-resource-monitor:latest
 
-  deploy:
-    name: A job to deploy everything to the microk8s cluster.
+  apply:
+    name: Apply everything to the microk8s cluster.
     if: ${{ always() }}
     runs-on: ubuntu-latest
     needs: ['build-backend', 'build-frontend']
@@ -105,7 +105,7 @@ jobs:
           args: apply -f ./devops --insecure-skip-tls-verify
 
   restart-frontend:
-    name: A job to restart frontend deployments iff source code have been modified.
+    name: Restart frontend deployments.
     runs-on: ubuntu-latest
     needs: build-frontend
     env:
@@ -119,7 +119,7 @@ jobs:
           args: rollout restart deployment/react-k8s-resource-monitor-deployment -n resource-monitor-system --insecure-skip-tls-verify
 
   restart-backend:
-    name: A job to restart backend deployments iff source code have been modified.
+    name: Restart backend deployments.
     runs-on: ubuntu-latest
     needs: build-backend
     env:
