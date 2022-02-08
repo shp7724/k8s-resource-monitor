@@ -98,6 +98,8 @@ jobs:
     env:
       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
     steps:
+      - uses: actions/checkout@v2
+      
       - name: Apply yamls in ./devops.
         uses: actions-hub/kubectl@master
         with:
