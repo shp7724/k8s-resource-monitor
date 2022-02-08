@@ -92,6 +92,7 @@ jobs:
 
   deploy:
     name: A job to deploy everything to the microk8s cluster.
+    if: ${{ always() }}
     runs-on: ubuntu-latest
     needs: ['build-backend', 'build-frontend']
     env:
