@@ -90,51 +90,24 @@ jobs:
           push: true
           tags: shp7724/django-k8s-resource-monitor:latest
 
-  test:
+  deploy:
+    name: A job to deploy everything to the microk8s cluster.
     runs-on: ubuntu-latest
+    needs: ['build-backend', 'build-frontend']
     env:
       KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-    # env:
-    #   KUBE_HOST: ${{ secrets.KUBE_HOST }}
-    #   KUBE_CERTIFICATE: ${{ secrets.KUBE_CERTIFICATE }}
-    #   KUBE_TOKEN: ${{ secrets.KUBE_TOKEN }}
     steps:
-      - uses: actions-hub/kubectl@master
+      - name: Apply yamls in ./devops.
+        uses: actions-hub/kubectl@master
         with:
-          args: get all -A --insecure-skip-tls-verify
+          args: apply -f ./devops --insecure-skip-tls-verify
 
-  # deploy:
-  #   runs-on: ubuntu-latest
-  #   name: A job to deploy to MicroK8s.
-  #   steps:
-  #     - uses: balchua/microk8s-actions@master
-  #       with:
-  #         channel: "1.19/stable"
-  #         addons: '["dns", "storage", "metrics-server"]'
+      - name: Restart backend deployments.
+        uses: actions-hub/kubectl@master
+        with:
+          args: rollout restart deployment/django-k8s-resource-monitor-deployment -n resource-monitor-system --insecure-skip-tls-verify
 
-  #     - name: Check User
-  #       run: |
-  #         id
-  #         sg microk8s -c 'microk8s status'
-
-  #     - name: Test MicroK8s
-  #       id: microk8s
-  #       run: |
-  #         set -ex
-  #         kubectl get no
-  #         kubectl get pods -A -o wide
-  #         # wait for storage pod to be ready
-  #         kubectl -n kube-system wait --for=condition=ready pod -l k8s-app=hostpath-provisioner --timeout=60s
-  #         storage_ready=$?
-  #         if [ $storage_ready -ne 0 ]; then
-  #           echo "Error storage not ready."
-  #           exit $storage_ready
-  #         fi
-  #     - name: Test MicroK8s commands
-  #       id: microk8s-commands
-  #       run: |
-  #         set -ex
-  #         echo "Executing microk8s status using sg command."
-  #         sg microk8s -c 'microk8s status'
-  #         echo "Executing microk8s status using sudo command."
-  #         sudo microk8s status
+      - name: Restart frontend deployments.
+        uses: actions-hub/kubectl@master
+        with:
+          args: rollout restart deployment/react-k8s-resource-monitor-deployment -n resource-monitor-system --insecure-skip-tls-verify
