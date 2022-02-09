@@ -10,7 +10,7 @@ function App() {
   const openCreateModal = useCreateResourceModal((state) => state.openModal);
   return (
     <div className="bg-gray-100">
-      <div className="container mx-auto">
+      <div className="container mx-auto px-5">
         <div className="h-32"></div>
         <Namespace />
 

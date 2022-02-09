@@ -4,6 +4,7 @@ import shallow from "zustand/shallow";
 import { useNamespace, usePod, usePodUsage } from "../../common/states";
 import NotFound from "../common/NotFound";
 import Spinner from "../common/Spinner";
+import { gridClassName } from "../deployments/Deployments";
 import PodCard from "./PodCard";
 import TerminalDialog from "./TerminalDialog";
 
@@ -49,7 +50,7 @@ const Pods: FC = (): JSX.Element => {
   ) : (
     <>
       <TerminalDialog />
-      <div className="grid grid-cols-3 gap-6">
+      <div className={gridClassName}>
         {pods.map((pod, idx) => (
           <PodCard key={idx} {...pod} />
         ))}

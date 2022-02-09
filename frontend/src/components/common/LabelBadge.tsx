@@ -23,10 +23,12 @@ const LabelBadge: FC<LabelBadgeProps> = (props): JSX.Element => {
     <div
       className={`flex items-center rounded-full divide-x divide-solid border text-sm ${colorClass}`}
     >
-      <div className="inline-block px-2 max-w-[10rem] truncate">
+      <div className="inline-block px-2 max-w-[5rem] truncate">
         {props.name}
       </div>
-      <div className="inline-block px-2">{props.value}</div>
+      <div className="inline-block px-2 max-w-[8rem] truncate">
+        {props.value}
+      </div>
     </div>
   );
 };
