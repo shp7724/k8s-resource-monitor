@@ -35,6 +35,7 @@ CORS_ALLOWED_ORIGINS = [
     f'https://{os.getenv("DJANGO_ALLOWED_HOST")}',
     f'http://{os.getenv("DJANGO_ALLOWED_HOST")}',
 ]
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
