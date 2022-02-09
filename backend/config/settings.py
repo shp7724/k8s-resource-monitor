@@ -87,6 +87,10 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+## FOR DEVELOPMENT
+# export DJANGO_DB_PASSWORD=real-password
+# kubectl port-forward --namespace resource-monitor-system svc/resource-monitor-db-postgresql 5432:5432
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
