@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv("DEBUG", "True") in ["True", "true"]
 ALLOWED_HOSTS = [*os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")]
 CORS_ALLOWED_ORIGINS = [
-    *os.getenv("DJANGO_ALLOWED_CORS_ORIGINS", "*").split(","),
+    *os.getenv("DJANGO_ALLOWED_CORS_ORIGINS", "https://*,http://*").split(","),
 ]
 
 with open("django_settings.log", "w") as f:
