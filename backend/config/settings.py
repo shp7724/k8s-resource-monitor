@@ -29,13 +29,15 @@ SECRET_KEY = os.getenv(
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") in ["True", "true"]
-ALLOWED_HOSTS = [os.getenv("DJANGO_ALLOWED_HOST", "*")]
+ALLOWED_HOSTS = [*os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")]
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    f'https://{os.getenv("DJANGO_ALLOWED_HOST")}',
-    f'http://{os.getenv("DJANGO_ALLOWED_HOST")}',
+    *os.getenv("DJANGO_ALLOWED_CORS_ORIGINS", "*").split(","),
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+
+with open("django_settings.log", "w") as f:
+    f.write(str(ALLOWED_HOSTS))
+    f.write("\n")
+    f.write(str(CORS_ALLOWED_ORIGINS))
 
 # Application definition
 
