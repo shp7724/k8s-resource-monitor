@@ -2,16 +2,16 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 import { FC, Fragment, useEffect } from "react";
 import shallow from "zustand/shallow";
-import { useNamespace } from "../../common/states";
+import { useListNamespace } from "../../states/namespaces";
 
 const Namespace: FC = (): JSX.Element => {
-  const { selected, options, fetch, setSelected } = useNamespace(
+  const { selected, data, list, setSelected } = useListNamespace(
     (state) => state,
     shallow
   );
 
   useEffect(() => {
-    fetch();
+    list();
   }, []);
 
   return (
@@ -34,7 +34,7 @@ const Namespace: FC = (): JSX.Element => {
             leaveTo="opacity-0"
           >
             <Listbox.Options className="z-20 scrollbar-hide absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-              {options.map((namespace, personIdx) => (
+              {[{ name: "전체" }, ...data].map((namespace, personIdx) => (
                 <Listbox.Option
                   key={personIdx}
                   className={({ active }) =>

@@ -1,14 +1,16 @@
 import { FC, useEffect } from "react";
 import toast from "react-hot-toast";
 import shallow from "zustand/shallow";
-import { useNamespace, usePod, usePodUsage } from "../../common/states";
+import { usePodUsage } from "../../common/states";
+import { useListNamespace } from "../../states/namespaces";
+import { useListPod } from "../../states/pods";
 import NotFound from "../common/NotFound";
 import Spinner from "../common/Spinner";
 import { gridClassName } from "../deployments/Deployments";
 import PodCard from "./PodCard";
 import TerminalDialog from "./TerminalDialog";
 
-export const k8sErrorToast = () => {
+export const k8sConnectionErrorToast = () => {
   toast.error(
     "K8s 클러스터와의 연결 상태가 불안정합니다.\n나중에 다시 시도해주세요.",
     {
@@ -19,23 +21,19 @@ export const k8sErrorToast = () => {
 };
 
 const Pods: FC = (): JSX.Element => {
-  const namespace = useNamespace((state) => state.selected);
-  const {
-    pods,
-    fetch: fetchPods,
-    isLoading,
-  } = usePod((state) => state, shallow);
+  const namespace = useListNamespace((state) => state.selected);
+  const { data: pods, list, isLoading } = useListPod((state) => state, shallow);
   const fetchPodUsage = usePodUsage((state) => state.fetch);
 
   useEffect(() => {
-    fetchPods(namespace);
+    list(namespace);
   }, [namespace]);
 
   useEffect(() => {
     fetchPodUsage();
     const timerId = setInterval(() => {
       fetchPodUsage().catch(() => {
-        k8sErrorToast();
+        k8sConnectionErrorToast();
       });
     }, 5000);
     return () => clearInterval(timerId);

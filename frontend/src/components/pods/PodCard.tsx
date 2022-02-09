@@ -1,12 +1,11 @@
 import {
   CheckCircleIcon,
-  DotsHorizontalIcon,
   ExclamationCircleIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
 import { FC } from "react";
-import { usePod } from "../../common/states";
 import { PodProps } from "../../common/types";
+import { useDetailPod } from "../../states/pods";
 import DropdownMenus, { MenuItemProps } from "../common/DropdownMenus";
 import LabelBadge from "../common/LabelBadge";
 import Description from "../deployments/Description";
@@ -14,7 +13,7 @@ import Label from "../deployments/Label";
 import PodUsageChart from "./PodUsageChart";
 
 const PodCard: FC<PodProps> = (props): JSX.Element => {
-  const deletePod = usePod((state) => state.delete);
+  const deletePod = useDetailPod((state) => state.delete);
   const menus = (props: PodProps): MenuItemProps[] => {
     return [
       {

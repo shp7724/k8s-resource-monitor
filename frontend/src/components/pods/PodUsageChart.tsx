@@ -1,7 +1,7 @@
 import { TerminalIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import { FC, useEffect, useState } from "react";
-import { TerminalProps, usePodUsage, useTerminal } from "../../common/states";
+import { usePodUsage, useTerminal } from "../../common/states";
 import { ContainerChartDataProps } from "../../common/types";
 import UsageLineChart from "./UsageLineChart";
 

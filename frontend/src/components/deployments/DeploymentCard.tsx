@@ -5,19 +5,19 @@ import {
 } from "@heroicons/react/outline";
 import { FC } from "react";
 import Moment from "react-moment";
-import { useDeployment, useDeploymentPatchModal } from "../../common/states";
 import { DeploymentProps } from "../../common/types";
+import { useDetailDeployment } from "../../states/deployments";
+import DropdownMenus, { MenuItemProps } from "../common/DropdownMenus";
 import LabelBadge from "../common/LabelBadge";
 import Container from "./Container";
-import DropdownMenus, { MenuItemProps } from "../common/DropdownMenus";
 import Description from "./Description";
 import Label from "./Label";
 import Pod from "./Pod";
 
 const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
-  const deleteDeployment = useDeployment((state) => state.delete);
-  const restartDeployment = useDeployment((state) => state.restart);
-  const openModal = useDeploymentPatchModal((state) => state.openModal);
+  const deleteDeployment = useDetailDeployment((state) => state.delete);
+  const restartDeployment = useDetailDeployment((state) => state.restart);
+  const openModal = useDetailDeployment((state) => state.openModal);
   const menus = (props: DeploymentProps): MenuItemProps[] => {
     return [
       {
@@ -30,7 +30,7 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
       {
         text: "재시작",
         onClick: () => {
-          restartDeployment(props.namespace, props.name);
+          restartDeployment?.(props.namespace, props.name);
         },
         Icon: RefreshIcon,
       },

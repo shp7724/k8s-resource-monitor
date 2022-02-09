@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
 import shallow from "zustand/shallow";
-import { useDeployment, useNamespace } from "../../common/states";
+import { useListDeployment } from "../../states/deployments";
+import { useListNamespace } from "../../states/namespaces";
 import NotFound from "../common/NotFound";
 import Spinner from "../common/Spinner";
 import DeploymentCard from "./DeploymentCard";
@@ -10,14 +11,15 @@ export const gridClassName =
   "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6";
 
 const Deployments: FC = (): JSX.Element => {
-  const namespace = useNamespace((state) => state.selected);
-  const { deployments, fetch, isLoading } = useDeployment(
-    (state) => state,
-    shallow
-  );
+  const namespace = useListNamespace((state) => state.selected);
+  const {
+    data: deployments,
+    list,
+    isLoading,
+  } = useListDeployment((state) => state, shallow);
 
   useEffect(() => {
-    fetch(namespace);
+    list(namespace);
   }, [namespace]);
 
   if (!isLoading && deployments.length === 0) {
