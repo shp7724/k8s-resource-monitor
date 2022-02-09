@@ -5,7 +5,7 @@ import { FitAddon } from "xterm-addon-fit";
 import { XTerm } from "xterm-for-react";
 import shallow from "zustand/shallow";
 import { endpoint, isProduction } from "../../common/axios";
-import { useTerminal } from "../../common/states";
+import { useTerminal } from "../../states/pods";
 
 const Terminal: FC = (): JSX.Element => {
   const xtermRef = useRef<any>(null);

@@ -1,24 +1,14 @@
 import { FC, useEffect } from "react";
 import toast from "react-hot-toast";
 import shallow from "zustand/shallow";
-import { usePodUsage } from "../../common/states";
+import { k8sConnectionErrorToast } from "../../common/utils";
 import { useListNamespace } from "../../states/namespaces";
-import { useListPod } from "../../states/pods";
+import { useListPod, usePodUsage } from "../../states/pods";
 import NotFound from "../common/NotFound";
 import Spinner from "../common/Spinner";
 import { gridClassName } from "../deployments/Deployments";
 import PodCard from "./PodCard";
 import TerminalDialog from "./TerminalDialog";
-
-export const k8sConnectionErrorToast = () => {
-  toast.error(
-    "K8s 클러스터와의 연결 상태가 불안정합니다.\n나중에 다시 시도해주세요.",
-    {
-      id: "k8s-error",
-      duration: 5000,
-    }
-  );
-};
 
 const Pods: FC = (): JSX.Element => {
   const namespace = useListNamespace((state) => state.selected);

@@ -1,11 +1,9 @@
-import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import shallow from "zustand/shallow";
-
-import { FC } from "react";
-import { useTerminal } from "../../common/states";
-import Terminal from "./Terminal";
 import classNames from "classnames";
+import { FC, Fragment, useEffect, useState } from "react";
+import shallow from "zustand/shallow";
+import { useTerminal } from "../../states/pods";
+import Terminal from "./Terminal";
 
 interface DotButtonProps {
   className?: string;

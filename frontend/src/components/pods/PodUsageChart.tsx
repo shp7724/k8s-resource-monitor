@@ -1,8 +1,8 @@
 import { TerminalIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import { FC, useEffect, useState } from "react";
-import { usePodUsage, useTerminal } from "../../common/states";
 import { ContainerChartDataProps } from "../../common/types";
+import { usePodUsage, useTerminal } from "../../states/pods";
 import UsageLineChart from "./UsageLineChart";
 
 type UsageDisplayMode = "CPU" | "Memory";

@@ -1,8 +1,8 @@
 import toast from "react-hot-toast";
-import { GetState, SetState } from "zustand";
+import create, { GetState, SetState } from "zustand";
 import axiosClient from "../common/axios";
 import { NamespaceProps } from "../common/types";
-import { k8sConnectionErrorToast } from "../components/pods/Pods";
+import { k8sConnectionErrorToast } from "../common/utils";
 
 /* -------------------------------------------------------------------------- */
 /*                                  ListState                                 */
@@ -110,3 +110,36 @@ export const createDetailStore = <StateType extends DetailState>(
     });
   },
 });
+
+/* -------------------------------------------------------------------------- */
+/*                                 CreateState                                */
+/* -------------------------------------------------------------------------- */
+
+interface CreateResourceModalState {
+  yaml: string;
+  setYaml: (code: string) => void;
+  create: () => void;
+  isOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
+}
+
+export const useCreateResourceModal = create<CreateResourceModalState>(
+  (set, get) => ({
+    yaml: "",
+    setYaml: (code) => {
+      set({ yaml: code });
+    },
+    create: () => {
+      const promise = axiosClient.post("common/create/", { yaml: get().yaml });
+      toast.promise(promise, {
+        loading: "생성 중...",
+        success: "생성 요청이 전송되었습니다.",
+        error: (err) => err.response.data.message,
+      });
+    },
+    isOpen: false,
+    openModal: () => set({ isOpen: true }),
+    closeModal: () => set({ isOpen: false }),
+  })
+);

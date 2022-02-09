@@ -1,7 +1,7 @@
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import React, { FC, useEffect } from "react";
 import shallow from "zustand/shallow";
-import { useCreateResourceModal } from "../../common/states";
+import { useCreateResourceModal } from "../../states/common";
 import BaseModal from "./BaseModal";
 
 const CreateModal: FC = (): JSX.Element => {
