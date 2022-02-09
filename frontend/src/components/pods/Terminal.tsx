@@ -1,11 +1,11 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef } from "react";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import colors from "tailwindcss/colors";
 import { FitAddon } from "xterm-addon-fit";
 import { XTerm } from "xterm-for-react";
-import { useTerminal } from "../../common/states";
-import colors from "tailwindcss/colors";
 import shallow from "zustand/shallow";
-import useWebSocket, { ReadyState } from "react-use-websocket";
 import { endpoint, isProduction } from "../../common/axios";
+import { useTerminal } from "../../common/states";
 
 const Terminal: FC = (): JSX.Element => {
   const xtermRef = useRef<any>(null);

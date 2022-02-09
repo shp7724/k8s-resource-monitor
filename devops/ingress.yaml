@@ -3,6 +3,9 @@ kind: Ingress
 metadata:
   name: resource-monitor-ingress
   namespace: resource-monitor-system
+  annotations:
+    nginx.ingress.kubernetes.io/from-to-www-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: public
   tls:
