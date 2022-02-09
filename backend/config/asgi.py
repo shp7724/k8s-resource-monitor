@@ -9,7 +9,9 @@ https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 
 import os
 
+# django 모듈을 부르기 전에 환경 변수가 먼저 세팅돼있어야 한다.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+
 
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
