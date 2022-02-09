@@ -5,7 +5,7 @@ import { useTerminal } from "../../common/states";
 import colors from "tailwindcss/colors";
 import shallow from "zustand/shallow";
 import useWebSocket, { ReadyState } from "react-use-websocket";
-import { endpoint } from "../../common/axios";
+import { endpoint, isProduction } from "../../common/axios";
 
 const Terminal: FC = (): JSX.Element => {
   const xtermRef = useRef<any>(null);
@@ -15,7 +15,9 @@ const Terminal: FC = (): JSX.Element => {
     shallow
   );
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    `ws://${endpoint}/ws/ssh/pod/${namespace}/${podName}/${containerName}/`
+    `${
+      isProduction ? "wss" : "ws"
+    }://${endpoint}/ws/ssh/pod/${namespace}/${podName}/${containerName}/`
   );
 
   useEffect(() => {
