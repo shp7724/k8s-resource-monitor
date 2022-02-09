@@ -24,6 +24,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: django-k8s-resource-monitor-config
+            - secretKeyRef:
+                name: resource-monitor-secrets
           ports:
             - containerPort: 8000
               name: gunicorn
