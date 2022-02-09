@@ -4,6 +4,6 @@ metadata:
   name: django-k8s-resource-monitor-config
   namespace: resource-monitor-system
 data:
-  DJANGO_ALLOWED_HOST: "app.resource-monitor.findy.co.kr:444"
+  DJANGO_ALLOWED_HOST: "app.resource-monitor.findy.co.kr"
   DEBUG: "True"
   DATABASE_HOST: "resource-monitor-db-postgresql.resource-monitor-system.svc.cluster.local"
