@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: resource-monitor-ingress
+  namespace: resource-monitor-system
+spec:
+  ingressClassName: public
+  tls:
+  - hosts:
+      - api.resource-monitor.findy.co.kr
+      - app.resource-monitor.findy.co.kr
+    secretName: resource-monitor-findy-tls
+  rules:
+    - host: api.resource-monitor.findy.co.kr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: django-k8s-resource-monitor-svc-clusterip
+                port: 
+                  number: 8000
+    - host: app.resource-monitor.findy.co.kr
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: react-k8s-resource-monitor-svc-clusterip
+                port: 
+                  number: 80

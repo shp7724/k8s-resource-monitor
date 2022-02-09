@@ -1,12 +1,13 @@
 import axios from "axios";
 
-export const endpoint =
-  process.env.NODE_ENV == "production"
-    ? "182.225.15.97:31234"
-    : "localhost:8000";
+export const isProduction = process.env.NODE_ENV == "production";
+
+export const endpoint = isProduction
+  ? "api.resource-monitor.findy.co.kr:444"
+  : "localhost:8000";
 
 const axiosClient = axios.create({
-  baseURL: `http://${endpoint}/api/`,
+  baseURL: `${isProduction ? "https" : "http"}://${endpoint}/api/`,
   timeout: 5000,
 });
 

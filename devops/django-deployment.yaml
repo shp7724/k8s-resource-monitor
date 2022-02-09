@@ -33,16 +33,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: django-k8s-resource-monitor-svc
+  name: django-k8s-resource-monitor-svc-clusterip
   namespace: resource-monitor-system
   labels:
     app: django-k8s-resource-monitor
 spec:
-  type: NodePort
   selector:
     app: django-k8s-resource-monitor
   ports:
     - port: 8000
       targetPort: 8000
       protocol: TCP
-      nodePort: 31234

@@ -28,16 +28,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: react-k8s-resource-monitor-svc
+  name: react-k8s-resource-monitor-svc-clusterip
   namespace: resource-monitor-system
   labels:
     app: react-k8s-resource-monitor
 spec:
-  type: NodePort
   selector:
     app: react-k8s-resource-monitor
   ports:
     - port: 80
       targetPort: 80
       protocol: TCP
-      nodePort: 31235

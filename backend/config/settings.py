@@ -32,9 +32,8 @@ DEBUG = os.getenv("DEBUG", "True") in ["True", "true"]
 ALLOWED_HOSTS = ["*"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    f'http://{os.getenv("DJANGO_ALLOWED_HOST")}:31235',
+    f'https://{os.getenv("DJANGO_ALLOWED_HOST")}',
 ]
-CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
