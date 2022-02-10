@@ -26,7 +26,6 @@ class Serializer:
         pods_managed_by_this_deployment = k8s.core.list_namespaced_pod(
             namespace=instance.metadata.namespace,
             label_selector=labels_to_string(instance.spec.selector.match_labels),
-            watch=False,
         )
         return dict(
             name=instance.metadata.name,
@@ -110,4 +109,12 @@ class Serializer:
                 cpu=parse_quantity(data["usage"]["cpu"]),
                 memory=parse_quantity(data["usage"]["memory"]),
             ),
+        )
+
+    @staticmethod
+    def ingress(instance: V1Ingress) -> dict:
+        return dict(
+            name=instance.metadata.name,
+            namespace=instance.metadata.namespace,
+            labels=instance.metadata.labels,
         )

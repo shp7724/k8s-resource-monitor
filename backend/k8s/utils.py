@@ -20,6 +20,7 @@ class K8sClient:
         self.core = client.CoreV1Api()
         self.custom = client.CustomObjectsApi()
         self.apps = client.AppsV1Api()
+        self.network = client.NetworkingV1Api()
         self.api = client.ApiClient()
 
     def get_ssh_stream(self, namespace: str, pod_name: str, container_name: str = ""):
@@ -39,6 +40,30 @@ class K8sClient:
         )
         return cont_stream
 
+    def get_deployment(self, namespace: str, name: str) -> V1Deployment:
+        try:
+            res = self.apps.read_namespaced_deployment(name=name, namespace=namespace)
+        except Exception as e:
+            raise ResourceNotFound(detail=str(e), resource_name="Deployment")
+        else:
+            return res
+
+    def get_configmap(self, namespace: str, name: str) -> V1ConfigMap:
+        try:
+            res = self.core.read_namespaced_config_map(name=name, namespace=namespace)
+        except Exception as e:
+            raise ResourceNotFound(detail=str(e), resource_name="ConfigMap")
+        else:
+            return res
+
+    def get_ingress(self, namespace: str, name: str) -> V1Ingress:
+        try:
+            res = self.network.read_namespaced_ingress(name=name, namespace=namespace)
+        except Exception as e:
+            raise ResourceNotFound(detail=str(e), resource_name="Ingress")
+        else:
+            return res
+
 
 k8s = K8sClient()
 
@@ -55,15 +80,6 @@ def create_resource(request: Request):
         create_from_yaml(k8s_client=k8s.api, yaml_objects=yaml.safe_load_all(yaml_data))
     except Exception as e:
         raise FailedToCreate(detail=str(e))
-
-
-def get_configmap(namespace: str, name: str) -> V1ConfigMap:
-    try:
-        configmap = k8s.core.read_namespaced_config_map(name=name, namespace=namespace)
-    except Exception as e:
-        raise ResourceNotFound(detail=str(e), resource_name="ConfigMap")
-    else:
-        return configmap
 
 
 def labels_to_string(labels: dict) -> str:

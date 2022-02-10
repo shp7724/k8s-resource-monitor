@@ -13,10 +13,10 @@ from k8s.utils import k8s
 class ListPod(APIView):
     def get(self, request: Request):
         namespace = request.query_params.get("namespace")
-        if namespace is None or namespace == "전체":
-            res = k8s.core.list_pod_for_all_namespaces(watch=False)
+        if namespace is None:
+            res = k8s.core.list_pod_for_all_namespaces()
         else:
-            res = k8s.core.list_namespaced_pod(namespace=namespace, watch=False)
+            res = k8s.core.list_namespaced_pod(namespace=namespace)
         data = [Serializer.pod(pod) for pod in res.items]
         return Response(data)
 

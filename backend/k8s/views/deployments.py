@@ -13,48 +13,22 @@ from datetime import datetime
 import pytz
 
 
-class ListCreateDeployment(APIView):
+class ListDeployment(APIView):
     def get(self, request):
         """List deployments with an optional `namespace` parameter."""
         namespace = request.query_params.get("namespace")
-        if namespace is None or namespace == "전체":
-            res: V1DeploymentList = k8s.apps.list_deployment_for_all_namespaces(
-                watch=False
-            )
+        if namespace is None:
+            res: V1DeploymentList = k8s.apps.list_deployment_for_all_namespaces()
         else:
-            res = k8s.apps.list_namespaced_deployment(namespace=namespace, watch=False)
+            res = k8s.apps.list_namespaced_deployment(namespace=namespace)
         data = [Serializer.deployment(dep) for dep in res.items]
         return Response(data)
 
-    def post(self, request):
-        """Creates deployments (or other k8s objects) from a single yaml file.
-
-        Raises:
-            ParseError: Raised when no yaml file data is given.
-            FailedToCreate: Raised when the names of the objects already exist.
-        """
-        create_resource(request)
-        return Response(status=201)
-
 
 class RetrieveUpdateDestroyDeployment(APIView):
-    def get_deployment(self, deploy_name: str, deploy_namespace: str) -> V1Deployment:
-        try:
-            deployment: V1Deployment = k8s.apps.read_namespaced_deployment(
-                name=deploy_name,
-                namespace=deploy_namespace,
-            )
-        except Exception as e:
-            raise ResourceNotFound(detail=str(e), resource_name="Deployment")
-        else:
-            return deployment
-
-    def get(self, request: Request, deploy_name: str, deploy_namespace: str):
+    def get(self, request: Request, name: str, namespace: str):
         """Retrieves the specified deployment."""
-        deployment = self.get_deployment(
-            deploy_name=deploy_name,
-            deploy_namespace=deploy_namespace,
-        )
+        deployment = k8s.get_deployment(namespace, name)
         dict_object = k8s.api.sanitize_for_serialization(deployment)
         del dict_object["metadata"]["annotations"]
         del dict_object["metadata"]["managedFields"]
@@ -62,9 +36,7 @@ class RetrieveUpdateDestroyDeployment(APIView):
         yaml_str = yaml.dump(dict_object)
         return Response(yaml_str)
 
-    def patch(
-        self, request: Request, deploy_name: str, deploy_namespace: str
-    ) -> Response:
+    def patch(self, request: Request, name: str, namespace: str) -> Response:
         """Updates the desired number of replicas for the specified deployment.
 
         Raises:
@@ -76,17 +48,17 @@ class RetrieveUpdateDestroyDeployment(APIView):
             raise ParseError(detail="yaml file not found.")
         try:
             updated_deployment = k8s.apps.patch_namespaced_deployment(
-                name=deploy_name,
-                namespace=deploy_namespace,
+                name=name,
+                namespace=namespace,
                 body=yaml.safe_load(yaml_data),
             )
         except Exception as e:
             raise FailedToPatch(detail=str(e))
         return Response(Serializer.deployment(updated_deployment))
 
-    def put(self, request, deploy_name: str, deploy_namespace: str):
+    def put(self, request, name: str, namespace: str):
         """Restarts the specified deployment."""
-        deployment = self.get_deployment(deploy_name, deploy_namespace)
+        deployment = k8s.get_deployment(namespace, name)
 
         deployment.spec.template.metadata.annotations = {
             "kubectl.kubernetes.io/restartedAt": datetime.utcnow()
@@ -96,26 +68,26 @@ class RetrieveUpdateDestroyDeployment(APIView):
 
         try:
             updated_deployment = k8s.apps.patch_namespaced_deployment(
-                name=deploy_name, namespace=deploy_namespace, body=deployment
+                name=name, namespace=namespace, body=deployment
             )
         except Exception as e:
             raise FailedToPatch(detail=str(e))
         return Response(Serializer.deployment(updated_deployment))
 
-    def delete(self, request, deploy_name: str, deploy_namespace: str):
+    def delete(self, request, name: str, namespace: str):
         """Deletes the specified deployment.
 
         Raises:
             ProtectedError: Raised when trying to delete essential resources.
             K8sClientError: Raised when DELETE operation fails.
         """
-        if deploy_namespace.endswith("-system"):
-            raise ProtectedError(message="System Deployment는 삭제할 수 없습니다.")
+        if namespace.endswith("-system"):
+            raise ProtectedError()
 
         try:
             k8s.apps.delete_namespaced_deployment(
-                name=deploy_name,
-                namespace=deploy_namespace,
+                name=name,
+                namespace=namespace,
                 body=V1DeleteOptions(
                     propagation_policy="Foreground", grace_period_seconds=5
                 ),

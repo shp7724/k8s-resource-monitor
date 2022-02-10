@@ -14,7 +14,7 @@ class K8sClientError(APIException):
 
 
 class ProtectedError(K8sClientError):
-    message = "보호되고 있는 객체입니다."
+    message = "시스템 리소스는 삭제할 수 없습니다."
 
 
 class FailedToCreate(K8sClientError):
