@@ -29,12 +29,12 @@ const PodCard: FC<PodProps> = (props): JSX.Element => {
 
   return (
     <div className="rounded-lg bg-blue-50 border border-blue-500 px-5 pb-5 shadow">
-      <div className="flex justify-end mt-3">
+      <div className="flex justify-between mt-3">
+        <div className="truncate">
+          <Label text="이름" color="blue" />
+          <Description color="blue">{props.name}</Description>
+        </div>
         <DropdownMenus menus={menus(props)} iconClassName="text-blue-600" />
-      </div>
-      <div className="truncate">
-        <Label text="이름" color="blue" />
-        <Description color="blue">{props.name}</Description>
       </div>
       <div>
         <Label text="Pod IP" color="blue" />

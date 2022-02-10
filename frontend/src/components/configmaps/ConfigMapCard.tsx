@@ -32,12 +32,12 @@ const ConfigMapCard: FC<ConfigMapProps> = (props): JSX.Element => {
 
   return (
     <div className="rounded-lg bg-amber-50 border border-amber-500 px-5 pb-5 shadow">
-      <div className="flex justify-end mt-3">
+      <div className="flex justify-between mt-3">
+        <div>
+          <Label text="이름" color="amber" />
+          <Description color="amber">{props.name}</Description>
+        </div>
         <DropdownMenus menus={menus(props)} iconClassName="text-amber-600" />
-      </div>
-      <div>
-        <Label text="이름" color="amber" />
-        <Description color="amber">{props.name}</Description>
       </div>
       <div>
         <Label text="네임스페이스" color="amber" />
