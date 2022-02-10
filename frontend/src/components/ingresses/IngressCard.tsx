@@ -4,8 +4,8 @@ import { IngressProps } from "../../common/types";
 import { useDetailIngress } from "../../states/ingresses";
 import DropdownMenus, { MenuItemProps } from "../common/DropdownMenus";
 import LabelBadge from "../common/LabelBadge";
-import Description from "../deployments/Description";
-import Label from "../deployments/Label";
+import Description from "../common/Description";
+import Label from "../common/Label";
 
 const IngressCard: FC<IngressProps> = (props): JSX.Element => {
   const openModal = useDetailIngress((state) => state.openModal);

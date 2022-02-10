@@ -4,8 +4,8 @@ import { ConfigMapProps } from "../../common/types";
 import { useDetailConfigMap } from "../../states/configmaps";
 import DropdownMenus, { MenuItemProps } from "../common/DropdownMenus";
 import LabelBadge from "../common/LabelBadge";
-import Description from "../deployments/Description";
-import Label from "../deployments/Label";
+import Description from "../common/Description";
+import Label from "../common/Label";
 
 const ConfigMapCard: FC<ConfigMapProps> = (props): JSX.Element => {
   const openModal = useDetailConfigMap((state) => state.openModal);

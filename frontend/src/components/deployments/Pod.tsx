@@ -1,8 +1,8 @@
 import { CheckCircleIcon, ExclamationCircleIcon } from "@heroicons/react/solid";
 import { FC } from "react";
 import { PodProps } from "../../common/types";
-import Description from "./Description";
-import Label from "./Label";
+import Description from "../common/Description";
+import Label from "../common/Label";
 
 const Pod: FC<PodProps> = (props): JSX.Element => {
   return (

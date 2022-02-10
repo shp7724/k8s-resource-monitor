@@ -10,9 +10,9 @@ import { useDetailDeployment } from "../../states/deployments";
 import DropdownMenus, { MenuItemProps } from "../common/DropdownMenus";
 import LabelBadge from "../common/LabelBadge";
 import Container from "./Container";
-import Description from "./Description";
-import Label from "./Label";
+import Description from "../common/Description";
 import Pod from "./Pod";
+import Label from "../common/Label";
 
 const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
   const deleteDeployment = useDetailDeployment((state) => state.delete);

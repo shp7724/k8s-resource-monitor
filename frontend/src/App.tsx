@@ -9,7 +9,7 @@ import Pods from "./components/pods/Pods";
 
 function App() {
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-50">
       <div className="container mx-auto px-5">
         <div className="h-32"></div>
         <Namespace />

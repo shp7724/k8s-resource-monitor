@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { ContainerProps } from "../../common/types";
-import Description from "./Description";
-import Label from "./Label";
+import Description from "../common/Description";
+import Label from "../common/Label";
 
 const Container: FC<ContainerProps> = (props): JSX.Element => {
   return (
