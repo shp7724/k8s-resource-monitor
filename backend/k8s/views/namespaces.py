@@ -17,24 +17,6 @@ class ListCreateNamespace(APIView):
         data = [Serializer.namespace(ns) for ns in res.items]
         return Response(data)
 
-    def post(self, request):
-        """Create a namespace.
-
-        Body:
-            name: Name of the namespace.
-            labels [dict]: Labels of the namespace.
-        """
-        namespace = V1Namespace(
-            api_version="v1",
-            kind="Namespace",
-            metadata=V1ObjectMeta(
-                name=request.data.get("name"),
-                labels=request.data.get("labels"),
-            ),
-        )
-        data = k8s.core.create_namespace(body=namespace)
-        return Response(Serializer.namespace(data))
-
 
 class RetrieveUpdateDestroyNamespace(APIView):
     def get(self, request):

@@ -64,6 +64,14 @@ class K8sClient:
         else:
             return res
 
+    def get_service(self, namespace: str, name: str) -> V1Service:
+        try:
+            res = self.core.read_namespaced_service(name=name, namespace=namespace)
+        except Exception as e:
+            raise ResourceNotFound(detail=str(e), resource_name="Service")
+        else:
+            return res
+
 
 k8s = K8sClient()
 

@@ -34,6 +34,11 @@ urlpatterns = [
         RetrieveUpdateDestroyIngress.as_view(),
     ),
     # --------------------------------- Services --------------------------------- #
+    path("services/", ListService.as_view()),
+    path(
+        "services/<str:namespace>/<str:name>/",
+        RetrieveUpdateDestroyService.as_view(),
+    ),
 ]
 
 websocket_urlpatterns = [

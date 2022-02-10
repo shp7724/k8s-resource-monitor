@@ -4,27 +4,27 @@ from rest_framework.exceptions import *
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .common import GenericListView, GenericRetrieveUpdateDestroyView
 
 from k8s.exceptions import *
 from k8s.serializers import Serializer
 from k8s.utils import k8s
 
 
-class ListPod(APIView):
-    def get(self, request: Request):
-        namespace = request.query_params.get("namespace")
-        if namespace is None:
-            res = k8s.core.list_pod_for_all_namespaces()
-        else:
-            res = k8s.core.list_namespaced_pod(namespace=namespace)
-        data = [Serializer.pod(pod) for pod in res.items]
-        return Response(data)
+class ListPod(GenericListView):
+    def serialize(self, resource):
+        return Serializer.pod(resource)
+
+    def list_namespaced_resource(self, namespace: str):
+        return k8s.core.list_namespaced_pod(namespace=namespace)
+
+    def list_resource_for_all_namespaces(self):
+        return k8s.core.list_pod_for_all_namespaces()
 
 
-class DeletePod(APIView):
-    def delete(self, request, namespace, name):
-        try:
-            k8s.core.delete_namespaced_pod(namespace=namespace, name=name)
-        except Exception as e:
-            raise FailedToDelete(detail=str(e))
-        return Response(status=204)
+class DeletePod(GenericRetrieveUpdateDestroyView):
+    def protect_system_resource(self) -> bool:
+        return False
+
+    def delete_namespaced_resource(self, namespace: str, name: str):
+        return k8s.core.delete_namespaced_pod(namespace=namespace, name=name)

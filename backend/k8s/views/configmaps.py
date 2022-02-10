@@ -1,3 +1,6 @@
+import imp
+from typing import Any
+
 import yaml
 from k8s.exceptions import *
 from k8s.serializers import Serializer
@@ -8,44 +11,31 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-
-class ListConfigMaps(APIView):
-    def get(self, request):
-        namespace = request.query_params.get("namespace")
-        if namespace is None:
-            res = k8s.core.list_config_map_for_all_namespaces()
-        else:
-            res = k8s.core.list_namespaced_config_map(namespace=namespace)
-        data = [Serializer.configmap(config) for config in res.items]
-        return Response(data)
+from .common import GenericListView, GenericRetrieveUpdateDestroyView
 
 
-class RetrieveUpdateDestroyConfigMap(APIView):
-    def get(self, request, namespace, name):
-        configmap = k8s.get_configmap(namespace=namespace, name=name)
-        dict_object = k8s.api.sanitize_for_serialization(configmap)
-        del dict_object["metadata"]["annotations"]
-        del dict_object["metadata"]["managedFields"]
-        yaml_str = yaml.dump(dict_object)
-        return Response(yaml_str)
+class ListConfigMaps(GenericListView):
+    def list_resource_for_all_namespaces(self):
+        return k8s.core.list_config_map_for_all_namespaces()
 
-    def patch(self, request: Request, namespace: str, name: str):
-        yaml_data = request.data.get("yaml")
-        if yaml_data is None:
-            raise ParseError(detail="yaml file not found.")
-        try:
-            updated_configmap = k8s.core.patch_namespaced_config_map(
-                name=name,
-                namespace=namespace,
-                body=yaml.safe_load(yaml_data),
-            )
-        except Exception as e:
-            raise FailedToPatch(detail=str(e))
-        return Response(Serializer.deployment(updated_configmap))
+    def list_namespaced_resource(self, namespace: str):
+        return k8s.core.list_namespaced_config_map(namespace=namespace)
 
-    def delete(self, request, namespace: str, name: str):
-        try:
-            k8s.core.delete_namespaced_config_map(namespace=namespace, name=name)
-        except Exception as e:
-            raise FailedToDelete(detail=str(e))
-        return Response(status=204)
+    def serialize(self, resource):
+        return Serializer.configmap(resource)
+
+
+class RetrieveUpdateDestroyConfigMap(GenericRetrieveUpdateDestroyView):
+    def protect_system_resource(self) -> bool:
+        return False
+
+    def get_resource(self, namespace: str, name: str):
+        return k8s.get_configmap(namespace, name)
+
+    def patch_namespaced_resource(self, namespace: str, name: str, body: Any):
+        return k8s.core.patch_namespaced_config_map(
+            name=name, namespace=namespace, body=body
+        )
+
+    def delete_namespaced_resource(self, namespace: str, name: str):
+        return k8s.core.delete_namespaced_config_map(name=name, namespace=namespace)
