@@ -1,5 +1,5 @@
 import CodeEditor from "@uiw/react-textarea-code-editor";
-import React, { FC, useEffect } from "react";
+import { FC, useEffect } from "react";
 import shallow from "zustand/shallow";
 import { useCreateResourceModal } from "../../states/common";
 import BaseModal from "./BaseModal";
