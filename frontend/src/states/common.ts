@@ -12,7 +12,7 @@ export interface ListState<T> {
   data: T[];
   isLoading: boolean;
   baseUrl: () => string;
-  list: (namespace?: NamespaceProps) => Promise<void>;
+  list: (namespace?: NamespaceProps, useLoading?: boolean) => Promise<void>;
 }
 
 export const createListStore = <
@@ -24,8 +24,10 @@ export const createListStore = <
 ) => ({
   data: [],
   isLoading: false,
-  list: async (namespace?: NamespaceProps) => {
-    set({ isLoading: true });
+  list: async (namespace?: NamespaceProps, useLoading?: boolean) => {
+    if (useLoading !== false) {
+      set({ isLoading: true });
+    }
     const res = await axiosClient
       .get<DataType[]>(get().baseUrl(), {
         params: { namespace: namespace?.name },

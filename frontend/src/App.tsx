@@ -1,14 +1,12 @@
-import CreateFloatingButton from "./components/common/CreateFloatingButton";
 import CreateModal from "./components/common/CreateModal";
+import FloatingButtons from "./components/common/FloatingButtons";
 import Title from "./components/common/Title";
 import ConfigMaps from "./components/configmaps/ConfigMaps";
 import Deployments from "./components/deployments/Deployments";
 import Namespace from "./components/namespaces/Namespace";
 import Pods from "./components/pods/Pods";
-import { useCreateResourceModal } from "./states/common";
 
 function App() {
-  const openCreateModal = useCreateResourceModal((state) => state.openModal);
   return (
     <div className="bg-gray-100">
       <div className="container mx-auto px-5">
@@ -26,7 +24,7 @@ function App() {
 
         <div className="h-32"></div>
 
-        <CreateFloatingButton onClick={openCreateModal} />
+        <FloatingButtons />
         <CreateModal />
       </div>
     </div>
