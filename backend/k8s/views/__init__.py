@@ -6,3 +6,5 @@ from .pods import *
 from .configmaps import *
 from .ingress import *
 from .services import *
+from .pvcs import *
+from .pvs import *

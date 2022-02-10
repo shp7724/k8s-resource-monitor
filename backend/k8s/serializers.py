@@ -137,3 +137,24 @@ class Serializer:
                 for port in instance.spec.ports
             ],
         )
+
+    @staticmethod
+    def pvc(instance: V1PersistentVolumeClaim) -> dict:
+        return dict(
+            uid=instance.metadata.uid,
+            name=instance.metadata.name,
+            namespace=instance.metadata.namespace,
+            labels=instance.metadata.labels,
+            storage_class_name=instance.spec.storage_class_name,
+            capacity=instance.spec.resources.requests.get("storage", "NA"),
+        )
+
+    @staticmethod
+    def pv(instance: V1PersistentVolume) -> dict:
+        return dict(
+            name=instance.metadata.name,
+            labels=instance.metadata.labels,
+            claim_ref=instance.spec.claim_ref.uid,
+            storage_class_name=instance.spec.storage_class_name,
+            capacity=instance.spec.capacity.get("storage", "NA"),
+        )

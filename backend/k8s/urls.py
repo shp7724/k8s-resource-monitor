@@ -39,6 +39,18 @@ urlpatterns = [
         "services/<str:namespace>/<str:name>/",
         RetrieveUpdateDestroyService.as_view(),
     ),
+    # -------------------------- PersistentVolumeClaims -------------------------- #
+    path("pvcs/", ListPVC.as_view()),
+    path(
+        "pvcs/<str:namespace>/<str:name>/",
+        RetrieveUpdateDestroyPVC.as_view(),
+    ),
+    # ----------------------------- PersistentVolumes ---------------------------- #
+    path("pvs/", ListPV.as_view()),
+    path(
+        "pvs/<str:namespace>/<str:name>/",
+        RetrieveUpdateDestroyPV.as_view(),
+    ),
 ]
 
 websocket_urlpatterns = [
