@@ -16,6 +16,8 @@ const getLabelColorClass = (color?: themeColors): string => {
       return "bg-amber-100 divide-amber-300 border-amber-300 text-amber-900";
     case "teal":
       return "bg-teal-100 divide-teal-300 border-teal-300 text-teal-900";
+    case "pink":
+      return "bg-pink-100 divide-pink-300 border-pink-300 text-pink-900";
     default:
       return "";
   }

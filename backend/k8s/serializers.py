@@ -118,3 +118,22 @@ class Serializer:
             namespace=instance.metadata.namespace,
             labels=instance.metadata.labels,
         )
+
+    @staticmethod
+    def service(instance: V1Service) -> dict:
+        return dict(
+            name=instance.metadata.name,
+            namespace=instance.metadata.namespace,
+            labels=instance.metadata.labels,
+            type=instance.spec.type,
+            selector=instance.spec.selector,
+            ports=[
+                dict(
+                    port=port.port,
+                    targetPort=port.port,
+                    nodePort=port.node_port,
+                    protocol=port.protocol,
+                )
+                for port in instance.spec.ports
+            ],
+        )

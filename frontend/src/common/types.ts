@@ -37,6 +37,19 @@ export interface ConfigMapProps extends DefaultProps {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IngressProps extends DefaultProps {}
 
+export interface ServiceProps extends DefaultProps {
+  type: string;
+  selector: { [key: string]: string };
+  ports: ServicePortProps[];
+}
+
+export interface ServicePortProps extends DefaultProps {
+  port: number;
+  targetPort: number;
+  nodePort?: number;
+  protocol: string;
+}
+
 export interface ContainerProps {
   name: string;
   image: string;

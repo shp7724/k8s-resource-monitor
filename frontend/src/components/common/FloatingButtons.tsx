@@ -8,6 +8,7 @@ import { useListDeployment } from "../../states/deployments";
 import { useListIngress } from "../../states/ingresses";
 import { useListNamespace } from "../../states/namespaces";
 import { useListPod } from "../../states/pods";
+import { useListService } from "../../states/services";
 
 interface FloatingButtonProps {
   onClick?: () => void;
@@ -35,6 +36,7 @@ const FloatingButtons: FC = (): JSX.Element => {
   const refreshPods = useListPod((state) => state.list);
   const refreshConfigMaps = useListConfigMap((state) => state.list);
   const refreshIngress = useListIngress((state) => state.list);
+  const refreshService = useListService((state) => state.list);
 
   const refreshAll = () => {
     const mergedPromises = Promise.all([
@@ -42,6 +44,7 @@ const FloatingButtons: FC = (): JSX.Element => {
       refreshPods(currentNamespace, false),
       refreshConfigMaps(currentNamespace, false),
       refreshIngress(currentNamespace, false),
+      refreshService(currentNamespace, false),
     ]);
     toast.promise(mergedPromises, {
       loading: "새로고침 중...",

@@ -19,10 +19,10 @@ class ListIngress(GenericListView):
 
 class RetrieveUpdateDestroyIngress(GenericRetrieveUpdateDestroyView):
     def patch_namespaced_resource(self, namespace: str, name: str, body: Any):
-        return k8s.network.patch_namespaced_ingress(namespace, name, body)
+        return k8s.network.patch_namespaced_ingress(name, namespace, body)
 
     def delete_namespaced_resource(self, namespace: str, name: str):
-        return k8s.network.delete_namespaced_ingress(namespace, name)
+        return k8s.network.delete_namespaced_ingress(name, namespace)
 
     def get_resource(self, namespace: str, name: str):
         return k8s.network.read_namespaced_ingress(name, namespace)

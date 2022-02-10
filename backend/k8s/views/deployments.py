@@ -60,5 +60,5 @@ class RetrieveUpdateDestroyDeployment(GenericRetrieveUpdateDestroyView):
                 namespace, name, deployment
             )
         except Exception as e:
-            raise FailedToPatch(detail=str(e))
+            raise FailedToPatch(detail=str(e), message="재시작 요청이 실패했습니다.")
         return Response(Serializer.deployment(updated_deployment))

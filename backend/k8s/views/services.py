@@ -18,11 +18,11 @@ class ListService(GenericListView):
 
 
 class RetrieveUpdateDestroyService(GenericRetrieveUpdateDestroyView):
+    def get_resource(self, namespace: str, name: str):
+        return k8s.core.read_namespaced_service(name, namespace)
+
     def delete_namespaced_resource(self, namespace: str, name: str):
-        return k8s.core.delete_namespaced_service(namespace, name)
+        return k8s.core.delete_namespaced_service(name, namespace)
 
     def patch_namespaced_resource(self, namespace: str, name: str, body: Any):
-        return k8s.core.patch_namespaced_service(namespace, name, body)
-
-    def get_resource(self, namespace: str, name: str):
-        return k8s.core.read_namespaced_service(namespace, name)
+        return k8s.core.patch_namespaced_service(name, namespace, body)

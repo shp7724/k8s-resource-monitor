@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { FC } from "react";
 import { themeColors } from "../../common/types";
-import { textColorMap } from "./Label";
+import { textColorMap } from "../../common/utils";
 
 interface DescriptionProps {
   children?: React.ReactNode;

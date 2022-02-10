@@ -97,7 +97,7 @@ class GenericRetrieveUpdateDestroyView(GenericK8sView):
         if self.protect_system_resource and namespace.endswith("-system"):
             raise ProtectedError()
         try:
-            self.delete_namespaced_resource(namespace, name)
+            self.delete_namespaced_resource(namespace=namespace, name=name)
         except Exception as e:
             raise FailedToDelete(detail=str(e))
         return Response(status=204)
