@@ -47,6 +47,33 @@ const ServiceCard: FC<ServiceProps> = (props): JSX.Element => {
         <Label text="타입" color="pink" />
         <Description color="pink">{props.type}</Description>
       </div>
+      <div className="flex flex-col gap-y-1.5 mt-2">
+        {props.ports.map((port, idx) => (
+          <div
+            key={idx}
+            className="bg-pink-100 rounded-md p-2 border border-pink-300"
+          >
+            <div>
+              <Label text="포트" color="pink" />
+              <Description color="pink">{port.port}</Description>
+            </div>
+            <div>
+              <Label text="타겟 포트" color="pink" />
+              <Description color="pink">{port.targetPort}</Description>
+            </div>
+            {port.nodePort && (
+              <div>
+                <Label text="노드 포트" color="pink" />
+                <Description color="pink">{port.nodePort}</Description>
+              </div>
+            )}
+            <div>
+              <Label text="프로토콜" color="pink" />
+              <Description color="pink">{port.protocol}</Description>
+            </div>
+          </div>
+        ))}
+      </div>
       {props.labels && (
         <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3">
           {Object.entries(props.labels).map(([name, value], index) => {
