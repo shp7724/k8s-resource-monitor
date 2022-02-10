@@ -3,7 +3,6 @@ from typing import Any
 import yaml
 from k8s.exceptions import *
 from k8s.utils import create_resource, k8s
-from kubernetes.client.models import V1DeleteOptions
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import *
 from rest_framework.request import Request
@@ -66,7 +65,15 @@ class GenericRetrieveUpdateDestroyView(GenericK8sView):
     # ------------------------------- HTTP METHODS ------------------------------- #
 
     def get(self, request: Request, namespace: str, name: str):
-        resource = self.get_resource(namespace, name)
+        try:
+            resource = self.get_resource(namespace, name)
+        except Exception as e:
+            raise ResourceNotFound(
+                detail=str(e),
+                resource_name=self.__class__.__name__.replace(
+                    "RetrieveUpdateDestroy", ""
+                ),
+            )
         dict_object = k8s.api.sanitize_for_serialization(resource)
         dict_object = self.sanitize(dict_object)
         yaml_str = yaml.dump(dict_object)

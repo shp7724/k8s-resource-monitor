@@ -2,17 +2,11 @@ from datetime import datetime
 from typing import Any
 
 import pytz
-import requests
-import yaml
-from k8s.exceptions import *
+from k8s.exceptions import FailedToPatch
 from k8s.serializers import Serializer
-from k8s.utils import create_resource, k8s
+from k8s.utils import k8s
 from kubernetes.client.models import *
-from rest_framework.decorators import api_view
-from rest_framework.exceptions import *
-from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .common import GenericListView, GenericRetrieveUpdateDestroyView
 
@@ -30,7 +24,7 @@ class ListDeployment(GenericListView):
 
 class RetrieveUpdateDestroyDeployment(GenericRetrieveUpdateDestroyView):
     def get_resource(self, namespace: str, name: str):
-        return k8s.get_deployment(namespace, name)
+        return k8s.apps.read_namespaced_deployment(name, namespace)
 
     def sanitize(self, dict_object: dict):
         dict_object = super().sanitize(dict_object)

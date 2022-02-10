@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import requests
 import yaml
 from kubernetes import client, config
 from kubernetes.client.models import *
@@ -39,38 +38,6 @@ class K8sClient:
             _preload_content=False,
         )
         return cont_stream
-
-    def get_deployment(self, namespace: str, name: str) -> V1Deployment:
-        try:
-            res = self.apps.read_namespaced_deployment(name=name, namespace=namespace)
-        except Exception as e:
-            raise ResourceNotFound(detail=str(e), resource_name="Deployment")
-        else:
-            return res
-
-    def get_configmap(self, namespace: str, name: str) -> V1ConfigMap:
-        try:
-            res = self.core.read_namespaced_config_map(name=name, namespace=namespace)
-        except Exception as e:
-            raise ResourceNotFound(detail=str(e), resource_name="ConfigMap")
-        else:
-            return res
-
-    def get_ingress(self, namespace: str, name: str) -> V1Ingress:
-        try:
-            res = self.network.read_namespaced_ingress(name=name, namespace=namespace)
-        except Exception as e:
-            raise ResourceNotFound(detail=str(e), resource_name="Ingress")
-        else:
-            return res
-
-    def get_service(self, namespace: str, name: str) -> V1Service:
-        try:
-            res = self.core.read_namespaced_service(name=name, namespace=namespace)
-        except Exception as e:
-            raise ResourceNotFound(detail=str(e), resource_name="Service")
-        else:
-            return res
 
 
 k8s = K8sClient()

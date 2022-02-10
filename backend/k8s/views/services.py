@@ -1,14 +1,7 @@
 from typing import Any
 
-import yaml
-from k8s.exceptions import *
 from k8s.serializers import Serializer
 from k8s.utils import k8s
-from kubernetes.client.models import *
-from rest_framework.exceptions import *
-from rest_framework.request import Request
-from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .common import GenericListView, GenericRetrieveUpdateDestroyView
 
