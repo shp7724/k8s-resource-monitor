@@ -33,7 +33,7 @@ const ConfigMapCard: FC<ConfigMapProps> = (props): JSX.Element => {
   return (
     <div className="rounded-lg bg-amber-50 border border-amber-500 px-5 pb-5 shadow">
       <div className="flex justify-between mt-3">
-        <div>
+        <div className="truncate">
           <Label text="이름" color="amber" />
           <Description color="amber">{props.name}</Description>
         </div>
