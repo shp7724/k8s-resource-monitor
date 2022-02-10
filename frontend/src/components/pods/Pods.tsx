@@ -1,5 +1,4 @@
 import { FC, useEffect } from "react";
-import toast from "react-hot-toast";
 import shallow from "zustand/shallow";
 import { k8sConnectionErrorToast } from "../../common/utils";
 import { useListNamespace } from "../../states/namespaces";

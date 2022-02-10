@@ -16,6 +16,10 @@ const LabelBadge: FC<LabelBadgeProps> = (props): JSX.Element => {
     case "blue":
       colorClass = "bg-blue-100 divide-blue-300 border-blue-300 text-blue-900";
       break;
+    case "amber":
+      colorClass =
+        "bg-amber-100 divide-amber-300 border-amber-300 text-amber-900";
+      break;
     default:
       break;
   }

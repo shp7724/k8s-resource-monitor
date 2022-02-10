@@ -31,6 +31,8 @@ class RetrieveUpdateDestroyConfigMap(APIView):
     def get(self, request, namespace, name):
         configmap = get_configmap(namespace=namespace, name=name)
         dict_object = k8s.api.sanitize_for_serialization(configmap)
+        del dict_object["metadata"]["annotations"]
+        del dict_object["metadata"]["managedFields"]
         yaml_str = yaml.dump(dict_object)
         return Response(yaml_str)
 

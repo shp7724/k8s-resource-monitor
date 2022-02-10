@@ -14,8 +14,9 @@ const Description: FC<DescriptionProps> = ({
   return (
     <div
       className={classNames("text-sm font-medium inline", {
-        "text-indigo-900": color !== "blue",
+        "text-indigo-900": color === "indigo",
         "text-blue-900": color === "blue",
+        "text-amber-900": color === "amber",
       })}
     >
       {children}

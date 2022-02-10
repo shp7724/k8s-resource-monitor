@@ -54,19 +54,19 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
         {props.name}
       </div>
       <div>
-        <Label text="네임스페이스" />
-        <Description>{props.namespace}</Description>
+        <Label text="네임스페이스" color="indigo" />
+        <Description color="indigo">{props.namespace}</Description>
       </div>
       <div>
-        <Label text="레플리카 수" />
-        <Description>
+        <Label text="레플리카 수" color="indigo" />
+        <Description color="indigo">
           현재 {props.status.available_replicas}개 / 목표{" "}
           {props.desired_replicas}개
         </Description>
       </div>
       <div>
-        <Label text="생성" />
-        <Description>
+        <Label text="생성" color="indigo" />
+        <Description color="indigo">
           <Moment
             format="YYYY년 MM월 DD일 HH:MM"
             date={props.creation_timestamp}

@@ -86,5 +86,5 @@ export interface ChartDataProps {
 /*                                    Types                                   */
 /* -------------------------------------------------------------------------- */
 
-export type themeColors = "indigo" | "blue";
+export type themeColors = "indigo" | "blue" | "amber";
 export type HeroIcon = (props: React.ComponentProps<"svg">) => JSX.Element;
