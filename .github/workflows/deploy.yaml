@@ -17,6 +17,7 @@ jobs:
         id: frontend-modified
         uses: tj-actions/changed-files@v14.4
         with:
+          since_last_remote_commit: true
           files: |
             frontend
 
@@ -24,6 +25,7 @@ jobs:
         id: backend-modified
         uses: tj-actions/changed-files@v14.4
         with:
+          since_last_remote_commit: true
           files: |
             backend
     outputs:
