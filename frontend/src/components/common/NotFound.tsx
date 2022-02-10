@@ -3,7 +3,7 @@ import { FC } from "react";
 
 const NotFound: FC = (): JSX.Element => {
   return (
-    <div className="text-center h-48 flex flex-col items-center justify-center bg-gray-100 rounded-lg">
+    <div className="text-center h-48 flex flex-col items-center justify-center bg-gray-100 rounded-lg border border-gray-200">
       <div className="flex justify-center">
         <InboxIcon className="h-20 w-20 text-gray-300" />
       </div>

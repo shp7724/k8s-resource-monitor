@@ -36,6 +36,10 @@ const PodCard: FC<PodProps> = (props): JSX.Element => {
         </div>
         <DropdownMenus menus={menus(props)} iconClassName="text-blue-600" />
       </div>
+      <div className="">
+        <Label text="네임스페이스" color="blue" />
+        <Description color="blue">{props.namespace}</Description>
+      </div>
       <div>
         <Label text="Pod IP" color="blue" />
         <Description color="blue">{props.pod_ip}</Description>

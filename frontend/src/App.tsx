@@ -6,6 +6,8 @@ import Deployments from "./components/deployments/Deployments";
 import Ingresses from "./components/ingresses/Ingresses";
 import Namespace from "./components/namespaces/Namespace";
 import Pods from "./components/pods/Pods";
+import PVCs from "./components/pvcs/PVCs";
+import PVs from "./components/pvs/PVs";
 import Services from "./components/services/Services";
 
 function App() {
@@ -29,6 +31,12 @@ function App() {
 
         <Title className="text-amber-900" text="ConfigMaps" />
         <ConfigMaps />
+
+        <Title className="text-emerald-900" text="PersistentVolumeClaim" />
+        <PVCs />
+
+        <Title className="text-emerald-900" text="PersistentVolume" />
+        <PVs />
 
         <div className="h-32"></div>
 

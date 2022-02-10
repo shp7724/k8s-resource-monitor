@@ -1,5 +1,5 @@
 import create from "zustand";
-import { ConfigMapProps, IngressProps } from "../common/types";
+import { IngressProps } from "../common/types";
 import {
   createDetailStore,
   createListStore,

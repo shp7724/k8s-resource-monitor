@@ -8,6 +8,8 @@ import { useListDeployment } from "../../states/deployments";
 import { useListIngress } from "../../states/ingresses";
 import { useListNamespace } from "../../states/namespaces";
 import { useListPod } from "../../states/pods";
+import { useListPVC } from "../../states/pvcs";
+import { useListPV } from "../../states/pvs";
 import { useListService } from "../../states/services";
 
 interface FloatingButtonProps {
@@ -18,7 +20,7 @@ interface FloatingButtonProps {
 const FloatingButton: FC<FloatingButtonProps> = (props): JSX.Element => {
   return (
     <div
-      className="bg-blue-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/70 cursor-pointer hover:bg-blue-600 transition-colors"
+      className="bg-indigo-500 rounded-full flex items-center justify-center shadow-lg shadow-indigo-500/70 cursor-pointer hover:bg-indigo-600 transition-colors"
       onClick={props.onClick}
     >
       <div className="p-2">
@@ -37,6 +39,8 @@ const FloatingButtons: FC = (): JSX.Element => {
   const refreshConfigMaps = useListConfigMap((state) => state.list);
   const refreshIngress = useListIngress((state) => state.list);
   const refreshService = useListService((state) => state.list);
+  const refreshPVC = useListPVC((state) => state.list);
+  const refreshPV = useListPV((state) => state.list);
 
   const refreshAll = () => {
     const mergedPromises = Promise.all([
@@ -45,10 +49,12 @@ const FloatingButtons: FC = (): JSX.Element => {
       refreshConfigMaps(currentNamespace, false),
       refreshIngress(currentNamespace, false),
       refreshService(currentNamespace, false),
+      refreshPVC(currentNamespace, false),
+      refreshPV(currentNamespace, false),
     ]);
     toast.promise(mergedPromises, {
       loading: "새로고침 중...",
-      success: "새로고침 완료",
+      success: "새로고침 완료!",
       error: () => {
         return "연결 상태가 불안정합니다. 나중에 다시 시도해주세요.";
       },

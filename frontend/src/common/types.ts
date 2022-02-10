@@ -50,6 +50,22 @@ export interface ServicePortProps extends DefaultProps {
   protocol: string;
 }
 
+export interface PersistentVolumeClaimProps extends DefaultProps {
+  uid: string;
+  storage_class_name: string;
+  capacity: string;
+}
+
+export interface PersistentVolumeProps {
+  name: string;
+  labels: {
+    [key: string]: string;
+  };
+  claim_ref: string;
+  storage_class_name: string;
+  capacity: string;
+}
+
 export interface ContainerProps {
   name: string;
   image: string;

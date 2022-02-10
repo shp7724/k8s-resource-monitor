@@ -21,10 +21,12 @@ export const textColorMap = (
     "text-amber-900": color === "amber",
     "text-teal-900": color === "teal",
     "text-pink-900": color === "pink",
+    "text-emerald-900": color === "emerald",
     "text-indigo-900/70": color === "indigo" && !!translucent,
     "text-blue-900/70": color === "blue" && !!translucent,
     "text-amber-900/70": color === "amber" && !!translucent,
     "text-teal-900/70": color === "teal" && !!translucent,
     "text-pink-900/70": color === "pink" && !!translucent,
+    "text-emerald-900/70": color === "emerald" && !!translucent,
   };
 };
