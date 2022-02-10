@@ -1,7 +1,7 @@
 import yaml
 from k8s.exceptions import *
 from k8s.serializers import Serializer
-from k8s.utils import get_ingress, k8s
+from k8s.utils import k8s
 from kubernetes.client.models import *
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import *
@@ -44,8 +44,6 @@ class RetrieveUpdateDestroyIngress(APIView):
         return Response(Serializer.ingress(updated))
 
     def delete(self, request, namespace, name):
-        if namespace.endswith("-system"):
-            raise ProtectedError()
         try:
             k8s.network.delete_namespaced_ingress(namespace=namespace, name=name)
         except Exception as e:

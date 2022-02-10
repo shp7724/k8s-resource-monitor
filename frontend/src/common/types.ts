@@ -34,6 +34,9 @@ export interface ConfigMapProps extends DefaultProps {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IngressProps extends DefaultProps {}
+
 export interface ContainerProps {
   name: string;
   image: string;
@@ -86,5 +89,11 @@ export interface ChartDataProps {
 /*                                    Types                                   */
 /* -------------------------------------------------------------------------- */
 
-export type themeColors = "indigo" | "blue" | "amber";
+export type themeColors =
+  | "indigo"
+  | "blue"
+  | "amber"
+  | "teal"
+  | "pink"
+  | "emerald";
 export type HeroIcon = (props: React.ComponentProps<"svg">) => JSX.Element;

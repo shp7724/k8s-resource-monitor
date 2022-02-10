@@ -3,6 +3,7 @@ import FloatingButtons from "./components/common/FloatingButtons";
 import Title from "./components/common/Title";
 import ConfigMaps from "./components/configmaps/ConfigMaps";
 import Deployments from "./components/deployments/Deployments";
+import Ingresses from "./components/ingresses/Ingresses";
 import Namespace from "./components/namespaces/Namespace";
 import Pods from "./components/pods/Pods";
 
@@ -22,6 +23,8 @@ function App() {
         <Title className="text-amber-900" text="ConfigMaps" />
         <ConfigMaps />
 
+        <Title className="text-teal-900" text="Ingresses" />
+        <Ingresses />
         <div className="h-32"></div>
 
         <FloatingButtons />

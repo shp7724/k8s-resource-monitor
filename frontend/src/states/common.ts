@@ -100,15 +100,15 @@ export const createDetailStore = <StateType extends DetailState>(
     toast.promise(promise, {
       loading: "업데이트 중...",
       success: "업데이트 성공!",
-      error: (err) => err.response.data.message,
+      error: (err) => err.response.data.message || err.response.data.detail,
     });
   },
   delete: async (namespace: string, name: string) => {
-    const promise = axiosClient.patch(get().baseUrl(namespace, name));
+    const promise = axiosClient.delete(get().baseUrl(namespace, name));
     toast.promise(promise, {
       loading: "삭제 중...",
       success: "삭제 성공!",
-      error: (err) => err.response.data.message,
+      error: (err) => err.response.data.message || err.response.data.detail,
     });
   },
 });

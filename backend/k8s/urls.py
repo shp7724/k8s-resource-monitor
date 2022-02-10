@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.urls import include, path
 
-from backend.k8s.views.ingress import ListIngress, RetrieveUpdateDestroyIngress
-
 
 from .views import *
 from .consumers import PodSSHConsumer
@@ -30,9 +28,9 @@ urlpatterns = [
         RetrieveUpdateDestroyConfigMap.as_view(),
     ),
     # ---------------------------------- Ingress --------------------------------- #
-    path("ingress/", ListIngress.as_view()),
+    path("ingresses/", ListIngress.as_view()),
     path(
-        "ingress/<str:namespace>/<str:name>/",
+        "ingresses/<str:namespace>/<str:name>/",
         RetrieveUpdateDestroyIngress.as_view(),
     ),
     # --------------------------------- Services --------------------------------- #

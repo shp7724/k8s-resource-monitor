@@ -5,6 +5,7 @@ import { HeroIcon } from "../../common/types";
 import { useCreateResourceModal } from "../../states/common";
 import { useListConfigMap } from "../../states/configmaps";
 import { useListDeployment } from "../../states/deployments";
+import { useListIngress } from "../../states/ingresses";
 import { useListNamespace } from "../../states/namespaces";
 import { useListPod } from "../../states/pods";
 
@@ -33,12 +34,14 @@ const FloatingButtons: FC = (): JSX.Element => {
   const refreshDeployments = useListDeployment((state) => state.list);
   const refreshPods = useListPod((state) => state.list);
   const refreshConfigMaps = useListConfigMap((state) => state.list);
+  const refreshIngress = useListIngress((state) => state.list);
 
   const refreshAll = () => {
     const mergedPromises = Promise.all([
       refreshDeployments(currentNamespace, false),
       refreshPods(currentNamespace, false),
       refreshConfigMaps(currentNamespace, false),
+      refreshIngress(currentNamespace, false),
     ]);
     toast.promise(mergedPromises, {
       loading: "새로고침 중...",

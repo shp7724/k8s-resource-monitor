@@ -6,26 +6,27 @@ interface LabelBadgeProps {
   color?: themeColors;
 }
 
-const LabelBadge: FC<LabelBadgeProps> = (props): JSX.Element => {
-  let colorClass = "";
-  switch (props.color) {
+const getLabelColorClass = (color?: themeColors): string => {
+  switch (color) {
     case "indigo":
-      colorClass =
-        "bg-indigo-100 divide-indigo-300 border-indigo-300 text-indigo-900";
-      break;
+      return "bg-indigo-100 divide-indigo-300 border-indigo-300 text-indigo-900";
     case "blue":
-      colorClass = "bg-blue-100 divide-blue-300 border-blue-300 text-blue-900";
-      break;
+      return "bg-blue-100 divide-blue-300 border-blue-300 text-blue-900";
     case "amber":
-      colorClass =
-        "bg-amber-100 divide-amber-300 border-amber-300 text-amber-900";
-      break;
+      return "bg-amber-100 divide-amber-300 border-amber-300 text-amber-900";
+    case "teal":
+      return "bg-teal-100 divide-teal-300 border-teal-300 text-teal-900";
     default:
-      break;
+      return "";
   }
+};
+
+const LabelBadge: FC<LabelBadgeProps> = (props): JSX.Element => {
   return (
     <div
-      className={`flex items-center rounded-full divide-x divide-solid border text-sm ${colorClass}`}
+      className={`flex items-center rounded-full divide-x divide-solid border text-sm ${getLabelColorClass(
+        props.color
+      )}`}
     >
       <div className="inline-block px-2 max-w-[5rem] truncate">
         {props.name}

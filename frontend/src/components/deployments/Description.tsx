@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { FC } from "react";
 import { themeColors } from "../../common/types";
+import { textColorMap } from "./Label";
 
 interface DescriptionProps {
   children?: React.ReactNode;
@@ -13,11 +14,7 @@ const Description: FC<DescriptionProps> = ({
 }): JSX.Element => {
   return (
     <div
-      className={classNames("text-sm font-medium inline", {
-        "text-indigo-900": color === "indigo",
-        "text-blue-900": color === "blue",
-        "text-amber-900": color === "amber",
-      })}
+      className={classNames("text-sm font-medium inline", textColorMap(color))}
     >
       {children}
     </div>
