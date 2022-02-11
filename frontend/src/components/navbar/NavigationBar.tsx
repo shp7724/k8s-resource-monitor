@@ -1,13 +1,13 @@
 import { Disclosure } from "@headlessui/react";
-import {
-  LockClosedIcon, MenuIcon,
-  XIcon
-} from "@heroicons/react/outline";
+import { LockClosedIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { FC } from "react";
 import { Link } from "react-scroll";
+import { useAuthModal } from "../../states/auth";
 import { navigationData } from "./navigationData";
 
 const NavigationBar: FC = (): JSX.Element => {
+  const openLoginModal = useAuthModal((state) => state.openModal);
+
   return (
     <>
       <Disclosure
@@ -61,10 +61,13 @@ const NavigationBar: FC = (): JSX.Element => {
                 </div>
                 <div className="hidden md:block">
                   <div className="flex items-center">
-                    <button className="group relative flex justify-center py-2 pl-3 pr-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button
+                      onClick={openLoginModal}
+                      className="group relative flex justify-center py-2 pl-3 pr-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+                    >
                       <span className="flex items-center">
                         <LockClosedIcon
-                          className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400 mr-2"
+                          className="h-5 w-5 text-indigo-300 group-hover:text-indigo-400 mr-2"
                           aria-hidden="true"
                         />
                       </span>

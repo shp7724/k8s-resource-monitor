@@ -25,9 +25,9 @@ const PodUsageChart: FC<PodUsageChartProps> = (props): JSX.Element => {
 
   return (
     <div>
-      <hr className="border-blue-900/20 my-3 -mx-5" />
-      <div className="flex justify-center my-2">
-        <div className="text-sm divide-x divide-blue-900/30 border border-blue-900/30 rounded cursor-pointer select-none">
+      <hr className="my-3 -mx-5 border-blue-900/20" />
+      <div className="my-2 flex justify-center">
+        <div className="cursor-pointer select-none divide-x divide-blue-900/30 rounded border border-blue-900/30 text-sm">
           {(["CPU", "Memory"] as UsageDisplayMode[]).map((string, idx) => (
             <div
               key={idx}
@@ -35,7 +35,7 @@ const PodUsageChart: FC<PodUsageChartProps> = (props): JSX.Element => {
                 setDisplayMode(string);
               }}
               className={classNames(
-                "inline-block px-2 leading-none font-semibold",
+                "inline-block px-2 font-semibold leading-none",
                 {
                   "text-blue-900": string === displayMode,
                   "text-blue-900/50": string !== displayMode,
@@ -49,7 +49,7 @@ const PodUsageChart: FC<PodUsageChartProps> = (props): JSX.Element => {
       </div>
       {chartData.map((container) => {
         return (
-          <div key={container.containerName} className="w-full h-20">
+          <div key={container.containerName} className="h-20 w-full">
             <UsageLineChart
               displayMode={displayMode}
               data={[
@@ -60,7 +60,7 @@ const PodUsageChart: FC<PodUsageChartProps> = (props): JSX.Element => {
             />
             <div className="flex justify-between px-1">
               <div className="text-sm">
-                <span className="text-blue-900 font-semibold">
+                <span className="font-semibold text-blue-900">
                   {container.containerName}
                 </span>
               </div>
@@ -71,7 +71,7 @@ const PodUsageChart: FC<PodUsageChartProps> = (props): JSX.Element => {
                   namespace: props.namespace,
                 })}
                 className={classNames(
-                  "h-5 w-5 text-blue-900 hover:text-blue-600 active:text-blue-700 cursor-pointer",
+                  "h-5 w-5 cursor-pointer text-blue-900 hover:text-blue-600 active:text-blue-700",
                   {}
                 )}
               />
@@ -79,7 +79,7 @@ const PodUsageChart: FC<PodUsageChartProps> = (props): JSX.Element => {
           </div>
         );
       })}
-      <hr className="border-blue-900/20 mb-3 mt-6 -mx-5" />
+      <hr className="-mx-5 mb-3 mt-6 border-blue-900/20" />
     </div>
   );
 };
