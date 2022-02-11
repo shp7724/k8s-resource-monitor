@@ -6,9 +6,20 @@ export const endpoint = isProduction
   ? "api.resource-monitor.findy.co.kr:444"
   : "localhost:8000";
 
+const baseURL = `${isProduction ? "https" : "http"}://${endpoint}/api/`;
+
 const axiosClient = axios.create({
-  baseURL: `${isProduction ? "https" : "http"}://${endpoint}/api/`,
+  baseURL: baseURL,
   timeout: 5000,
 });
+
+export const authClient = axios.create({
+  baseURL: baseURL,
+  timeout: 5000,
+});
+
+export const updateToken = (access: string) => {
+  axiosClient.defaults.headers.common["Authorization"] = `Bearer ${access}`;
+};
 
 export default axiosClient;

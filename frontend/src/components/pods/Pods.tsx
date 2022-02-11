@@ -21,8 +21,8 @@ const Pods: FC = (): JSX.Element => {
   useEffect(() => {
     fetchPodUsage();
     const timerId = setInterval(() => {
-      fetchPodUsage().catch(() => {
-        k8sConnectionErrorToast();
+      fetchPodUsage().catch(err => {
+        k8sConnectionErrorToast(err);
       });
     }, 5000);
     return () => clearInterval(timerId);

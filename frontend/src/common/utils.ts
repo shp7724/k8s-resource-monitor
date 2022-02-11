@@ -1,9 +1,11 @@
 import toast from "react-hot-toast";
 import { themeColors } from "./types";
 
-export const k8sConnectionErrorToast = () => {
+export const k8sConnectionErrorToast = (error: any) => {
   toast.error(
-    "K8s 클러스터와의 연결 상태가 불안정합니다.\n나중에 다시 시도해주세요.",
+    error.response.status === 401
+      ? "인증되지 않은 사용자입니다.\n로그인 후 다시 시도해주세요."
+      : "K8s 클러스터와의 연결 상태가 불안정합니다.\n나중에 다시 시도해주세요.",
     {
       id: "k8s-error",
       duration: 5000,

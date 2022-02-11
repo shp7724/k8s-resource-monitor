@@ -32,7 +32,7 @@ export const createListStore = <
       .get<DataType[]>(get().baseUrl(), {
         params: { namespace: namespace?.name },
       })
-      .catch(() => k8sConnectionErrorToast());
+      .catch((err) => k8sConnectionErrorToast(err));
     if (!res) {
       return;
     }
