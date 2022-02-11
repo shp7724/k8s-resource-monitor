@@ -1,14 +1,11 @@
-import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Disclosure } from "@headlessui/react";
 import {
-  BellIcon,
-  MenuIcon,
-  XIcon,
-  LockClosedIcon,
+  LockClosedIcon, MenuIcon,
+  XIcon
 } from "@heroicons/react/outline";
-import classNames from "classnames";
-import { FC, Fragment } from "react";
-import { navigationData } from "./navigationData";
+import { FC } from "react";
 import { Link } from "react-scroll";
+import { navigationData } from "./navigationData";
 
 const NavigationBar: FC = (): JSX.Element => {
   return (
