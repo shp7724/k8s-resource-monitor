@@ -1,44 +1,29 @@
+import { Fragment } from "react";
 import CreateModal from "./components/common/CreateModal";
 import FloatingButtons from "./components/common/FloatingButtons";
 import Title from "./components/common/Title";
-import ConfigMaps from "./components/configmaps/ConfigMaps";
-import Deployments from "./components/deployments/Deployments";
-import Ingresses from "./components/ingresses/Ingresses";
 import Namespace from "./components/namespaces/Namespace";
-import Pods from "./components/pods/Pods";
-import PVCs from "./components/pvcs/PVCs";
-import PVs from "./components/pvs/PVs";
-import Services from "./components/services/Services";
+import NavigationBar from "./components/navbar/NavigationBar";
+import { navigationData } from "./components/navbar/navigationData";
 
 function App() {
   return (
     <div className="bg-gray-50">
+      <NavigationBar />
       <div className="container mx-auto px-5">
         <div className="h-32"></div>
         <Namespace />
 
-        <Title className="text-indigo-900" text="Deployments" />
-        <Deployments />
+        {navigationData.map((item, idx) => {
+          return (
+            <div id={item.title} key={idx}>
+              <Title className={item.titleClass} text={item.title} />
+              <item.item />
+            </div>
+          );
+        })}
 
-        <Title className="text-blue-900" text="Pods" />
-        <Pods />
-
-        <Title className="text-pink-900" text="Services" />
-        <Services />
-
-        <Title className="text-teal-900" text="Ingresses" />
-        <Ingresses />
-
-        <Title className="text-amber-900" text="ConfigMaps" />
-        <ConfigMaps />
-
-        <Title className="text-emerald-900" text="PersistentVolumeClaim" />
-        <PVCs />
-
-        <Title className="text-emerald-900" text="PersistentVolume" />
-        <PVs />
-
-        <div className="h-32"></div>
+        <div className="h-96"></div>
 
         <FloatingButtons />
         <CreateModal />
