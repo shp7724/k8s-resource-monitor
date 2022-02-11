@@ -3,21 +3,23 @@ from typing import Any
 from k8s.serializers import Serializer
 from k8s.utils import k8s
 
-from .common import GenericListView, GenericRetrieveUpdateDestroyView
+from .common import *
 
 
-class ListConfigMaps(GenericListView):
+class ConfigMapMixins(GenericMixins):
+    def serialize(self, resource):
+        return Serializer.configmap(resource)
+
+
+class ListConfigMaps(ConfigMapMixins, GenericListView):
     def list_resource_for_all_namespaces(self):
         return k8s.core.list_config_map_for_all_namespaces()
 
     def list_namespaced_resource(self, namespace: str):
         return k8s.core.list_namespaced_config_map(namespace=namespace)
 
-    def serialize(self, resource):
-        return Serializer.configmap(resource)
 
-
-class RetrieveUpdateDestroyConfigMap(GenericRetrieveUpdateDestroyView):
+class RetrieveUpdateDestroyConfigMap(ConfigMapMixins, GenericRetrieveUpdateDestroyView):
     def protect_system_resource(self) -> bool:
         return False
 

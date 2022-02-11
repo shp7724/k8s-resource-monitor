@@ -8,21 +8,25 @@ from k8s.utils import k8s
 from kubernetes.client.models import *
 from rest_framework.response import Response
 
-from .common import GenericListView, GenericRetrieveUpdateDestroyView
+from .common import *
 
 
-class ListDeployment(GenericListView):
+class DeploymentMixins(GenericMixins):
+    def serialize(self, resource):
+        return Serializer.deployment(resource)
+
+
+class ListDeployment(DeploymentMixins, GenericListView):
     def list_resource_for_all_namespaces(self):
         return k8s.apps.list_deployment_for_all_namespaces()
 
     def list_namespaced_resource(self, namespace: str):
         return k8s.apps.list_namespaced_deployment(namespace=namespace)
 
-    def serialize(self, resource):
-        return Serializer.deployment(resource)
 
-
-class RetrieveUpdateDestroyDeployment(GenericRetrieveUpdateDestroyView):
+class RetrieveUpdateDestroyDeployment(
+    DeploymentMixins, GenericRetrieveUpdateDestroyView
+):
     def get_resource(self, namespace: str, name: str):
         return k8s.apps.read_namespaced_deployment(name, namespace)
 

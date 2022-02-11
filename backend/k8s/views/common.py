@@ -21,18 +21,18 @@ def create_resource_view(request: Request):
 # ---------------------------------------------------------------------------- #
 
 
-class GenericK8sView(APIView):
+class GenericMixins:
     def serialize(self, resource):
         raise NotImplementedError()
 
+
+class GenericListView(GenericMixins, APIView):
     def list_resource_for_all_namespaces(self):
         raise NotImplementedError()
 
     def list_namespaced_resource(self, namespace: str):
         raise NotImplementedError()
 
-
-class GenericListView(GenericK8sView):
     def get(self, request):
         namespace = request.query_params.get("namespace")
         if namespace is None:
@@ -44,7 +44,7 @@ class GenericListView(GenericK8sView):
         return Response(data)
 
 
-class GenericRetrieveUpdateDestroyView(GenericK8sView):
+class GenericRetrieveUpdateDestroyView(GenericMixins, APIView):
     def get_resource(self, namespace: str, name: str):
         raise NotImplementedError()
 

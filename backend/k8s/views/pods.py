@@ -2,13 +2,15 @@ from k8s.exceptions import *
 from k8s.serializers import Serializer
 from k8s.utils import k8s
 
-from .common import GenericListView, GenericRetrieveUpdateDestroyView
+from .common import *
 
 
-class ListPod(GenericListView):
+class PodMixins(GenericMixins):
     def serialize(self, resource):
         return Serializer.pod(resource)
 
+
+class ListPod(PodMixins, GenericListView):
     def list_namespaced_resource(self, namespace: str):
         return k8s.core.list_namespaced_pod(namespace=namespace)
 
@@ -16,7 +18,7 @@ class ListPod(GenericListView):
         return k8s.core.list_pod_for_all_namespaces()
 
 
-class DeletePod(GenericRetrieveUpdateDestroyView):
+class DeletePod(PodMixins, GenericRetrieveUpdateDestroyView):
     def protect_system_resource(self) -> bool:
         return False
 
