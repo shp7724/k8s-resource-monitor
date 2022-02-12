@@ -12,6 +12,8 @@ from rest_framework.views import APIView
 
 @api_view(["POST"])
 def create_resource_view(request: Request):
+    if not request.user.is_active:
+        raise PermissionDenied(detail="리소스를 생성하려면 관리자 권한이 필요합니다.")
     create_resource(request)
     return Response(status=201)
 
@@ -80,6 +82,9 @@ class GenericRetrieveUpdateDestroyView(GenericMixins, APIView):
         return Response(yaml_str)
 
     def patch(self, request, name, namespace):
+        if not self.request.user.is_active:
+            raise PermissionDenied(detail="리소스를 수정하려면 관리자 권한이 필요합니다.")
+
         yaml_data = request.data.get("yaml")
         if yaml_data is None:
             raise ParseError(detail="yaml file not found.")
@@ -94,6 +99,8 @@ class GenericRetrieveUpdateDestroyView(GenericMixins, APIView):
         return Response(self.serialize(updated))
 
     def delete(self, request, namespace, name):
+        if not self.request.user.is_active:
+            raise PermissionDenied(detail="리소스를 삭제하려면 관리자 권한이 필요합니다.")
         if self.protect_system_resource and namespace.endswith("-system"):
             raise ProtectedError()
         try:

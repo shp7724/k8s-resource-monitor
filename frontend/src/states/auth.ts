@@ -1,8 +1,5 @@
 import create from "zustand";
-import axiosClient, {
-  authClient,
-  updateToken as registerToken,
-} from "../common/axios";
+import axiosClient, { authClient, registerToken } from "../common/axios";
 
 export interface LoginDataProps {
   username: string;
@@ -46,13 +43,14 @@ export const useAuth = create<AuthState>((set, get) => ({
             refresh: get().refreshToken,
           })
           .then((res) => {
-            registerToken(res.data.access);
             err.config.headers["Authorization"] = `Bearer ${res.data.access}`;
+            registerToken(res.data.access);
             set({ isAuthenticated: true, accessToken: res.data.access });
             return axiosClient.request(err.config);
           })
           .catch((err) => {
             axiosClient.interceptors.response.eject(newRetrier);
+            registerToken(null);
             set({ isAuthenticated: false, accessToken: "", refreshToken: "" });
             return Promise.reject(err);
           });

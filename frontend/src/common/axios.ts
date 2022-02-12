@@ -18,7 +18,11 @@ export const authClient = axios.create({
   timeout: 5000,
 });
 
-export const updateToken = (access: string) => {
+export const registerToken = (access: string | null) => {
+  if (access === null) {
+    axiosClient.defaults.headers.common["Authorization"] = "";
+    return;
+  }
   axiosClient.defaults.headers.common["Authorization"] = `Bearer ${access}`;
 };
 

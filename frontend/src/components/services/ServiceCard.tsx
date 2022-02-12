@@ -26,13 +26,14 @@ const ServiceCard: FC<ServiceProps> = (props): JSX.Element => {
         },
         Icon: TrashIcon,
         mode: "destructive",
+        requireAuth: true,
       },
     ];
   };
 
   return (
-    <div className="rounded-lg bg-pink-50 border border-pink-500 px-5 pb-5 shadow">
-      <div className="flex justify-between mt-3">
+    <div className="rounded-lg border border-pink-500 bg-pink-50 px-5 pb-5 shadow">
+      <div className="mt-3 flex justify-between">
         <div className="truncate">
           <Label text="이름" color="pink" />
           <Description color="pink">{props.name}</Description>
@@ -47,11 +48,11 @@ const ServiceCard: FC<ServiceProps> = (props): JSX.Element => {
         <Label text="타입" color="pink" />
         <Description color="pink">{props.type}</Description>
       </div>
-      <div className="flex flex-col gap-y-1.5 mt-2">
+      <div className="mt-2 flex flex-col gap-y-1.5">
         {props.ports.map((port, idx) => (
           <div
             key={idx}
-            className="bg-pink-100 rounded-md p-2 border border-pink-300"
+            className="rounded-md border border-pink-300 bg-pink-100 p-2"
           >
             <div>
               <Label text="포트" color="pink" />
@@ -75,7 +76,7 @@ const ServiceCard: FC<ServiceProps> = (props): JSX.Element => {
         ))}
       </div>
       {props.labels && (
-        <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3">
+        <div className="mt-3 flex flex-wrap gap-x-2 gap-y-1">
           {Object.entries(props.labels).map(([name, value], index) => {
             return (
               <LabelBadge key={index} name={name} value={value} color="pink" />

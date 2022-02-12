@@ -1,7 +1,9 @@
 import { PlusIcon, RefreshIcon } from "@heroicons/react/outline";
+import classNames from "classnames";
 import { FC } from "react";
 import toast from "react-hot-toast";
 import { HeroIcon } from "../../common/types";
+import { useAuth } from "../../states/auth";
 import { useCreateResourceModal } from "../../states/common";
 import { useListConfigMap } from "../../states/configmaps";
 import { useListDeployment } from "../../states/deployments";
@@ -15,18 +17,33 @@ import { useListService } from "../../states/services";
 interface FloatingButtonProps {
   onClick?: () => void;
   Icon: HeroIcon;
+  requireAuth?: boolean;
+  isAuthenticated?: boolean;
 }
 
 const FloatingButton: FC<FloatingButtonProps> = (props): JSX.Element => {
+  const disabled = props.requireAuth && !props.isAuthenticated;
   return (
-    <div
-      className="bg-indigo-500 rounded-full flex items-center justify-center shadow-lg shadow-indigo-500/70 cursor-pointer hover:bg-indigo-600 transition-colors"
+    <button
+      disabled={disabled}
+      className={classNames(
+        "flex items-center justify-center rounded-full shadow-lg  transition-colors ",
+        {
+          "bg-indigo-500": !disabled,
+          "bg-gray-300 shadow-gray-300/80 hover:bg-gray-400": disabled,
+        }
+      )}
       onClick={props.onClick}
     >
       <div className="p-2">
-        <props.Icon className="w-5 h-5 text-blue-100" />
+        <props.Icon
+          className={classNames("h-5 w-5", {
+            "text-blue-100": !disabled,
+            "text-gray-500": disabled,
+          })}
+        />
       </div>
-    </div>
+    </button>
   );
 };
 
@@ -41,6 +58,8 @@ const FloatingButtons: FC = (): JSX.Element => {
   const refreshService = useListService((state) => state.list);
   const refreshPVC = useListPVC((state) => state.list);
   const refreshPV = useListPV((state) => state.list);
+
+  const isAuthenticated = useAuth((state) => state.isAuthenticated);
 
   const refreshAll = () => {
     const mergedPromises = Promise.all([
@@ -65,7 +84,12 @@ const FloatingButtons: FC = (): JSX.Element => {
     <div className="fixed right-8 bottom-8">
       <div className="flex flex-col gap-2">
         <FloatingButton onClick={refreshAll} Icon={RefreshIcon} />
-        <FloatingButton onClick={openCreateModal} Icon={PlusIcon} />
+        <FloatingButton
+          onClick={openCreateModal}
+          Icon={PlusIcon}
+          requireAuth={true}
+          isAuthenticated={isAuthenticated}
+        />
       </div>
     </div>
   );

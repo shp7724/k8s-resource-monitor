@@ -25,14 +25,15 @@ const ConfigMapCard: FC<ConfigMapProps> = (props): JSX.Element => {
           deleteConfigMap(props.namespace, props.name);
         },
         Icon: TrashIcon,
+        requireAuth: true,
         mode: "destructive",
       },
     ];
   };
 
   return (
-    <div className="rounded-lg bg-amber-50 border border-amber-500 px-5 pb-5 shadow">
-      <div className="flex justify-between mt-3">
+    <div className="rounded-lg border border-amber-500 bg-amber-50 px-5 pb-5 shadow">
+      <div className="mt-3 flex justify-between">
         <div className="truncate">
           <Label text="이름" color="amber" />
           <Description color="amber">{props.name}</Description>
@@ -44,7 +45,7 @@ const ConfigMapCard: FC<ConfigMapProps> = (props): JSX.Element => {
         <Description color="amber">{props.namespace}</Description>
       </div>
       {props.labels && (
-        <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3">
+        <div className="mt-3 flex flex-wrap gap-x-2 gap-y-1">
           {Object.entries(props.labels).map(([name, value], index) => {
             return (
               <LabelBadge key={index} name={name} value={value} color="amber" />

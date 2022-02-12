@@ -19,6 +19,7 @@ const PodCard: FC<PodProps> = (props): JSX.Element => {
       {
         text: "삭제",
         mode: "destructive",
+        requireAuth: true,
         Icon: TrashIcon,
         onClick: () => {
           deletePod(props.namespace, props.name);

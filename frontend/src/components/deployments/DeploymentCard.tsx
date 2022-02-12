@@ -32,6 +32,7 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
         onClick: () => {
           restartDeployment?.(props.namespace, props.name);
         },
+        requireAuth: true,
         Icon: RefreshIcon,
       },
       {
@@ -39,6 +40,7 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
         onClick: () => {
           deleteDeployment(props.namespace, props.name);
         },
+        requireAuth: true,
         Icon: TrashIcon,
         mode: "destructive",
       },
@@ -46,9 +48,9 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
   };
 
   return (
-    <div className="rounded-lg bg-indigo-50 border border-indigo-500 px-5 pb-5 shadow">
-      <div className="flex justify-between mt-3">
-        <div className="text-indigo-900 text-xl font-semibold truncate mb-2">
+    <div className="rounded-lg border border-indigo-500 bg-indigo-50 px-5 pb-5 shadow">
+      <div className="mt-3 flex justify-between">
+        <div className="mb-2 truncate text-xl font-semibold text-indigo-900">
           {props.name}
         </div>
         <DropdownMenus menus={menus(props)} iconClassName="text-indigo-600" />
@@ -74,7 +76,7 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
         </Description>
       </div>
       <div className="my-2">
-        <div className="text-sm text-indigo-900/80 font-semibold mb-1">
+        <div className="mb-1 text-sm font-semibold text-indigo-900/80">
           컨테이너 템플릿
         </div>
         <div className="flex flex-col gap-y-1.5">
@@ -84,7 +86,7 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
         </div>
       </div>
       <div className="my-2">
-        <div className="text-sm text-indigo-900/80 font-semibold mb-1">
+        <div className="mb-1 text-sm font-semibold text-indigo-900/80">
           파드
         </div>
         <div className="flex flex-col gap-y-1.5">
@@ -93,7 +95,7 @@ const DeploymentCard: FC<DeploymentProps> = (props): JSX.Element => {
           })}
         </div>
       </div>
-      <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3">
+      <div className="mt-3 flex flex-wrap gap-x-2 gap-y-1">
         {Object.entries(props.labels).map(([name, value], index) => {
           return (
             <LabelBadge key={index} name={name} value={value} color="indigo" />

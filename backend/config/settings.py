@@ -161,6 +161,6 @@ ASGI_APPLICATION = "config.asgi.application"
 # ---------------------------------------------------------------------------- #
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=10),
-    "REFRESH_TOKEN_LIFETIME": timedelta(seconds=20),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(day=1),
 }

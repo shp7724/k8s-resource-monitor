@@ -24,6 +24,7 @@ const PVCCard: FC<PersistentVolumeClaimProps> = (props): JSX.Element => {
         onClick: () => {
           deleteIngress(props.namespace, props.name);
         },
+        requireAuth: true,
         Icon: TrashIcon,
         mode: "destructive",
       },
@@ -31,8 +32,8 @@ const PVCCard: FC<PersistentVolumeClaimProps> = (props): JSX.Element => {
   };
 
   return (
-    <div className="rounded-lg bg-emerald-50 border border-emerald-500 px-5 pb-5 shadow">
-      <div className="flex justify-between mt-3">
+    <div className="rounded-lg border border-emerald-500 bg-emerald-50 px-5 pb-5 shadow">
+      <div className="mt-3 flex justify-between">
         <div className="truncate">
           <Label text="이름" color="emerald" />
           <Description color="emerald">{props.name}</Description>
@@ -56,7 +57,7 @@ const PVCCard: FC<PersistentVolumeClaimProps> = (props): JSX.Element => {
         <Description color="emerald">{props.uid}</Description>
       </div>
       {props.labels && (
-        <div className="flex flex-wrap gap-x-2 gap-y-1 mt-3">
+        <div className="mt-3 flex flex-wrap gap-x-2 gap-y-1">
           {Object.entries(props.labels).map(([name, value], index) => {
             return (
               <LabelBadge
