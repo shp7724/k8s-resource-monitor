@@ -5,6 +5,7 @@ import { LoginDataProps, useAuth, useAuthModal } from "../../states/auth";
 import BaseModal from "../common/BaseModal";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Logo from "../common/Logo";
 
 const LoginModal: FC = (): JSX.Element => {
   const requestToken = useAuth((state) => state.requestToken);
@@ -41,11 +42,7 @@ const LoginModal: FC = (): JSX.Element => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full max-w-md space-y-8">
             <div>
-              <img
-                className="mx-auto h-12 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                alt="Workflow"
-              />
+              <Logo logoClassName="h-12 w-12" />
               <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 관리자 계정으로 로그인
               </h2>

@@ -6,15 +6,21 @@ import { textColorMap } from "../../common/utils";
 interface DescriptionProps {
   children?: React.ReactNode;
   color?: themeColors;
+  className?: string;
 }
 
 const Description: FC<DescriptionProps> = ({
   children,
+  className,
   color,
 }): JSX.Element => {
   return (
     <div
-      className={classNames("text-sm font-medium inline", textColorMap(color))}
+      className={classNames(
+        "inline text-sm font-medium",
+        className,
+        textColorMap(color)
+      )}
     >
       {children}
     </div>

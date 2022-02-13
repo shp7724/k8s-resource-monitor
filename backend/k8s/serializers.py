@@ -18,7 +18,7 @@ class Serializer:
             labels=instance.metadata.labels,
             pod_ip=instance.status.pod_ip,
             creation_timestamp=instance.metadata.creation_timestamp,
-            status=Serializer.conditions(instance.status.conditions),
+            conditions=Serializer.conditions(instance.status.conditions),
         )
 
     @staticmethod
@@ -157,4 +157,15 @@ class Serializer:
             claim_ref=instance.spec.claim_ref.uid,
             storage_class_name=instance.spec.storage_class_name,
             capacity=instance.spec.capacity.get("storage", "NA"),
+        )
+
+    @staticmethod
+    def node(instance: V1Node) -> dict:
+        return dict(
+            name=instance.metadata.name,
+            namespace=instance.metadata.namespace,
+            labels=instance.metadata.labels,
+            creation_timestamp=instance.metadata.creation_timestamp,
+            os_image=instance.status.node_info.os_image,
+            conditions=Serializer.conditions(instance.status.conditions),
         )

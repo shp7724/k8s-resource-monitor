@@ -18,7 +18,7 @@ const Pod: FC<PodProps> = (props): JSX.Element => {
       <div>
         <Label text="상태" color="indigo" />
         <Description color="indigo">
-          {props.status.find((item) => item.type === "Ready")?.status ? (
+          {props.conditions.find((item) => item.type === "Ready")?.status ? (
             <CheckCircleIcon className="w-5 h-5 inline-block pb-1" />
           ) : (
             <ExclamationCircleIcon className="w-5 h-5 inline-block pb-1 text-red-600" />

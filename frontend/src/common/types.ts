@@ -10,10 +10,16 @@ interface DefaultProps {
   };
 }
 
+export interface NodeProps extends DefaultProps {
+  creation_timestamp: string;
+  os_image: string;
+  conditions: ConditionProps[];
+}
+
 export interface PodProps extends DefaultProps {
   pod_ip: string;
   creation_timestamp: string;
-  status: PodStatusProps[];
+  conditions: ConditionProps[];
 }
 
 export interface DeploymentProps extends DefaultProps {
@@ -72,8 +78,8 @@ export interface ContainerProps {
   image_pull_policy: string;
 }
 
-export interface PodStatusProps {
-  type: "Initialized" | "Ready" | "ContainersReady" | "PodScheduled";
+export interface ConditionProps {
+  type: string;
   message: string;
   reason: string;
   status: boolean;
@@ -109,6 +115,12 @@ export interface ContainerChartDataProps {
   memoryChartData: ChartDataProps;
 }
 
+export interface NodeChartDataProps {
+  nodeName: string;
+  cpuChartData: ChartDataProps;
+  memoryChartData: ChartDataProps;
+}
+
 export interface ChartDataProps {
   id: string;
   data: { x: string; y: number }[];
@@ -124,5 +136,6 @@ export type themeColors =
   | "amber"
   | "teal"
   | "pink"
-  | "emerald";
+  | "emerald"
+  | "gray";
 export type HeroIcon = (props: React.ComponentProps<"svg">) => JSX.Element;

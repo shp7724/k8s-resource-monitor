@@ -20,11 +20,21 @@ def top_nodes(request: Request):
 
 @api_view(["GET"])
 def top_pods(request: Request):
-    namespace = request.query_params.get("namespace")
     data = k8s.custom.list_cluster_custom_object("metrics.k8s.io", "v1beta1", "pods")
-    data = [
-        Serializer.pod_usage(pod)
-        for pod in data.get("items", [])
-        if namespace is None or pod["metadata"]["namespace"] == namespace
-    ]
+    data = [Serializer.pod_usage(pod) for pod in data.get("items", [])]
     return Response(data)
+
+
+@api_view(["GET"])
+def top(request: Request):
+    node_data = k8s.custom.list_cluster_custom_object(
+        "metrics.k8s.io", "v1beta1", "nodes"
+    )
+    node_data = [Serializer.node_usage(node) for node in node_data.get("items", [])]
+
+    pod_data = k8s.custom.list_cluster_custom_object(
+        "metrics.k8s.io", "v1beta1", "pods"
+    )
+    pod_data = [Serializer.pod_usage(pod) for pod in pod_data.get("items", [])]
+
+    return Response(dict(pod=pod_data, node=node_data))

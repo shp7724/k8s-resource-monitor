@@ -2,10 +2,11 @@ import { TerminalIcon } from "@heroicons/react/outline";
 import classNames from "classnames";
 import { FC, useEffect, useState } from "react";
 import { ContainerChartDataProps } from "../../common/types";
-import { usePodUsage, useTerminal } from "../../states/pods";
+import { useMetrics } from "../../states/metrics";
+import { useTerminal } from "../../states/pods";
 import UsageLineChart from "./UsageLineChart";
 
-type UsageDisplayMode = "CPU" | "Memory";
+export type UsageDisplayMode = "CPU" | "Memory";
 
 interface PodUsageChartProps {
   podName: string;
@@ -14,8 +15,8 @@ interface PodUsageChartProps {
 
 const PodUsageChart: FC<PodUsageChartProps> = (props): JSX.Element => {
   const [chartData, setChartData] = useState<ContainerChartDataProps[]>([]);
-  const usagesByPod = usePodUsage((state) => state.usagesByPod);
-  const getChartDataOf = usePodUsage((state) => state.getChartDataOf);
+  const usagesByPod = useMetrics((state) => state.usagesByPod);
+  const getChartDataOf = useMetrics((state) => state.getChartDataOf);
   const [displayMode, setDisplayMode] = useState<UsageDisplayMode>("CPU");
   const openTerminal = useTerminal((state) => state.openTerminal);
 

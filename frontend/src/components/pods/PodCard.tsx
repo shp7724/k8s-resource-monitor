@@ -48,7 +48,7 @@ const PodCard: FC<PodProps> = (props): JSX.Element => {
       <div>
         <Label text="상태" color="blue" />
         <Description color="blue">
-          {props.status.find((item) => item.type === "Ready")?.status ? (
+          {props.conditions.find((item) => item.type === "Ready")?.status ? (
             <CheckCircleIcon className="inline-block h-5 w-5 pb-1" />
           ) : (
             <ExclamationCircleIcon className="inline-block h-5 w-5 pb-1 text-red-600" />

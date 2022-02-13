@@ -8,3 +8,4 @@ from .ingress import *
 from .services import *
 from .pvcs import *
 from .pvs import *
+from .nodes import *

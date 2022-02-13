@@ -1,8 +1,12 @@
+/* eslint-disable react/prop-types */
 import { ResponsiveLine } from "@nivo/line";
-import colors from "tailwindcss/colors";
+import tailwindColors from "tailwindcss/colors";
 
-// eslint-disable-next-line react/prop-types
-const UsageLineChart = ({ data, displayMode }) => (
+const UsageLineChart = ({
+  data,
+  displayMode,
+  colors = [tailwindColors.blue[900]],
+}) => (
   <ResponsiveLine
     data={data}
     margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
@@ -27,7 +31,7 @@ const UsageLineChart = ({ data, displayMode }) => (
     enableGridX={false}
     enableGridY={false}
     curve="linear"
-    colors={[colors.blue[900]]}
+    colors={colors}
     pointSize={2}
     pointColor={{ from: "color", modifiers: [] }}
     pointBorderWidth={4}
