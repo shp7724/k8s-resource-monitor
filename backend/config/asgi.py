@@ -17,10 +17,11 @@ from django.core.asgi import get_asgi_application
 from k8s.urls import websocket_urlpatterns
 from k8s.middlewares import TokenAuthMiddlewareStack
 
+asgi_app = get_asgi_application()
 
 application = ProtocolTypeRouter(
     {
-        "http": get_asgi_application(),
+        "http": asgi_app,
         "websocket": TokenAuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
     }
 )

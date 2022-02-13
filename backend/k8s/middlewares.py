@@ -1,8 +1,3 @@
-import os
-
-# django 모듈을 부르기 전에 환경 변수가 먼저 세팅돼있어야 한다.
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-
 from channels.auth import AuthMiddlewareStack
 from django.contrib.auth.models import AnonymousUser
 from rest_framework.exceptions import AuthenticationFailed
