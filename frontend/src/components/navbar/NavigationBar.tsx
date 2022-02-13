@@ -1,14 +1,16 @@
 import { Disclosure } from "@headlessui/react";
-import { LockClosedIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/outline";
+import classNames from "classnames";
 import { FC } from "react";
 import { Link } from "react-scroll";
-import { useAuthModal } from "../../states/auth";
-import { navigationData } from "./navigationData";
+import { useAuth, useAuthModal } from "../../states/auth";
 import Logo from "../common/Logo";
+import { navigationData } from "./navigationData";
 
 const NavigationBar: FC = (): JSX.Element => {
   const openLoginModal = useAuthModal((state) => state.openModal);
-
+  const isAuthenticated = useAuth((state) => state.isAuthenticated);
+  const Icon = isAuthenticated ? LockClosedIcon : LockOpenIcon;
   return (
     <>
       <Disclosure
@@ -45,11 +47,18 @@ const NavigationBar: FC = (): JSX.Element => {
                 <div className="hidden md:block">
                   <div className="flex items-center">
                     <button
+                      disabled={isAuthenticated}
                       onClick={openLoginModal}
-                      className="group relative flex justify-center rounded-lg border border-transparent bg-indigo-600 py-2 pl-3 pr-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none"
+                      className={classNames(
+                        "relative flex justify-center rounded-lg border border-transparent bg-indigo-600 py-2 pl-3 pr-4 text-sm font-medium text-white focus:outline-none",
+                        {
+                          "opacity-70": isAuthenticated,
+                          "group hover:bg-indigo-700 ": !isAuthenticated,
+                        }
+                      )}
                     >
                       <span className="flex items-center">
-                        <LockClosedIcon
+                        <Icon
                           className="mr-2 h-5 w-5 text-indigo-300 group-hover:text-indigo-400"
                           aria-hidden="true"
                         />
