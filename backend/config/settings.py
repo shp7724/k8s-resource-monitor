@@ -101,6 +101,9 @@ DATABASES = {
     }
 }
 
+with open('debug.log','w') as f:
+    f.write(os.getenv("DJANGO_DB_PASSWORD", "fake-password"))
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
