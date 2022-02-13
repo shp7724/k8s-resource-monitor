@@ -12,15 +12,15 @@ import os
 # django 모듈을 부르기 전에 환경 변수가 먼저 세팅돼있어야 한다.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
-
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
 from k8s.urls import websocket_urlpatterns
+from k8s.middlewares import TokenAuthMiddlewareStack
 
 
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
-        "websocket": URLRouter(websocket_urlpatterns),
+        "websocket": TokenAuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
     }
 )

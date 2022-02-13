@@ -25,6 +25,10 @@ class StreamThread(Thread):
 
 class PodSSHConsumer(WebsocketConsumer):
     def connect(self):
+        if self.scope["user"].is_anonymous:
+            self.close()
+            return
+
         self.namespace = self.scope["url_route"]["kwargs"]["namespace"]
         self.container_name = self.scope["url_route"]["kwargs"]["container_name"]
         self.pod_name = self.scope["url_route"]["kwargs"]["pod_name"]
@@ -35,10 +39,11 @@ class PodSSHConsumer(WebsocketConsumer):
         )
         thread = StreamThread(websocket=self, stream=self.stream)
         thread.start()
-        self.accept()
+        self.accept("Bearer")
 
     def disconnect(self, code):
-        self.stream.write_stdin("exit\r")
+        if hasattr(self, "stream"):
+            self.stream.write_stdin("exit\r")
 
     def receive(self, text_data=None, bytes_data=None):
         self.stream.write_stdin(text_data)
