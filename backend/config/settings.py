@@ -93,9 +93,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "rmdb",
-        "USER": "rmdb",
-        "PASSWORD": os.getenv("DJANGO_DB_PASSWORD", "fake-password"),
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": os.getenv("DJANGO_DB_PASSWORD", "fake-password").strip(),
         "HOST": os.getenv("DATABASE_HOST", "127.0.0.1"),
         "PORT": "5432",
     }
