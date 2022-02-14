@@ -1,4 +1,4 @@
-import { FC, Fragment, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import Lottie from "react-lottie-player";
 import shallow from "zustand/shallow";
 import animData from "../../assets/kube4.json";
