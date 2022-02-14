@@ -101,7 +101,7 @@ class GenericRetrieveUpdateDestroyView(GenericMixins, APIView):
     def delete(self, request, namespace, name):
         if not self.request.user.is_active:
             raise PermissionDenied(detail="리소스를 삭제하려면 관리자 권한이 필요합니다.")
-        if self.protect_system_resource and namespace.endswith("-system"):
+        if self.protect_system_resource() and namespace.endswith("-system"):
             raise ProtectedError()
         try:
             self.delete_namespaced_resource(namespace=namespace, name=name)

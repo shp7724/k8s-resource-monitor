@@ -51,7 +51,8 @@ class RetrieveUpdateDestroyDeployment(
 
     def put(self, request, name: str, namespace: str):
         """Restarts the specified deployment."""
-        if self.request.user.is_active:
+        print(self.request.user)
+        if not self.request.user.is_active:
             raise PermissionDenied(detail="리소스를 수정하려면 관리자 권한이 필요합니다.")
 
         deployment = self.get_resource(namespace, name)

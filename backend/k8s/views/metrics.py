@@ -26,6 +26,7 @@ def top_pods(request: Request):
 
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def top(request: Request):
     node_data = k8s.custom.list_cluster_custom_object(
         "metrics.k8s.io", "v1beta1", "nodes"
