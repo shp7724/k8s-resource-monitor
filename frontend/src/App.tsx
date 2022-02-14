@@ -12,6 +12,7 @@ import { useMetrics } from "./states/metrics";
 
 function App() {
   const fetchPodUsage = useMetrics((state) => state.fetch);
+  console.log("dummy");
 
   useEffect(() => {
     fetchPodUsage();
