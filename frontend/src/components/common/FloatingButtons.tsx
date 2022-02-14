@@ -27,7 +27,7 @@ const FloatingButton: FC<FloatingButtonProps> = (props): JSX.Element => {
     <button
       disabled={disabled}
       className={classNames(
-        "flex items-center justify-center rounded-full shadow-lg transition-colors ",
+        "flex items-center justify-center rounded-full shadow-lg transition-all duration-150 ease-out hover:scale-110",
         {
           "bg-indigo-500 hover:bg-indigo-600": !disabled,
           "bg-gray-300 shadow-gray-300/80 hover:bg-gray-400": disabled,

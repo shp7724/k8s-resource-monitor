@@ -28,14 +28,14 @@ const getLabelColorClass = (color?: themeColors): string => {
 const LabelBadge: FC<LabelBadgeProps> = (props): JSX.Element => {
   return (
     <div
-      className={`flex items-center rounded-full divide-x divide-solid border text-sm ${getLabelColorClass(
+      className={`group flex cursor-pointer items-center divide-x divide-solid rounded-full border text-sm transition-all hover:scale-105 ${getLabelColorClass(
         props.color
       )}`}
     >
-      <div className="inline-block px-2 max-w-[5rem] truncate">
+      <div className="inline-block max-w-[5rem] truncate px-2 ">
         {props.name}
       </div>
-      <div className="inline-block px-2 max-w-[8rem] truncate">
+      <div className="inline-block max-w-[8rem] truncate px-2">
         {props.value}
       </div>
     </div>

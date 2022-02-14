@@ -19,7 +19,7 @@ function App() {
       fetchPodUsage().catch((err) => {
         k8sConnectionErrorToast(err);
       });
-    }, 50000);
+    }, 5000);
     return () => clearInterval(timerId);
   }, []);
 

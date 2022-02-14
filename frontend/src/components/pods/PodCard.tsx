@@ -29,7 +29,7 @@ const PodCard: FC<PodProps> = (props): JSX.Element => {
   };
 
   return (
-    <div className="rounded-lg border border-blue-500 bg-blue-50 px-5 pb-5 shadow">
+    <div id={props.name} className="rounded-lg border border-blue-500 bg-blue-50 px-5 pb-5 shadow">
       <div className="mt-3 flex justify-between">
         <div className="truncate">
           <Label text="이름" color="blue" />

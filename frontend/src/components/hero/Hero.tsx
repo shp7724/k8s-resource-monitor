@@ -4,8 +4,10 @@ import shallow from "zustand/shallow";
 import animData from "../../assets/kube4.json";
 import { useListNode } from "../../states/nodes";
 import NodeCard from "./NodeCard";
+import { useInView } from "react-intersection-observer";
 
 const Hero: FC = (): JSX.Element => {
+  const { ref, inView } = useInView();
   const { isLoading, list, data } = useListNode((state) => state, shallow);
 
   useEffect(() => {
@@ -13,7 +15,7 @@ const Hero: FC = (): JSX.Element => {
   }, []);
 
   return (
-    <div className="my-36 flex items-center justify-center">
+    <div className="mb-36 mt-20 flex items-center justify-center sm:my-36">
       <div className="w-full">
         <div className="relative z-10 flex h-[488px] w-full justify-center gap-8">
           {data.map((node, idx) => (
@@ -21,10 +23,10 @@ const Hero: FC = (): JSX.Element => {
           ))}
         </div>
         <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-          <div className="">
+          <div ref={ref} className="">
             <Lottie
               loop
-              play
+              play={inView}
               animationData={animData}
               speed={0.3}
               className="svg-wrapper h-[1000px] w-[1000px]"
