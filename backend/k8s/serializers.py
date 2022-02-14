@@ -80,6 +80,8 @@ class Serializer:
 
     @staticmethod
     def conditions(data: list[V1Condition]) -> list[dict]:
+        if data is None:
+            return []
         return [Serializer.condition(instance) for instance in data]
 
     @staticmethod

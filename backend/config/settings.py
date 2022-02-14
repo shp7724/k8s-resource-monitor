@@ -92,12 +92,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "rmdb",
-        "USER": "root",
+        "USER": "rmdb",
         "PASSWORD": os.getenv("DJANGO_DB_PASSWORD", "fake-password"),
         "HOST": os.getenv("DATABASE_HOST", "127.0.0.1"),
-        "PORT": "3306",
+        "PORT": "5432",
     }
 }
 
