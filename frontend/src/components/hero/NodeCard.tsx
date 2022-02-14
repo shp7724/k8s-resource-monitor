@@ -11,7 +11,7 @@ import NodeUsageChart from "./NodeUsageChart";
 
 const NodeCard: FC<NodeProps> = (props): JSX.Element => {
   return (
-    <div className="w-[25rem] rounded-2xl border border-gray-300/40 bg-gray-100/10 p-5 text-left shadow-2xl shadow-gray-900/10 backdrop-blur-xl">
+    <div className="w-full rounded-2xl border border-gray-300/40 bg-gray-100/10 p-5 text-left shadow-2xl shadow-gray-900/10 backdrop-blur-xl sm:w-[25rem]">
       <div className="">
         <Label text="노드 이름" color="gray" />
         <Description color="gray">{props.name}</Description>

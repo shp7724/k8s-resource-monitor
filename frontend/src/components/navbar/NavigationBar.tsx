@@ -21,28 +21,30 @@ const NavigationBar: FC = (): JSX.Element => {
           <>
             <div className="container mx-auto px-5">
               <div className="flex h-16 items-center justify-between">
-                <div className="shrink-0">
-                  <Logo withText />
-                </div>
-                <div className="ml-5 hidden basis-2/3 overflow-hidden md:block">
-                  <div className="flex items-baseline space-x-4">
-                    {navigationData.map((item) => (
-                      <Link
-                        key={item.title}
-                        to={item.title}
-                        spy={true}
-                        offset={-300}
-                        smooth={true}
-                        duration={(px) => Math.abs(px) * 0.2}
-                        activeClass="bg-gray-900/10"
-                        className="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-500/10"
-                      >
-                        {item.title}
-                      </Link>
-                    ))}
+                <div className="flex basis-auto overflow-hidden md:basis-3/4">
+                  <div className="shrink-0">
+                    <Logo withText />
+                  </div>
+                  <div className="ml-5 hidden basis-4/5 overflow-hidden md:block">
+                    <div className="flex items-baseline space-x-4">
+                      {navigationData.map((item) => (
+                        <Link
+                          key={item.title}
+                          to={item.title}
+                          spy={true}
+                          offset={-300}
+                          smooth={true}
+                          duration={(px) => Math.abs(px) * 0.2}
+                          activeClass="bg-gray-900/10"
+                          className="cursor-pointer rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-500/10"
+                        >
+                          {item.title}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <div className="hidden shrink-0 md:block">
+                <div className="shrink-0">
                   <div className="flex items-center">
                     <button
                       disabled={isAuthenticated}

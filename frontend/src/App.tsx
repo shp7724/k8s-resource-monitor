@@ -28,8 +28,8 @@ function App() {
       <LoginModal />
       <NavigationBar />
       <div className="container mx-auto px-5">
+        <div className="h-16"></div>
         <Hero />
-        <div className="h-40 sm:h-16 md:h-0"></div>
 
         <Namespace />
 
