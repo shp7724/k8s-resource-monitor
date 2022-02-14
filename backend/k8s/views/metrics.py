@@ -5,6 +5,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from k8s.serializers import Serializer
+from django.contrib.auth.models import User
 
 from k8s.exceptions import *
 from k8s.utils import k8s
@@ -26,8 +27,8 @@ def top_pods(request: Request):
 
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
 def top(request: Request):
+    print(User.objects.all())
     node_data = k8s.custom.list_cluster_custom_object(
         "metrics.k8s.io", "v1beta1", "nodes"
     )

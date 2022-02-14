@@ -17,7 +17,6 @@ const NodeUsageChart: FC<NodeUsageChartProps> = (props): JSX.Element => {
   const [displayMode, setDisplayMode] = useState<UsageDisplayMode>("CPU");
 
   useEffect(() => {
-    console.log(props.nodeName);
     setChartData(getNodeChartDataOf(props.nodeName));
   }, [usagesByNode]);
 
