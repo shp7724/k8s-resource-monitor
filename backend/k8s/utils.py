@@ -12,7 +12,6 @@ from rest_framework.response import Response
 
 from .exceptions import *
 
-print('dummy')
 
 class K8sClient:
     def __init__(self) -> None:

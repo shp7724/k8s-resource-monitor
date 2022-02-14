@@ -12,7 +12,6 @@ import { useMetrics } from "./states/metrics";
 
 function App() {
   const fetchPodUsage = useMetrics((state) => state.fetch);
-  console.log("dummy");
 
   useEffect(() => {
     fetchPodUsage();
@@ -20,7 +19,7 @@ function App() {
       fetchPodUsage().catch((err) => {
         k8sConnectionErrorToast(err);
       });
-    }, 5000);
+    }, 50000);
     return () => clearInterval(timerId);
   }, []);
 
