@@ -25,9 +25,9 @@ class StreamThread(Thread):
 
 class PodSSHConsumer(WebsocketConsumer):
     def connect(self):
-        # if self.scope["user"].is_anonymous:
-        #     self.close()
-        #     return
+        if self.scope["user"].is_anonymous:
+            self.close()
+            return
 
         self.namespace = self.scope["url_route"]["kwargs"]["namespace"]
         self.container_name = self.scope["url_route"]["kwargs"]["container_name"]
