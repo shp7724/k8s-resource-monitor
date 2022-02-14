@@ -7,4 +7,4 @@ data:
   DJANGO_ALLOWED_HOSTS: api.resource-monitor.findy.co.kr,127.0.0.1,localhost
   DJANGO_ALLOWED_CORS_ORIGINS: https://app.resource-monitor.findy.co.kr:444,http://127.0.0.1:3000,http://localhost:3000
   DEBUG: "True"
-  DATABASE_HOST: resource-monitor-db-postgresql.resource-monitor-system.svc.cluster.local
+  DATABASE_HOST: resource-monitor-database-postgresql.resource-monitor-system.svc.cluster.local
