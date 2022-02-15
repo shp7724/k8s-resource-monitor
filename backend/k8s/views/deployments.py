@@ -27,6 +27,9 @@ class ListDeployment(DeploymentMixins, GenericListView):
 class RetrieveUpdateDestroyDeployment(
     DeploymentMixins, GenericRetrieveUpdateDestroyView
 ):
+    def protect_system_resource(self) -> bool:
+        return False
+
     def get_resource(self, namespace: str, name: str):
         return k8s.apps.read_namespaced_deployment(name, namespace)
 
@@ -51,7 +54,6 @@ class RetrieveUpdateDestroyDeployment(
 
     def put(self, request, name: str, namespace: str):
         """Restarts the specified deployment."""
-        print(self.request.user)
         if not self.request.user.is_active:
             raise PermissionDenied(detail="리소스를 수정하려면 관리자 권한이 필요합니다.")
 
