@@ -50,4 +50,4 @@ def stress(request):
     for i in range(1000000):
         x += math.sqrt(i)
     exe_time = time.time() - start_time
-    return Response(f"runtime: {exe_time}\n")
+    return Response(f"runtime: {exe_time}")
