@@ -20,6 +20,9 @@ class ListService(ServiceMixins, GenericListView):
 
 
 class RetrieveUpdateDestroyService(ServiceMixins, GenericRetrieveUpdateDestroyView):
+    def protect_system_resource(self) -> bool:
+        return False
+
     def get_resource(self, namespace: str, name: str):
         return k8s.core.read_namespaced_service(name, namespace)
 
