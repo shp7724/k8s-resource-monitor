@@ -47,8 +47,7 @@ def top(request: Request):
 def stress(request):
     x = 0
     start_time = time.time()
-    for i in range(100000):
+    for i in range(1000000):
         x += math.sqrt(i)
     exe_time = time.time() - start_time
-    return Response(f'runtime: {exe_time}')
-    return Response(f"runtime: {exe_time}")
+    return Response(f"runtime: {exe_time}\n")
