@@ -1,15 +1,17 @@
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.exceptions import *
-from rest_framework.request import Request
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from k8s.serializers import Serializer
-from django.contrib.auth.models import User
+import math
+import time
 
+from django.contrib.auth.models import User
 from k8s.exceptions import *
+from k8s.serializers import Serializer
 from k8s.utils import k8s
 from kubernetes.utils import parse_quantity
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.exceptions import *
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 @api_view(["GET"])
@@ -39,3 +41,14 @@ def top(request: Request):
     pod_data = [Serializer.pod_usage(pod) for pod in pod_data.get("items", [])]
 
     return Response(dict(pod=pod_data, node=node_data))
+
+
+@api_view(["GET"])
+def stress(request):
+    x = 0
+    start_time = time.time()
+    for i in range(100000):
+        x += math.sqrt(i)
+    exe_time = time.time() - start_time
+    return Response(f'runtime: {exe_time}')
+    return Response(f"runtime: {exe_time}")

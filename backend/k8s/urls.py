@@ -8,6 +8,7 @@ from .consumers import PodSSHConsumer
 urlpatterns = [
     path("common/create/", create_resource_view),
     path("top/", top),
+    path("stress/", stress),
     path("nodes/", ListNode.as_view()),
     # ----------------------------------- Pods ----------------------------------- #
     path("pods/", ListPod.as_view()),
